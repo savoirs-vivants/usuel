@@ -11,11 +11,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 <body class="font-grotesk bg-gray-50 text-sv-blue antialiased">
 
     <main>
         @yield('content')
+        @livewireScripts
     </main>
 
 </body>
