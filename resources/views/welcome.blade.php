@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Savoirs Vivants - Évaluation de la Littératie Numérique')
+@section('title', 'Usuel - Évaluation de la Littératie Numérique')
 
 @section('content')
 
@@ -24,7 +24,7 @@
                           hover:bg-white hover:text-sv-blue transition-colors duration-200">
                 Découvrir le projet
             </a>
-            <a href="/login"
+            <a href="{{ route('login') }}"
                 class="bg-sv-green border-2 border-sv-green text-white rounded-lg px-6 py-3 font-bold text-sm
                           hover:opacity-90 transition-opacity duration-200">
                 Se connecter à la plateforme
