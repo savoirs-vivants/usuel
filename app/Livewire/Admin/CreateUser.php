@@ -13,7 +13,7 @@ class CreateUser extends Component
     public $name;
     public $firstname;
     public $email;
-    public $role = 'user';
+    public $role;
     public $structure;
 
     protected $rules = [

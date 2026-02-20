@@ -39,7 +39,8 @@
                                     Rôle</th>
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
                                     Structure</th>
-                                <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">Action</th>
+                                <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
+                                    Action</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
@@ -51,20 +52,31 @@
                                     <td class="px-6 py-4 text-gray-500">{{ $user->email }}</td>
                                     <td class="px-6 py-4">
                                         <span
-                                            class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold {{ $user->role === 'admin' ? 'bg-sv-blue/10 text-sv-blue' : 'bg-sv-green/10 text-sv-green' }}">
-                                            {{ $user->role ?? 'user' }}
+                                            class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold
+                                            @if ($user->role === 'admin') bg-red-100 text-red-700
+                                            @elseif($user->role === 'gestionnaire')
+                                            bg-sv-blue/10 text-sv-blue
+                                            @else
+                                            bg-sv-green/10 text-sv-green @endif">
+                                            @if ($user->role === 'admin')
+                                                Administrateur
+                                            @elseif($user->role === 'gestionnaire')
+                                                Gestionnaire
+                                            @else
+                                                Travailleur social
+                                            @endif
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-gray-600 font-medium">{{ $user->structure ?? '—' }}</td>
                                     <td class="px-6 py-4">
-                                            <button
-                                                class="text-xs font-bold text-sv-blue border-2 border-sv-blue/20 hover:border-sv-blue rounded-lg px-3 py-1.5 transition-colors">
-                                                Modifier
-                                            </button>
-                                            <button
-                                                class="text-xs font-bold text-red-500 border-2 border-red-200 hover:border-red-400 rounded-lg px-3 py-1.5 transition-colors">
-                                                Supprimer
-                                            </button>
+                                        <button
+                                            class="text-xs font-bold text-sv-blue border-2 border-sv-blue/20 hover:border-sv-blue rounded-lg px-3 py-1.5 transition-colors">
+                                            Modifier
+                                        </button>
+                                        <button
+                                            class="text-xs font-bold text-red-500 border-2 border-red-200 hover:border-red-400 rounded-lg px-3 py-1.5 transition-colors">
+                                            Supprimer
+                                        </button>
                                     </td>
                                 </tr>
                             @endforeach

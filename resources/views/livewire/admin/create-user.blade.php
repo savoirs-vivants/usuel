@@ -60,8 +60,8 @@
                                     class="text-red-500">*</span></label>
                             <select wire:model="role"
                                 class="w-full bg-gray-50 border-2 border-gray-200 rounded-lg p-2.5 outline-none focus:border-sv-green text-sm">
-                                <option value="user">Travailleur Social</option>
-                                <option value="user">Gestionnaire</option>
+                                <option value="travailleur">Travailleur Social</option>
+                                <option value="gestionnaire">Gestionnaire</option>
                                 <option value="admin">Administrateur</option>
                             </select>
                             @error('role')
