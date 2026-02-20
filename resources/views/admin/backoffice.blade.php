@@ -10,7 +10,7 @@
 
             <div class="flex items-center justify-between mb-8">
                 <div>
-                    <h1 class="font-mono font-bold text-3xl text-sv-blue">Back-Office</h1>
+                    <h1 class="font-mono font-bold text-3xl text-sv-blue">Utilisateurs</h1>
                     <p class="text-gray-400 text-sm mt-1">Gestion des utilisateurs de la plateforme</p>
                 </div>
                 <livewire:admin.create-user />
