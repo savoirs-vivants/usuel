@@ -5,11 +5,13 @@ namespace App\Livewire\Admin;
 use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InvitationMail;
 
 class CreateUser extends Component
 {
     public $isOpen = false;
-
     public $name;
     public $firstname;
     public $email;
@@ -40,14 +42,22 @@ class CreateUser extends Component
     {
         $this->validate();
 
-        User::create([
-            'name'      => $this->name,
-            'firstname' => $this->firstname,
-            'email'     => $this->email,
-            'role'      => $this->role,
-            'structure' => $this->structure,
-            'password'  => Hash::make('motdepasse123'),
+        $token = Str::uuid()->toString();
+
+        $user = User::create([
+            'name'             => $this->name,
+            'firstname'        => $this->firstname,
+            'email'            => $this->email,
+            'role'             => $this->role,
+            'structure'        => $this->structure,
+            'password'         => Hash::make(Str::random(32)),
+            'invitation_token' => $token,
+            'is_registered'    => false,
         ]);
+
+        Mail::to($user->email)->send(new InvitationMail($user, $token));
+
+        $this->closeModal();
 
         return redirect()->route('admin.backoffice');
     }

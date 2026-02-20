@@ -15,7 +15,7 @@
 </head>
 <body class="font-grotesk bg-gray-50 text-sv-blue antialiased">
 
-    @if(!Route::is('welcome') && !Route::is('login') && !Route::is('register'))
+    @if(!Route::is('welcome') && !Route::is('login') && !Route::is('inscription'))
 
         <div>
             @include('components.sidebar')
