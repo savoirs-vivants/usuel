@@ -13,13 +13,7 @@
                     <h1 class="font-mono font-bold text-3xl text-sv-blue">Back-Office</h1>
                     <p class="text-gray-400 text-sm mt-1">Gestion des utilisateurs de la plateforme</p>
                 </div>
-                <button
-                    class="flex items-center gap-2 bg-sv-green hover:opacity-90 transition-opacity text-white font-bold text-sm font-mono px-5 py-3 rounded-xl shadow-lg shadow-sv-green/20">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    Ajouter un utilisateur
-                </button>
+                <livewire:admin.create-user />
             </div>
 
             <div class="relative mb-6 max-w-sm">
@@ -45,7 +39,7 @@
                                     Rôle</th>
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
                                     Structure</th>
-                                <th class="px-6 py-4"></th>
+                                <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">Action</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
@@ -62,17 +56,15 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-gray-600 font-medium">{{ $user->structure ?? '—' }}</td>
-                                    <td class="px-6 py-4 text-right">
-                                        <div class="flex items-center justify-end gap-2">
+                                    <td class="px-6 py-4">
                                             <button
-                                                class="text-xs font-bold font-mono text-sv-blue border-2 border-sv-blue/20 hover:border-sv-blue rounded-lg px-3 py-1.5 transition-colors">
+                                                class="text-xs font-bold text-sv-blue border-2 border-sv-blue/20 hover:border-sv-blue rounded-lg px-3 py-1.5 transition-colors">
                                                 Modifier
                                             </button>
                                             <button
-                                                class="text-xs font-bold font-mono text-red-500 border-2 border-red-200 hover:border-red-400 rounded-lg px-3 py-1.5 transition-colors">
+                                                class="text-xs font-bold text-red-500 border-2 border-red-200 hover:border-red-400 rounded-lg px-3 py-1.5 transition-colors">
                                                 Supprimer
                                             </button>
-                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
