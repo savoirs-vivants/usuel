@@ -13,7 +13,7 @@
                 </h1>
             </div>
             <div class="px-8 pb-8">
-                <form class="space-y-5" action="#" method="POST">
+                <form class="space-y-5" action="{{ route('login.submit') }}" method="POST">
                     @csrf
                     <div>
                         <label for="email" class="block mb-1.5 text-sm font-bold text-sv-blue">
