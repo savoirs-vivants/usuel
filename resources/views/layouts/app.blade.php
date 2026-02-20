@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>@yield('title', 'Savoirs Vivants')</title>
+    <title>@yield('title', 'Usuel')</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,10 +15,20 @@
 </head>
 <body class="font-grotesk bg-gray-50 text-sv-blue antialiased">
 
-    <main>
-        @yield('content')
-        @livewireScripts
-    </main>
+    @if(!Route::is('welcome') && !Route::is('login') && !Route::is('register'))
 
+        <div>
+            @include('components.sidebar')
+            <main>
+                @yield('content')
+            </main>
+        </div>
+
+    @else        <main>
+            @yield('content')
+        </main>
+    @endif
+
+    @livewireScripts
 </body>
 </html>

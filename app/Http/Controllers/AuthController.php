@@ -25,7 +25,7 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect('/');
+        return redirect(route('admin.backoffice'));
     }
 
     public function login(Request $request)
@@ -37,7 +37,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
-            return redirect()->intended('/');
+            return redirect()->intended(route('admin.backoffice'));
         }
 
         return back()->withErrors(['email' => 'Identifiants incorrects.']);
