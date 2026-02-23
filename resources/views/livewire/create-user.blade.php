@@ -87,13 +87,11 @@
                             wire:target="save"
                             class="px-5 py-2.5 rounded-xl font-bold text-sm bg-sv-green text-white hover:opacity-90 transition-opacity flex items-center gap-2 disabled:opacity-70">
 
-                            {{-- Icône spinner pendant le chargement --}}
                             <svg wire:loading wire:target="save" class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
                             </svg>
 
-                            {{-- Icône enveloppe au repos --}}
                             <svg wire:loading.remove wire:target="save" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />

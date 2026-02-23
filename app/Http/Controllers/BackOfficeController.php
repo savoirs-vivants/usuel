@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -14,7 +14,7 @@ class BackOfficeController extends Controller
         ->where('is_registered', 1)
         ->latest()
         ->get();
-        return view('admin.backoffice', compact('users'));
+        return view('backoffice', compact('users'));
     }
-        
+
 }

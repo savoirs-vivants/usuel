@@ -52,7 +52,7 @@
             <span class="font-semibold text-sm">Statistiques</span>
         </a>
 
-        <a href="{{ route('admin.backoffice') }}"
+        <a href="{{ route('backoffice') }}"
             class="flex items-center gap-3 px-4 py-3 rounded-xl bg-sv-green text-white transition-all duration-150 shadow-lg shadow-sv-green/20">
             <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

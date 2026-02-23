@@ -13,7 +13,7 @@
                     <h1 class="font-mono font-bold text-3xl text-sv-blue">Utilisateurs</h1>
                     <p class="text-gray-400 text-sm mt-1">Gestion des utilisateurs de la plateforme</p>
                 </div>
-                <livewire:admin.create-user />
+                @livewire('create-user')
             </div>
 
             <div class="relative mb-6 max-w-sm">

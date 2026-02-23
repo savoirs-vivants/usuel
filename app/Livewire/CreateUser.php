@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin;
+namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\User;
@@ -59,11 +59,11 @@ class CreateUser extends Component
 
         $this->closeModal();
 
-        return redirect()->route('admin.backoffice');
+        return redirect()->route('backoffice');
     }
 
     public function render()
     {
-        return view('livewire.admin.create-user');
+        return view('livewire.create-user');
     }
 }
