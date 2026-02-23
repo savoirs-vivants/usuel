@@ -14,21 +14,23 @@ Route::post('/inscription/{token}', [InscriptionController::class, 'complete'])-
 Route::get('/connexion', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/connexion', [AuthController::class, 'login'])->name('login.submit');
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::middleware('auth')->group(function () {
 
-Route::get('/backoffice', [BackOfficeController::class, 'index'])
-    ->name('backoffice')
-    ->middleware('auth');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/questionnaire', function () {
-    return view('questionnaire');
-})->name('questionnaire.index');
+    Route::get('/backoffice', [BackOfficeController::class, 'index'])->name('backoffice');
 
-Route::get('/questionnaire/run', function () {
-    return view('questionnaire.run');
-})->name('questionnaire.run');
+    Route::get('/questionnaire', function () {
+        return view('questionnaire');
+    })->name('questionnaire.index');
 
-Route::get('/questionnaire/result/{id}', function ($id) {
-    $passation = Passation::with('beneficiaire')->findOrFail($id);
-    return view('questionnaire.result', compact('passation'));
-})->name('questionnaire.result');
+    Route::get('/questionnaire/run', function () {
+        return view('questionnaire.run');
+    })->name('questionnaire.run');
+
+    Route::get('/questionnaire/result/{id}', function ($id) {
+        $passation = Passation::with('beneficiaire')->findOrFail($id);
+        return view('questionnaire.result', compact('passation'));
+    })->name('questionnaire.result');
+
+});

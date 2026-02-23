@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Passation;
 use App\Models\Question;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class QuestionnaireRun extends Component
@@ -26,6 +27,11 @@ class QuestionnaireRun extends Component
 
     public function mount(): void
     {
+        if (!session()->has('beneficiaire_id')) {
+            $this->redirect(route('questionnaire.index'));
+            return;
+        }
+
         $this->questionIds    = Question::orderBy('id')->pluck('id')->toArray();
         $this->totalQuestions = count($this->questionIds);
     }
@@ -52,9 +58,7 @@ class QuestionnaireRun extends Component
 
     private function enregistrerReponse(string $reponse): void
     {
-        // On récupère manuellement la question en cours pour calculer les points
-        $question = Question::find($this->questionIds[$this->currentIndex]);
-
+        $question = Question::find($this->questionIds[$this->currentIndex] ?? null);
         if (!$question) return;
 
         $poids = $question->getPoids($reponse);
@@ -64,8 +68,6 @@ class QuestionnaireRun extends Component
 
         $this->selectedAnswer = '';
         $this->showError      = false;
-
-        // On passe à la question suivante !
         $this->currentIndex++;
 
         if ($this->currentIndex >= $this->totalQuestions) {
@@ -81,30 +83,30 @@ class QuestionnaireRun extends Component
         session()->forget(['beneficiaire_id', 'consentement_recherche']);
 
         $passation = Passation::create([
-            'id_beneficiaire'       => $beneficiaireId,
-            'id_travailleur'        => auth()->id(),
-            'score'                 => $this->scores,
-            'consentement_recherche'=> $consentementRecherche,
-            'mode_ordre'            => 'fixe',
-            'date'                  => now()->toDateString(),
-            'scenario'              => null,
-            'modules'               => null,
+            'id_beneficiaire'        => $beneficiaireId,
+            'id_travailleur'         => Auth::id(),
+            'score'                  => $this->scores,
+            'consentement_recherche' => $consentementRecherche,
+            'mode_ordre'             => 'fixe',
+            'date'                   => now()->toDateString(),
+            'scenario'               => null,
+            'modules'                => null,
         ]);
+
+        session()->flash('autoriser_resultat', $passation->id);
 
         $this->redirect(route('questionnaire.result', $passation->id));
     }
 
     public function render(): \Illuminate\View\View
     {
-        // À CHAQUE fois que la vue se met à jour, on va chercher la BONNE question
         $currentQuestion = null;
         if ($this->currentIndex < $this->totalQuestions) {
             $currentQuestion = Question::find($this->questionIds[$this->currentIndex]);
         }
 
-        // On envoie la variable $currentQuestion à la vue
         return view('livewire.questionnaire-run', [
-            'currentQuestion' => $currentQuestion
+            'currentQuestion' => $currentQuestion,
         ]);
     }
 }
