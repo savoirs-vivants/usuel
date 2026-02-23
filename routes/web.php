@@ -21,3 +21,7 @@ Route::get('/admin/backoffice', [BackOfficeController::class, 'index'])
 
 Route::get('/questionnaire', function () { return view('questionnaire'); })
     ->name('questionnaire.index');
+
+Route::get('/questionnaire/run', function () {
+    return view('questionnaire.run');
+})->name('questionnaire.run');

@@ -16,13 +16,7 @@
                 </p>
             </div>
 
-            <a href="#"
-               class="inline-flex font-mono items-center gap-2 bg-[#1a9e7e] hover:bg-[#158a6c] text-white font-semibold text-sm px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 whitespace-nowrap shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M5 3l14 9-14 9V3z"/>
-                </svg>
-                Lancer le questionnaire
-            </a>
+            @livewire('questionnaire-modal')
         </div>
 
         <div class="flex items-center gap-3 mb-8">
