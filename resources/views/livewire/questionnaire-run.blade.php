@@ -22,34 +22,36 @@
             </div>
         </div>
 
-        <div class="flex-1 pt-16 pb-10">
+        <div class="flex-1 pt-14" style="height: calc(100vh - 3.5rem); overflow: hidden;">
 
             @if ($currentQuestion->image)
 
-                <div class="max-w-4xl mx-auto px-6 py-8 flex flex-col items-center">
+            <div class="h-full grid grid-cols-2">
 
-                    <h2 class="font-mono font-bold text-sm tracking-widest text-[#1a9e7e] uppercase mb-5 self-start">
+                <div class="h-full bg-gray-50 border-r border-gray-100 flex items-center justify-center p-6">
+                    <img
+                        src="{{ asset('storage/questions/' . $currentQuestion->image) }}"
+                        alt="Illustration question {{ $currentIndex + 1 }}"
+                        class="max-w-full max-h-full object-contain rounded-xl shadow-lg"
+                        wire:key="img-{{ $currentQuestion->id }}">
+                </div>
+
+                <div class="h-full flex flex-col justify-center px-10 py-8 overflow-y-auto">
+
+                    <p class="font-mono font-bold text-xs tracking-widest text-[#1a9e7e] uppercase mb-4">
                         Question {{ $currentIndex + 1 }} / {{ $totalQuestions }}
-                    </h2>
+                    </p>
 
-                    <p class="text-xl md:text-2xl font-semibold text-[#1a2340] text-center leading-relaxed mb-8 max-w-3xl">
+                    <p class="text-xl font-semibold text-[#1a2340] leading-relaxed mb-8">
                         {{ $currentQuestion->intitule }}
                     </p>
 
-                    <div class="w-full rounded-2xl overflow-hidden border border-gray-200 shadow-xl bg-gray-50 mb-8">
-                        <img
-                            src="{{ asset('storage/questions/' . $currentQuestion->image) }}"
-                            alt="Illustration question {{ $currentIndex + 1 }}"
-                            class="w-full object-contain max-h-[520px]"
-                            wire:key="img-{{ $currentQuestion->id }}">
-                    </div>
-
-                    <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+                    <div class="space-y-2.5 mb-7">
                         @foreach ($currentQuestion->choixSansE as $lettre => $choixData)
                         <button
                             wire:key="q-{{ $currentQuestion->id }}-choix-{{ $lettre }}"
                             wire:click="choisir('{{ $lettre }}')"
-                            class="w-full text-left flex items-center gap-4 px-5 py-3.5 rounded-xl border-2 transition-all duration-200
+                            class="w-full text-left flex items-center gap-4 px-5 py-3 rounded-xl border-2 transition-all duration-200
                                 {{ $selectedAnswer === $lettre
                                     ? 'border-[#1a9e7e] bg-[#1a9e7e]/10 shadow-sm'
                                     : 'border-gray-200 bg-gray-100 hover:border-gray-300 hover:bg-gray-200/50' }}">
@@ -67,7 +69,7 @@
                     </div>
 
                     @if ($showError)
-                    <div class="w-full text-center text-red-500 text-sm font-semibold mb-4 flex items-center justify-center gap-2">
+                    <div class="text-red-500 text-sm font-semibold mb-4 flex items-center gap-2">
                         <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
                         </svg>
@@ -75,13 +77,13 @@
                     </div>
                     @endif
 
-                    <div class="flex gap-3 w-full max-w-sm">
+                    <div class="flex gap-3">
                         <button wire:click="jeSaisPas"
-                            class="flex-1 px-6 py-3.5 rounded-xl font-bold text-white bg-[#1a9e7e]/70 hover:bg-[#1a9e7e] transition-all duration-200 text-sm">
+                            class="flex-1 px-6 py-3 rounded-xl font-bold text-white bg-[#1a9e7e]/70 hover:bg-[#1a9e7e] transition-all duration-200 text-sm">
                             Je ne sais pas
                         </button>
                         <button wire:click="valider" @if ($selectedAnswer === '') disabled @endif
-                            class="flex-1 px-6 py-3.5 rounded-xl font-bold text-white transition-all duration-200 text-sm
+                            class="flex-1 px-6 py-3 rounded-xl font-bold text-white transition-all duration-200 text-sm
                                 {{ $selectedAnswer === ''
                                     ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
                                     : 'bg-[#1a2340] hover:bg-[#111827] hover:scale-[1.02] shadow-md' }}">
@@ -90,19 +92,20 @@
                     </div>
 
                 </div>
+            </div>
             @else
-
-                <div class="max-w-3xl mx-auto px-6 py-12 flex flex-col items-center">
+            <div class="h-full flex flex-col items-center justify-center px-6">
+                <div class="w-full max-w-3xl flex flex-col items-center">
 
                     <h2 class="font-mono font-bold text-sm tracking-widest text-[#1a9e7e] uppercase mb-5">
                         Question {{ $currentIndex + 1 }} / {{ $totalQuestions }}
                     </h2>
 
-                    <p class="text-2xl md:text-3xl font-semibold text-[#1a2340] text-center leading-relaxed mb-12 max-w-2xl">
+                    <p class="text-2xl md:text-3xl font-semibold text-[#1a2340] text-center leading-relaxed mb-10 max-w-2xl">
                         {{ $currentQuestion->intitule }}
                     </p>
 
-                    <div class="w-full space-y-3 mb-10">
+                    <div class="w-full space-y-3 mb-8">
                         @foreach ($currentQuestion->choixSansE as $lettre => $choixData)
                         <button
                             wire:key="q-{{ $currentQuestion->id }}-choix-{{ $lettre }}"
@@ -148,6 +151,7 @@
                     </div>
 
                 </div>
+            </div>
 
             @endif
 
