@@ -1,26 +1,25 @@
 <?php
 
-// app/Livewire/QuestionnaireModal.php
-
 namespace App\Livewire;
 
+use App\Models\Beneficiaire;
 use Livewire\Component;
 
 class QuestionnaireModal extends Component
 {
-    public bool $open = false;
+    public bool   $open  = false;
+    public int    $step  = 1;
 
-    public int $step = 1;
-
-    public string $genre    = '';
-    public string $age      = '';
-    public string $diplome  = '';
-    public string $csp      = '';
+    public string $genre   = '';
+    public string $age     = '';
+    public string $diplome = '';
+    public string $csp     = '';
 
     public string $nom    = '';
     public string $prenom = '';
 
     public bool $consentement = false;
+
 
     public function ouvrir(): void
     {
@@ -43,13 +42,9 @@ class QuestionnaireModal extends Component
             'csp'     => 'required|in:agriculteur,artisan,cadre,intermediaire,employe,ouvrier,retraite,sans_activite',
         ], [
             'genre.required'   => 'Veuillez sélectionner un genre.',
-            'genre.in'         => 'Valeur invalide.',
-            'age.required'     => 'Veuillez sélectionner une tranche d\'âge.',
-            'age.in'           => 'Valeur invalide.',
+            'age.required'     => "Veuillez sélectionner une tranche d'âge.",
             'diplome.required' => 'Veuillez sélectionner un niveau de diplôme.',
-            'diplome.in'       => 'Valeur invalide.',
             'csp.required'     => 'Veuillez sélectionner une catégorie socio-professionnelle.',
-            'csp.in'           => 'Valeur invalide.',
         ]);
 
         $this->step = 2;
@@ -72,16 +67,28 @@ class QuestionnaireModal extends Component
             'nom.min'         => 'Le nom doit comporter au moins 2 caractères.',
         ]);
 
+        $beneficiaire = Beneficiaire::create([
+            'nom'     => trim($this->nom),
+            'prenom'  => trim($this->prenom),
+            'genre'   => $this->genre,
+            'age'     => $this->age,
+            'diplome' => $this->diplome,
+            'csp'     => $this->csp,
+        ]);
+
+        session(['beneficiaire_id' => $beneficiaire->id]);
+        session()->save();
+
         $this->step = 4;
     }
 
     public function validerConsentement(): void
     {
         $this->validate([
-            'consentement' => 'accepted',
-        ], [
-            'consentement.accepted' => 'Vous devez accepter pour continuer.',
+            'consentement' => 'boolean',
         ]);
+
+        session(['consentement_recherche' => (bool) $this->consentement]);
 
         $this->redirect(route('questionnaire.run'), navigate: true);
     }
