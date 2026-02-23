@@ -66,7 +66,7 @@
                     {{ substr(Auth::user()->email ?? 'U', 0, 1) }}
                 </div>
                 <div class="flex-1 text-left overflow-hidden">
-                    <p class="text-white font-semibold text-sm leading-tight truncate">{{ Auth::user()->name ?? 'Utilisateur' }}</p>
+                    <p class="text-white font-semibold text-sm leading-tight truncate">{{ Auth::user()->firstname }} {{ Auth::user()->name }}</p>
                     <p class="text-white/50 text-xs capitalize">{{ Auth::user()->role ?? 'rôle' }}</p>
                 </div>
             </button>
