@@ -13,7 +13,7 @@
     $scores = $passation->score ?? [];
 
     $labelsMap = [
-        'Résilience' => 'Résilience',
+        'Resilience' => 'Resilience',
         'EC'         => 'Esprit Critique',
         'CSDLEN'     => 'Comportements sociaux',
         'CT'         => 'Compétence technique',
@@ -30,7 +30,7 @@
     $scorePct = round((($scoreTotal - $minTotal) / ($maxTotal - $minTotal)) * 100);
 
     $catColors = [
-        'Résilience' => '#3b82f6',
+        'Resilience' => '#3b82f6',
         'EC'         => '#8b5cf6',
         'CSDLEN'     => '#ec4899',
         'CT'         => '#f97316',

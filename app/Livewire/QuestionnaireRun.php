@@ -24,19 +24,10 @@ class QuestionnaireRun extends Component
 
     public array $questionIds = [];
 
-
     public function mount(): void
     {
         $this->questionIds    = Question::orderBy('id')->pluck('id')->toArray();
         $this->totalQuestions = count($this->questionIds);
-    }
-
-    public function getCurrentQuestionProperty(): ?Question
-    {
-        if ($this->currentIndex >= $this->totalQuestions) {
-            return null;
-        }
-        return Question::find($this->questionIds[$this->currentIndex]);
     }
 
     public function choisir(string $reponse): void
@@ -61,7 +52,9 @@ class QuestionnaireRun extends Component
 
     private function enregistrerReponse(string $reponse): void
     {
-        $question = $this->currentQuestion;
+        // On récupère manuellement la question en cours pour calculer les points
+        $question = Question::find($this->questionIds[$this->currentIndex]);
+
         if (!$question) return;
 
         $poids = $question->getPoids($reponse);
@@ -71,6 +64,8 @@ class QuestionnaireRun extends Component
 
         $this->selectedAnswer = '';
         $this->showError      = false;
+
+        // On passe à la question suivante !
         $this->currentIndex++;
 
         if ($this->currentIndex >= $this->totalQuestions) {
@@ -80,7 +75,7 @@ class QuestionnaireRun extends Component
 
     private function terminer(): void
     {
-        $beneficiaireId       = session('beneficiaire_id');
+        $beneficiaireId        = session('beneficiaire_id');
         $consentementRecherche = session('consentement_recherche', false);
 
         session()->forget(['beneficiaire_id', 'consentement_recherche']);
@@ -88,7 +83,7 @@ class QuestionnaireRun extends Component
         $passation = Passation::create([
             'id_beneficiaire'       => $beneficiaireId,
             'id_travailleur'        => auth()->id(),
-            'score'                 => $this->scores,  
+            'score'                 => $this->scores,
             'consentement_recherche'=> $consentementRecherche,
             'mode_ordre'            => 'fixe',
             'date'                  => now()->toDateString(),
@@ -101,6 +96,15 @@ class QuestionnaireRun extends Component
 
     public function render(): \Illuminate\View\View
     {
-        return view('livewire.questionnaire-run');
+        // À CHAQUE fois que la vue se met à jour, on va chercher la BONNE question
+        $currentQuestion = null;
+        if ($this->currentIndex < $this->totalQuestions) {
+            $currentQuestion = Question::find($this->questionIds[$this->currentIndex]);
+        }
+
+        // On envoie la variable $currentQuestion à la vue
+        return view('livewire.questionnaire-run', [
+            'currentQuestion' => $currentQuestion
+        ]);
     }
 }
