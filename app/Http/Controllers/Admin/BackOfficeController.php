@@ -10,7 +10,11 @@ class BackOfficeController extends Controller
 {
     public function index()
     {
-        $users = User::where('id', '!=', Auth::id())->latest()->get();
+        $users = User::where('id', '!=', Auth::id())
+        ->where('is_registered', 1)
+        ->latest()
+        ->get();
         return view('admin.backoffice', compact('users'));
     }
+        
 }

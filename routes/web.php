@@ -18,3 +18,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/admin/backoffice', [BackOfficeController::class, 'index'])
     ->name('admin.backoffice')
     ->middleware('auth');
+
+Route::get('/questionnaire', function () { return view('questionnaire'); })
+    ->name('questionnaire.index');

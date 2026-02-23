@@ -15,7 +15,7 @@
             <span class="font-semibold text-sm">Dashboard</span>
         </a>
 
-        <a href="#"
+        <a href="{{ route('questionnaire.index') }}"
             class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 hover:text-white transition-all duration-150">
             <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
