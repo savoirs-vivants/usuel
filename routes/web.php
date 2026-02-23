@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackOfficeController;
 use App\Http\Controllers\InscriptionController;
+use App\Models\Passation;
 
 Route::get('/', function () { return view('welcome'); })->name('welcome');
 
@@ -19,9 +20,15 @@ Route::get('/backoffice', [BackOfficeController::class, 'index'])
     ->name('backoffice')
     ->middleware('auth');
 
-Route::get('/questionnaire', function () { return view('questionnaire'); })
-    ->name('questionnaire.index');
+Route::get('/questionnaire', function () {
+    return view('questionnaire');
+})->name('questionnaire.index');
 
 Route::get('/questionnaire/run', function () {
     return view('questionnaire.run');
 })->name('questionnaire.run');
+
+Route::get('/questionnaire/result/{id}', function ($id) {
+    $passation = Passation::with('beneficiaire')->findOrFail($id);
+    return view('questionnaire.result', compact('passation'));
+})->name('questionnaire.result');
