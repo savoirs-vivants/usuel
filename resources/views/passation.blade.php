@@ -37,7 +37,7 @@
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
                                     Date du test</th>
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
-                                    Ordre du questionnaire</th>
+                                    Ordre des questions</th>
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
                                     Score</th>
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
