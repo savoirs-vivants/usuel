@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackOfficeController;
+use App\Http\Controllers\CertificationController;
 use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\PassationController;
 use App\Models\Passation;
@@ -22,6 +23,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/backoffice', [BackOfficeController::class, 'index'])->name('backoffice');
 
     Route::get('/passations', [PassationController::class, 'index'])->name('passations');
+
+    Route::get('/certification', function () {
+        return view('certification');
+    })->name('certification');
 
     Route::get('/questionnaire', function () {
         return view('questionnaire');
