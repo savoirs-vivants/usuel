@@ -8,7 +8,9 @@ use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\PassationController;
 use App\Models\Passation;
 
-Route::get('/', function () { return view('welcome'); })->name('welcome');
+Route::get('/', function () {
+    return view('welcome');
+})->name('welcome');
 
 Route::get('/inscription/{token}', [InscriptionController::class, 'show'])->name('inscription');
 Route::post('/inscription/{token}', [InscriptionController::class, 'complete'])->name('inscription.complete');
@@ -24,9 +26,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/passations', [PassationController::class, 'index'])->name('passations');
 
-    Route::get('/certification', function () {
-        return view('certification');
-    })->name('certification');
+    Route::get('/passations/{passation}/certificat', [PassationController::class, 'certificat'])
+        ->name('passation.certificat');
 
     Route::get('/questionnaire', function () {
         return view('questionnaire');
@@ -40,5 +41,4 @@ Route::middleware('auth')->group(function () {
         $passation = Passation::with('beneficiaire')->findOrFail($id);
         return view('questionnaire.result', compact('passation'));
     })->name('questionnaire.result');
-
 });

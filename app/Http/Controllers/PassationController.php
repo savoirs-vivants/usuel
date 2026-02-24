@@ -12,4 +12,9 @@ class PassationController extends Controller
         $passations = Passation::with('beneficiaire', 'user')->where('consentement_recherche', 1)->latest()->get();
         return view('passation', compact('passations'));
     }
+
+    public function certificat(Passation $passation)
+    {
+        return view('questionnaire.certificat', compact('passation'));
+    }
 }
