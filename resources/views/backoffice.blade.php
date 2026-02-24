@@ -22,13 +22,13 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                <input type="text" placeholder="Rechercher un utilisateur…"
+                <input type="text" placeholder="Rechercher un utilisateur…" data-search="table-users"
                     class="w-full bg-white border-2 border-gray-200 focus:border-sv-green outline-none rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-700 transition-colors duration-200">
             </div>
 
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 @if ($users->isNotEmpty())
-                    <table class="w-full text-sm">
+                    <table id="table-users" class="w-full text-sm">
                         <thead>
                             <tr class="bg-gray-50 border-b border-gray-100">
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">Nom
