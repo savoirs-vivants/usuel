@@ -53,7 +53,7 @@
         <div>
             <p class="text-xs font-semibold uppercase tracking-widest text-[#1a9e7e]">Test terminé</p>
         </div>
-        <a href="{{ route('questionnaire.index') }}"
+        <a href="{{ route('passations') }}"
            class="inline-flex items-center gap-2 bg-[#1a9e7e] hover:bg-[#158a6c] text-white font-semibold px-5 py-2.5 rounded-lg transition text-sm shadow-sm">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
@@ -93,7 +93,7 @@
                                 stroke-dasharray="{{ round($scorePct * 3.14159) }} 314"/>
                     </svg>
                     <div class="absolute inset-0 flex flex-col items-center justify-center">
-                        <span class="text-2xl font-bold text-[#1a2340]">{{ $scoreTotal > 0 ? '+' : '' }}{{ $scoreTotal }}</span>
+                        <span class="text-2xl font-bold text-[#1a2340]">{{ $scoreTotal }}</span>
                         <span class="text-[10px] text-gray-400">/ {{ (int)$maxTotal }} pts</span>
                     </div>
                 </div>
@@ -136,7 +136,7 @@
                     <div class="flex items-center justify-between mb-1">
                         <span class="text-xs font-semibold text-[#1a2340] truncate">{{ $label }}</span>
                         <span class="text-xs font-bold tabular-nums ml-1 shrink-0 {{ $score >= 0 ? 'text-emerald-600' : 'text-red-500' }}">
-                            {{ $score > 0 ? '+' : '' }}{{ $score }}
+                            {{ $score }}
                         </span>
                     </div>
                     <div class="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden mb-1.5">

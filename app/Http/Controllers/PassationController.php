@@ -9,7 +9,7 @@ class PassationController extends Controller
 {
     public function index()
     {
-        $passations = Passation::with('beneficiaire')->latest()->get();
+        $passations = Passation::with('beneficiaire', 'user')->where('consentement_recherche', 1)->latest()->get();
         return view('passation', compact('passations'));
     }
 }

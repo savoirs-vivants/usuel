@@ -32,6 +32,11 @@ class Passation extends Model
         return $this->belongsTo(Beneficiaire::class, 'id_beneficiaire');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_travailleur');
+    }
+
 
     public function getScoreTotalAttribute(): float
     {

@@ -32,8 +32,12 @@
                             <tr class="bg-gray-50 border-b border-gray-100">
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">ID
                                 </th>
+                                <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">Travailleur social
+                                </th>
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
                                     Date du test</th>
+                                <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
+                                    Ordre du questionnaire</th>
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
                                     Score</th>
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
@@ -46,13 +50,19 @@
                                     <td class="px-6 py-4 font-semibold text-gray-800">
                                         {{ $passation->id }}
                                     </td>
+                                    <td class="px-6 py-4 text-gray-700">{{ $passation->user->name }} {{ $passation->user->firstname }}</td>
                                     <td class="px-6 py-4 text-gray-700">{{ $passation->date->format('d/m/Y') }}</td>
+                                    <td class="px-6 py-4 text-gray-700">{{ $passation->mode_ordre }}</td>
                                     <td class="px-6 py-4 text-gray-500">{{ $passation->score_total }}</td>
                                     <td class="px-6 py-4">
-                                        <button
-                                            class="text-xs font-bold text-sv-blue border-2 border-sv-blue/20 hover:border-sv-blue rounded-lg px-3 py-1.5 transition-colors">
+                                        <a href="{{ route('questionnaire.result', $passation->id) }}"
+                                            class="inline-block text-xs font-bold text-sv-blue border-2 border-sv-blue/20 hover:border-sv-blue rounded-lg px-3 py-1.5 transition-colors text-center">
                                             Voir les détails
-                                        </button>
+                                        </a>
+                                        <a
+                                            class="text-xs font-bold text-red-500 border-2 border-red-200 hover:border-red-400 rounded-lg px-3 py-1.5 transition-colors">
+                                            Supprimer
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach
