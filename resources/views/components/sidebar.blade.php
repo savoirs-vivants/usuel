@@ -42,7 +42,7 @@
             <span class="text-sm">Certifications</span>
         </a>
 
-        <a href="#"
+        <a href="{{ route('statistiques.index') }}"
             class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-150
             {{ Route::is('statistiques.*') ? 'bg-sv-green text-white shadow-lg shadow-sv-green/20 font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white font-semibold' }}">
             <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

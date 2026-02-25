@@ -44,4 +44,8 @@ Route::middleware('auth')->group(function () {
         $passation = Passation::with('beneficiaire')->findOrFail($id);
         return view('questionnaire.result', compact('passation'));
     })->name('questionnaire.result');
+
+    Route::get('/statistiques', function () {
+        return view('statistiques');
+    })->name('statistiques.index');
 });
