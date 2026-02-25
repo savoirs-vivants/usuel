@@ -36,6 +36,6 @@ class InscriptionController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('backoffice');
+        return redirect()->route('dashboard');
     }
 }

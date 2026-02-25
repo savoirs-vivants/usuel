@@ -12,22 +12,6 @@ class AuthController extends Controller
     public function showRegister() { return view('auth.register'); }
     public function showLogin() { return view('auth.login'); }
 
-    public function register(Request $request)
-    {
-        $request->validate([
-            'email'    => 'required|email|unique:users',
-            'password' => 'required|min:8|confirmed',
-        ]);
-
-        $user = User::create([
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        Auth::login($user);
-        return redirect(route('backoffice'));
-    }
-
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -37,7 +21,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
-            return redirect()->intended(route('backoffice'));
+            return redirect()->intended(route('dashboard'));
         }
 
         return back()->withErrors(['email' => 'Identifiants incorrects.']);
