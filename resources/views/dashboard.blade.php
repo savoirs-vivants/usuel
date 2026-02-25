@@ -49,7 +49,7 @@
                     </div>
                     <div>
                         <p class="font-mono font-bold text-4xl text-sv-blue leading-none">{{ $passationsMois }}</p>
-                        <p class="text-sm text-gray-500 mt-1.5 leading-snug">passation(s)<br>réalisée(s) ce mois</p>
+                        <p class="text-sm text-gray-500 mt-1.5 leading-snug">passations réalisées ce mois</p>
                     </div>
                     @if ($evolutionMois !== null)
                         <div
@@ -59,36 +59,10 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="{{ $evolutionMois >= 0 ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7' }}" />
                             </svg>
-                            {{ abs($evolutionMois) }} vs mois dernier
+                            {{ abs($evolutionMois) }} par rapport au mois dernier
                         </div>
                     @endif
                 </div>
-
-                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col gap-3">
-                    <div class="flex items-center justify-between">
-                        <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Score moyen</p>
-                        <div class="w-9 h-9 bg-sv-green/10 rounded-xl flex items-center justify-center">
-                            <svg class="w-4 h-4 text-sv-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2z
-                                     m0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2
-                                     m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                            </svg>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex items-baseline gap-1.5">
-                            <p class="font-mono font-bold text-4xl text-sv-blue leading-none">
-                                {{ $scoreMoyen !== null ? ($scoreMoyen > 0 ? '+' : '') . $scoreMoyen : '—' }}
-                            </p>
-                            @if ($scoreMoyen !== null)
-                                <p class="font-mono text-gray-400 font-bold text-lg">/ 30</p>
-                            @endif
-                        </div>
-                        <p class="text-sm text-gray-500 mt-1.5 leading-snug">moyenne des scores<br>sur toutes les passations
-                        </p>
-                    </div>
-                </div>
-
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col gap-3">
                     <div class="flex items-center justify-between">
                         <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Bénéficiaires</p>
@@ -211,9 +185,9 @@
                                         </td>
                                         <td class="px-6 py-3">
                                             <span
-                                                class="inline-flex items-center font-mono font-bold text-xs px-2 py-0.5 rounded-lg
+                                                class="inline-flex items-center font-bold text-xs px-2 py-0.5 rounded-lg
                                     {{ $s > 15 ? 'bg-sv-green/10 text-sv-green' : ($s >= 0 ? 'bg-blue-50 text-blue-600' : 'bg-red-50 text-red-500') }}">
-                                                {{ $s > 0 ? '+' : '' }}{{ $s }} / 30
+                                                {{ $s }} / 30
                                             </span>
                                         </td>
                                         <td class="px-6 py-3">
