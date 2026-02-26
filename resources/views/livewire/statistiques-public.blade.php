@@ -1,6 +1,4 @@
 <div>
-<style>[x-cloak] { display: none !important; }</style>
-
 <div class="p-8 font-sans text-[#1a2340]" x-data="{
     filterOpen: false,
     timeRange: '{{ $timeRange }}',
@@ -56,7 +54,7 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <div class="flex items-center gap-2 mr-2" x-show="customVisible" x-cloak>
+                <div class="flex items-center gap-2 mr-2" @if($timeRange !== 'Custom') style="display:none" @endif x-show="customVisible" x-cloak>
                     <input type="date" wire:model.live="customStartDate"
                         class="text-sm border border-gray-300 rounded-md px-2 py-1 outline-none focus:border-[#1a9e7e]">
                     <span class="text-gray-400">à</span>
@@ -68,10 +66,7 @@
                         <button
                             wire:click="setTimeRange('{{ $range }}')"
                             @click="setRange('{{ $range }}')"
-                            :class="timeRange === '{{ $range }}'
-                                ? 'bg-white shadow-sm text-[#1a2340]'
-                                : 'text-gray-500 hover:text-gray-800'"
-                            class="px-4 py-1.5 rounded-md transition-all duration-200">
+                            class="px-4 py-1.5 rounded-md transition-all duration-200 {{ $timeRange === $range ? 'bg-white shadow-sm text-[#1a2340]' : 'text-gray-500 hover:text-gray-800' }}">
                             {{ $range }}
                         </button>
                     @endforeach
