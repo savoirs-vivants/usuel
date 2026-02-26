@@ -36,7 +36,9 @@ class StatistiquesPublic extends Component
 
     public function mount(): void
     {
-        $this->availableAges     = Beneficiaire::whereNotNull('age')->distinct()->orderBy('age')->pluck('age')->toArray();
+        $ageOrder = ['moins_18', '18_25', '26_35', '36_45', '46_55', '56_65', 'plus_65'];
+        $rawAges  = Beneficiaire::whereNotNull('age')->distinct()->pluck('age')->toArray();
+        $this->availableAges = array_values(array_filter($ageOrder, fn($a) => in_array($a, $rawAges)));
         $this->availableGenres   = Beneficiaire::whereNotNull('genre')->distinct()->orderBy('genre')->pluck('genre')->toArray();
         $this->availableCsps     = Beneficiaire::whereNotNull('csp')->distinct()->orderBy('csp')->pluck('csp')->toArray();
         $this->availableDiplomes = Beneficiaire::whereNotNull('diplome')->distinct()->orderBy('diplome')->pluck('diplome')->toArray();

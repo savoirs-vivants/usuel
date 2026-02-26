@@ -412,7 +412,7 @@
                                 label: function (context) {
                                     const total      = context.dataset.data.reduce((a, b) => a + b, 0);
                                     const percentage = total > 0 ? ((context.raw / total) * 100).toFixed(1) : 0;
-                                    return ` ${context.label}: ${context.raw} (${percentage}%)`;
+                                    return ` ${context.raw} (${percentage}%)`;
                                 }
                             }
                         }
