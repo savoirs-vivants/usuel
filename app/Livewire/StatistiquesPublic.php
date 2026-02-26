@@ -113,6 +113,11 @@ class StatistiquesPublic extends Component
             '56_65'         => '56-65',
             'plus_65'       => '> 65 ans',
 
+            'homme'         => 'Homme',
+            'femme'         => 'Femme',
+            'autre'         => 'Autre / Non-binaire',
+            'non_precise'   => 'Non précisé',
+
             'agriculteur'   => 'Agriculteur exploitant',
             'artisan'       => 'Artisan / Commerçant',
             'cadre'         => 'Cadre',
@@ -144,7 +149,7 @@ class StatistiquesPublic extends Component
         foreach ($this->availableGenres as $genre) {
             $count = $passations->where('genre', $genre)->count();
             if ($count > 0) {
-                $genreLabels[] = ucfirst($genre);
+                $genreLabels[] = $labelsMap[$genre] ?? ucfirst($genre);
                 $genreCounts[] = $count;
             }
         }

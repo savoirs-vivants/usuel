@@ -10,7 +10,6 @@
     },
 
     init() {
-        // Écoute les mises à jour Livewire pour synchroniser l'état Alpine
         $wire.on('update-charts', (data) => {
             this.timeRange = '{{ $timeRange }}';
         });
@@ -18,9 +17,15 @@
 }">
     <div class="flex items-center justify-between mb-8">
         <h1 class="text-3xl font-bold">Statistiques</h1>
-        <button class="bg-[#1a9e7e] hover:bg-[#158a6c] text-white px-6 py-2 rounded-lg font-semibold transition-colors shadow-sm">
-            Exporter
-        </button>
+        @livewire('export-modal', [
+            'selectedAges'     => $selectedAges,
+            'selectedGenres'   => $selectedGenres,
+            'selectedCsps'     => $selectedCsps,
+            'selectedDiplomes' => $selectedDiplomes,
+            'timeRange'        => $timeRange,
+            'customStartDate'  => $customStartDate,
+            'customEndDate'    => $customEndDate,
+        ])
     </div>
 
     <div class="flex items-center gap-8 border-b border-gray-200 mb-8">
