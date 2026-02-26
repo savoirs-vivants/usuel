@@ -420,6 +420,10 @@
                 }
             });
 
+            const rawMax    = hasDimData ? Math.max(...data.dim_scores) : 5;
+            const dimMax    = Math.max(Math.ceil(rawMax * 2) / 2, 0.5);
+            const dimStep   = parseFloat((dimMax / 5).toFixed(2));
+
             const ctxDim = document.getElementById('dimChart').getContext('2d');
             dimChart = new Chart(ctxDim, {
                 type: 'radar',
@@ -448,8 +452,8 @@
                         r: {
                             beginAtZero: true,
                             min: 0,
-                            max: 10,
-                            ticks: { stepSize: 2, backdropColor: 'transparent', color: '#6b7280', font: { weight: '500' } },
+                            max: dimMax,
+                            ticks: { stepSize: dimStep, backdropColor: 'transparent', color: '#6b7280', font: { weight: '500' } },
                             grid: { color: 'rgba(0,0,0,0.08)' },
                             angleLines: { color: 'rgba(0,0,0,0.08)' },
                             pointLabels: { font: { size: 13, weight: '600' }, color: '#374151' }
@@ -462,7 +466,7 @@
                             titleFont: { weight: 'bold' },
                             bodyFont: { size: 14 },
                             callbacks: {
-                                label: (ctx) => `Score: ${Number(ctx.raw).toFixed(1)} / 10`
+                                label: (ctx) => `Score: ${Number(ctx.raw).toFixed(1)} / 5`
                             }
                         }
                     }
