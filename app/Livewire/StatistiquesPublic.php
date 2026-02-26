@@ -45,16 +45,10 @@ class StatistiquesPublic extends Component
         $this->customEndDate   = Carbon::now()->endOfMonth()->toDateString();
     }
 
-    /**
-     * Déclenché par wire:model.live (checkboxes, dates custom).
-     * On dispatch l'événement JS pour mettre à jour les graphiques.
-     */
     public function updated(string $property): void
     {
-        // On évite de dispatcher pour les changements de timeRange
-        // car setTimeRange() le gère déjà.
         if ($property !== 'timeRange') {
-            unset($this->chartData); // Invalide le cache du computed
+            unset($this->chartData);
             $this->dispatch('update-charts', data: $this->chartData);
         }
     }
@@ -109,21 +103,24 @@ class StatistiquesPublic extends Component
         $totalPassations = $passations->count();
 
         $labelsMap = [
-            'moins_18'   => '< 18 ans',
-            '18_25'      => '18-25',
-            '26_35'      => '26-35',
-            '36_45'      => '36-45',
-            '46_55'      => '46-55',
-            '56_65'      => '56-65',
-            'plus_65'    => '> 65 ans',
-            'etudiant'   => 'Étudiant',
-            'employe'    => 'Employé',
-            'cadre'      => 'Cadre',
-            'sans_emploi' => 'Sans emploi',
-            'retraite'   => 'Retraité',
+            'moins_18'      => '< 18 ans',
+            '18_25'         => '18-25',
+            '26_35'         => '26-35',
+            '36_45'         => '36-45',
+            '46_55'         => '46-55',
+            '56_65'         => '56-65',
+            'plus_65'       => '> 65 ans',
+
+            'agriculteur'   => 'Agriculteur exploitant',
+            'artisan'       => 'Artisan / Commerçant',
+            'cadre'         => 'Cadre',
+            'intermediaire' => 'Profession intermédiaire',
+            'employe'       => 'Employé',
+            'ouvrier'       => 'Ouvrier',
+            'retraite'      => 'Retraité',
+            'sans_activite' => 'Sans activité professionnelle',
         ];
 
-        // ── Données par âge ──────────────────────────────────────────────
         $ageLabels = [];
         $ageScores = [];
 
@@ -139,7 +136,6 @@ class StatistiquesPublic extends Component
             }
         }
 
-        // ── Données par genre ─────────────────────────────────────────────
         $genreLabels = [];
         $genreCounts = [];
 
@@ -151,7 +147,6 @@ class StatistiquesPublic extends Component
             }
         }
 
-        // ── Données par CSP ───────────────────────────────────────────────
         $cspLabels = [];
         $cspCounts = [];
 
@@ -163,7 +158,6 @@ class StatistiquesPublic extends Component
             }
         }
 
-        // ── Données par dimension (radar) ─────────────────────────────────
         $dimensions = ['Résilience', 'Esprit Critique', 'Comp. sociales', 'Comp. Technique', 'Trait. info', 'Création'];
         $dimKeys    = ['Resilience', 'EC', 'CSDLEN', 'CT', 'TDLinfo', 'CDC'];
         $dimScores  = [];
@@ -209,26 +203,36 @@ class StatistiquesPublic extends Component
     public function render()
     {
         $labelsMap = [
-            'moins_18'    => 'Moins de 18 ans',
-            '18_25'       => '18 – 25 ans',
-            '26_35'       => '26 – 35 ans',
-            '36_45'       => '36 – 45 ans',
-            '46_55'       => '46 – 55 ans',
-            '56_65'       => '56 – 65 ans',
-            'plus_65'     => 'Plus de 65 ans',
-            'etudiant'    => 'Étudiant',
-            'employe'     => 'Employé',
-            'cadre'       => 'Cadre',
-            'sans_emploi' => 'Sans emploi',
-            'retraite'    => 'Retraité',
-            'sans'        => 'Sans diplôme',
-            'bac'         => 'Bac',
-            'bac2'        => 'Bac +2',
-            'bac3'        => 'Bac +3',
-            'bac5'        => 'Bac +5 et plus',
-            'Homme'       => 'Homme',
-            'Femme'       => 'Femme',
-            'Autre'       => 'Autre',
+            'moins_18'      => 'Moins de 18 ans',
+            '18_25'         => '18 – 25 ans',
+            '26_35'         => '26 – 35 ans',
+            '36_45'         => '36 – 45 ans',
+            '46_55'         => '46 – 55 ans',
+            '56_65'         => '56 – 65 ans',
+            'plus_65'       => 'Plus de 65 ans',
+
+            'homme'         => 'Homme',
+            'femme'         => 'Femme',
+            'autre'         => 'Autre / Non-binaire',
+            'non_precise'   => 'Non précisé',
+
+            'aucun'         => 'Aucun diplôme',
+            'brevet'        => 'Brevet (DNB)',
+            'cap_bep'       => 'CAP / BEP',
+            'bac'           => 'Baccalauréat',
+            'bac2'          => 'Bac +2 (BTS, DUT…)',
+            'bac3'          => 'Bac +3 (Licence…)',
+            'bac5'          => 'Bac +5 (Master…)',
+            'doctorat'      => 'Doctorat (Bac +8)',
+
+            'agriculteur'   => 'Agriculteur exploitant',
+            'artisan'       => 'Artisan / Commerçant',
+            'cadre'         => 'Cadre',
+            'intermediaire' => 'Profession intermédiaire',
+            'employe'       => 'Employé',
+            'ouvrier'       => 'Ouvrier',
+            'retraite'      => 'Retraité',
+            'sans_activite' => 'Sans activité professionnelle',
         ];
 
         return view('livewire.statistiques-public', compact('labelsMap'));
