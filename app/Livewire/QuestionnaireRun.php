@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Passation;
 use App\Models\Question;
+use App\Models\Tracking;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -24,6 +25,7 @@ class QuestionnaireRun extends Component
     ];
 
     public array $questionIds = [];
+    public array $trackingIds = [];
 
     public function mount(): void
     {
@@ -42,17 +44,19 @@ class QuestionnaireRun extends Component
         $this->showError      = false;
     }
 
-    public function valider(): void
+    public function validerAvecTracking(array $tracking): void
     {
         if ($this->selectedAnswer === '') {
             $this->showError = true;
             return;
         }
+        $this->insererTracking($tracking);
         $this->enregistrerReponse($this->selectedAnswer);
     }
 
-    public function jeSaisPas(): void
+    public function jeSaisPasAvecTracking(array $tracking): void
     {
+        $this->insererTracking($tracking);
         $this->enregistrerReponse('E');
     }
 
@@ -72,7 +76,30 @@ class QuestionnaireRun extends Component
 
         if ($this->currentIndex >= $this->totalQuestions) {
             $this->terminer();
+            return;
         }
+        $nextQuestionId = $this->questionIds[$this->currentIndex];
+        $this->dispatch('question-ready', questionId: $nextQuestionId, position: $this->currentIndex);
+    }
+
+    private function insererTracking(array $data): void
+    {
+        if (empty($data) || !isset($data['id_question'])) return;
+
+        $row = Tracking::create([
+            'id_passation'        => null,
+            'id_question'         => (int)   ($data['id_question']         ?? 0),
+            'position'            => (int)   ($data['position']            ?? $this->currentIndex),
+            'temps_total_ms'      => (float) ($data['temps_total_ms']      ?? 0),
+            'latence_ms'          => (float) ($data['latence_ms']          ?? 0),
+            'nb_clics'            => (int)   ($data['nb_clics']            ?? 0),
+            'nb_changements'      => (int)   ($data['nb_changements']      ?? 0),
+            'nb_clics_hors_cible' => (int)   ($data['nb_clics_hors_cible'] ?? 0),
+            'nb_pauses'           => (int)   ($data['nb_pauses']           ?? 0),
+            'suivi_souris'        => $data['suivi_souris'] ?? null,
+        ]);
+
+        $this->trackingIds[] = $row->id;
     }
 
     private function terminer(): void
@@ -92,9 +119,12 @@ class QuestionnaireRun extends Component
             'scenario'               => null,
             'modules'                => null,
         ]);
+        if (!empty($this->trackingIds)) {
+            Tracking::whereIn('id', $this->trackingIds)
+                ->update(['id_passation' => $passation->id]);
+        }
 
         session()->flash('autoriser_resultat', $passation->id);
-
         $this->redirect(route('questionnaire.result', $passation->id));
     }
 
