@@ -32,7 +32,8 @@
                             <tr class="bg-gray-50 border-b border-gray-100">
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">ID
                                 </th>
-                                <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">Travailleur social
+                                <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
+                                    Travailleur social
                                 </th>
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
                                     Date du test</th>
@@ -45,12 +46,13 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
-@foreach ($passations as $passation)
+                            @foreach ($passations as $passation)
                                 <tr class="hover:bg-gray-50/80 transition-colors duration-100" x-data="{ confirmDelete: false }">
                                     <td class="px-6 py-4 font-semibold text-gray-800">
                                         {{ $passation->id }}
                                     </td>
-                                    <td class="px-6 py-4 text-gray-700">{{ $passation->user->name }} {{ $passation->user->firstname }}</td>
+                                    <td class="px-6 py-4 text-gray-700">{{ $passation->user->name }}
+                                        {{ $passation->user->firstname }}</td>
                                     <td class="px-6 py-4 text-gray-700">{{ $passation->date->format('d/m/Y') }}</td>
                                     <td class="px-6 py-4 text-gray-700">{{ $passation->mode_ordre }}</td>
                                     <td class="px-6 py-4 text-gray-500">{{ $passation->score_total }}/30</td>
@@ -68,7 +70,8 @@
 
                                         <div x-show="confirmDelete" x-cloak class="flex items-center gap-2">
                                             <span class="text-xs text-gray-500 font-medium">Confirmer ?</span>
-                                            <form action="{{ route('passation.destroy', $passation) }}" method="POST" class="inline">
+                                            <form action="{{ route('passation.destroy', $passation) }}" method="POST"
+                                                class="inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
@@ -88,8 +91,10 @@
                     </table>
                 @else
                     <div class="text-center py-16 text-gray-400">
-                        <svg class="w-10 h-10 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <svg class="w-10 h-10 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                         <p class="font-mono text-sm">Aucune passation trouvée</p>
                     </div>

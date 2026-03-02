@@ -392,19 +392,19 @@
                             },
                             borderRadius: (context) => {
                                 const v = context.raw;
-                                return v >= 0 ?
-                                    {
-                                        topLeft: 6,
-                                        topRight: 6,
-                                        bottomLeft: 0,
-                                        bottomRight: 0
-                                    } :
-                                    {
-                                        topLeft: 0,
-                                        topRight: 0,
-                                        bottomLeft: 6,
-                                        bottomRight: 6
-                                    };
+                                return v >= 0 ? {
+
+                                    topLeft: 6,
+                                    topRight: 6,
+                                    bottomLeft: 0,
+                                    bottomRight: 0
+                                } : {
+
+                                    topLeft: 0,
+                                    topRight: 0,
+                                    bottomLeft: 6,
+                                    bottomRight: 6
+                                };
                             },
                             borderSkipped: false,
                             barPercentage: 0.55,
@@ -598,7 +598,7 @@
                             r: {
                                 beginAtZero: true,
                                 min: 0,
-                                max: dimMax,
+                                max: 1,
                                 ticks: {
                                     stepSize: dimStep,
                                     backdropColor: 'transparent',
@@ -636,7 +636,7 @@
                                     size: 13
                                 },
                                 callbacks: {
-                                    label: (ctx) => `Score: ${Number(ctx.raw).toFixed(1)} / 5`
+                                    label: (ctx) => `Score: ${(ctx.raw / 5).toFixed(2)} / 1`
                                 }
                             }
                         }
