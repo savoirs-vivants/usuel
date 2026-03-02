@@ -23,6 +23,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    Route::get('/profil', function () {
+        return view('profile-page');
+    })->name('profile.edit');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/backoffice', [BackOfficeController::class, 'index'])->name('backoffice');
