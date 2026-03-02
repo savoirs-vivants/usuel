@@ -3,11 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackOfficeController;
-use App\Http\Controllers\CertificationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\PassationController;
 use App\Models\Passation;
+use App\Models\User;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,6 +30,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/backoffice', [BackOfficeController::class, 'index'])->name('backoffice');
+    Route::get('/backoffice/user/{user}/edit', function (User $user) {
+        return view('edit-user-page', compact('user'));
+    })->name('user.edit');
+    Route::delete('/backoffice/users/{user}', [BackOfficeController::class, 'destroy'])->name('backoffice.destroy');
 
     Route::get('/passations', [PassationController::class, 'index'])->name('passations');
 
