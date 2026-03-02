@@ -48,4 +48,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/statistiques', function () {
         return view('statistiques');
     })->name('statistiques.index');
+
+    Route::get('/statistiques/comportementale', function () {
+        return view('statistiques-comportementale-page');
+    })->name('statistiques.comportementale');
 });
