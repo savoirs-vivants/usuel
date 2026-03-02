@@ -57,8 +57,10 @@ class CreateUser extends Component
 
         Mail::to($user->email)->send(new InvitationMail($user, $token));
 
+        $email = $this->email;
         $this->closeModal();
-
+        session()->flash('toast_message', 'Invitation envoyée à ' . $email);
+        session()->flash('toast_type', 'success');
         return redirect()->route('backoffice');
     }
 

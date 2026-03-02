@@ -30,5 +30,6 @@
     @endif
 
     @livewireScripts
+    @include('components.toast-notification')
 </body>
 </html>
