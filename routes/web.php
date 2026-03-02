@@ -40,6 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/passations/{passation}/certificat', [PassationController::class, 'certificat'])
         ->name('passation.certificat');
 
+    Route::delete('/passations/{passation}', [PassationController::class, 'destroy'])->name('passation.destroy');
+
+
     Route::get('/questionnaire', function () {
         return view('questionnaire');
     })->name('questionnaire.index');

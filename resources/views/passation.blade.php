@@ -45,8 +45,8 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
-                            @foreach ($passations as $passation)
-                                <tr class="hover:bg-gray-50/80 transition-colors duration-100 group">
+@foreach ($passations as $passation)
+                                <tr class="hover:bg-gray-50/80 transition-colors duration-100" x-data="{ confirmDelete: false }">
                                     <td class="px-6 py-4 font-semibold text-gray-800">
                                         {{ $passation->id }}
                                     </td>
@@ -55,14 +55,32 @@
                                     <td class="px-6 py-4 text-gray-700">{{ $passation->mode_ordre }}</td>
                                     <td class="px-6 py-4 text-gray-500">{{ $passation->score_total }}/30</td>
                                     <td class="px-6 py-4">
-                                        <a href="{{ route('questionnaire.result', $passation->id) }}"
-                                            class="inline-block text-xs font-bold text-sv-blue border-2 border-sv-blue/20 hover:border-sv-blue rounded-lg px-3 py-1.5 transition-colors text-center">
-                                            Voir les détails
-                                        </a>
-                                        <a
-                                            class="text-xs font-bold text-red-500 border-2 border-red-200 hover:border-red-400 rounded-lg px-3 py-1.5 transition-colors">
-                                            Supprimer
-                                        </a>
+                                        <div x-show="!confirmDelete" class="flex items-center gap-2">
+                                            <a href="{{ route('questionnaire.result', $passation->id) }}"
+                                                class="inline-block text-xs font-bold text-sv-blue border-2 border-sv-blue/20 hover:border-sv-blue rounded-lg px-3 py-1.5 transition-colors text-center">
+                                                Voir les détails
+                                            </a>
+                                            <button @click="confirmDelete = true"
+                                                class="text-xs font-bold text-red-500 border-2 border-red-200 hover:border-red-400 rounded-lg px-3 py-1.5 transition-colors">
+                                                Supprimer
+                                            </button>
+                                        </div>
+
+                                        <div x-show="confirmDelete" x-cloak class="flex items-center gap-2">
+                                            <span class="text-xs text-gray-500 font-medium">Confirmer ?</span>
+                                            <form action="{{ route('passation.destroy', $passation) }}" method="POST" class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="text-xs font-bold text-white bg-red-500 hover:bg-red-600 rounded-lg px-3 py-1.5 transition-colors">
+                                                    Oui, supprimer
+                                                </button>
+                                            </form>
+                                            <button @click="confirmDelete = false"
+                                                class="text-xs font-bold text-gray-500 border-2 border-gray-200 hover:border-gray-400 rounded-lg px-3 py-1.5 transition-colors">
+                                                Annuler
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

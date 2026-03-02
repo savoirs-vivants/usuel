@@ -17,4 +17,14 @@ class PassationController extends Controller
     {
         return view('questionnaire.certificat', compact('passation'));
     }
+
+        public function destroy(Passation $passation)
+    {
+        $passation->delete();
+
+        session()->flash('toast_message', 'Passation supprimé');
+        session()->flash('toast_type', 'success');
+
+        return redirect()->route('passations');
+    }
 }
