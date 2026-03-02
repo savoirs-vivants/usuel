@@ -45,7 +45,7 @@ Route::middleware('auth')->group(function () {
         return view('questionnaire.result', compact('passation'));
     })->name('questionnaire.result');
 
-    Route::get('/statistiques', function () {
+    Route::get('/statistiques/public', function () {
         return view('statistiques');
     })->name('statistiques.index');
 

@@ -33,11 +33,11 @@
         </div>
 
         <div class="flex items-center gap-1 border-b border-gray-200 mb-6">
-            <a href="#"
+            <a href="{{ route('statistiques.index') }}"
                 class="px-4 py-2.5 text-sm font-bold text-sv-green border-b-2 border-sv-green -mb-px transition-colors">
                 Public
             </a>
-            <a href="#"
+            <a href="{{ route('statistiques.comportementale') }}"
                 class="px-4 py-2.5 text-sm font-semibold text-gray-400 border-b-2 border-transparent hover:text-sv-blue hover:border-gray-300 -mb-px transition-colors">
                 Comportementale
             </a>
@@ -98,8 +98,7 @@
                     x-transition:leave="transition ease-in duration-150"
                     x-transition:leave-start="opacity-100 translate-x-0"
                     x-transition:leave-end="opacity-0 -translate-x-2" x-cloak
-                    class="absolute top-0 left-0 z-20 w-68 bg-white border-r border-b border-gray-100 shadow-lg rounded-bl-2xl overflow-y-auto"
-                    style="width:272px; max-height: calc(100% - 1px)">
+                    class="absolute top-0 left-0 z-20 w-68 bg-white border-r border-b border-gray-100 shadow-lg rounded-bl-2xl overflow-y-auto">
                     <div class="p-5 space-y-1">
 
                         @if (!empty($availableAges))
