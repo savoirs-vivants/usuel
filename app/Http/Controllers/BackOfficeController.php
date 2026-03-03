@@ -5,15 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class BackOfficeController extends Controller
 {
     public function index()
     {
-        $users = User::where('id', '!=', Auth::id())
-            ->where('is_registered', 1)
-            ->latest()
-            ->get();
+        Gate::authorize('viewAny', User::class);
+
+        $query = User::query();
+
+        if (Auth::user()->role === 'gestionnaire') {
+            $query->where('structure', Auth::user()->structure)
+                  ->where('role', 'travailleur');
+        }
+
+        $users = $query->get();
 
         return view('backoffice', compact('users'));
     }

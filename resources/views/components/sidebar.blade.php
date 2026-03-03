@@ -68,7 +68,7 @@
                     <p class="text-white font-semibold text-sm leading-tight truncate">
                         {{ Auth::user()->firstname }} {{ Auth::user()->name }}
                     </p>
-                    <p class="text-white/50 text-xs capitalize">{{ Auth::user()->role ?? 'rôle' }}</p>
+                    <p class="text-white/50 text-xs capitalize">{{ Auth::user()->role === 'travailleur' ? 'travailleur social' : (Auth::user()->role ?? 'rôle') }}</p>
                 </div>
                 <svg class="w-4 h-4 text-white/40 transition-transform duration-200 shrink-0"
                     :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
