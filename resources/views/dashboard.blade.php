@@ -43,7 +43,7 @@
                         <div class="w-9 h-9 bg-sv-blue/8 rounded-xl flex items-center justify-center">
                             <svg class="w-4 h-4 text-sv-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2
-                                     M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                         M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                             </svg>
                         </div>
                     </div>
@@ -69,8 +69,8 @@
                         <div class="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center">
                             <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857
-                                     M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857
-                                     m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                                         M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857
+                                         m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
                         </div>
                     </div>
@@ -155,38 +155,28 @@
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="bg-gray-50 border-b border-gray-100">
-                                    <th
-                                        class="text-left px-6 py-3 font-bold text-sv-blue text-xs uppercase tracking-wider">
+                                    <th class="text-left px-6 py-3 font-bold text-sv-blue text-xs uppercase tracking-wider">
                                         ID</th>
-                                    <th
-                                        class="text-left px-6 py-3 font-bold text-sv-blue text-xs uppercase tracking-wider">
-                                        Bénéficiaire</th>
-                                    <th
-                                        class="text-left px-6 py-3 font-bold text-sv-blue text-xs uppercase tracking-wider">
+                                    <th class="text-left px-6 py-3 font-bold text-sv-blue text-xs uppercase tracking-wider">
                                         Date</th>
-                                    <th
-                                        class="text-left px-6 py-3 font-bold text-sv-blue text-xs uppercase tracking-wider">
+                                    <th class="text-left px-6 py-3 font-bold text-sv-blue text-xs uppercase tracking-wider">
                                         Score</th>
-                                    <th
-                                        class="text-left px-6 py-3 font-bold text-sv-blue text-xs uppercase tracking-wider">
+                                    <th class="text-left px-6 py-3 font-bold text-sv-blue text-xs uppercase tracking-wider">
                                         Détail du résultat</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-50">
                                 @foreach ($dernieresPassations as $p)
-                                    @php $s = $p->score_total; @endphp
+                                    @php $s = $p->score_total ?? 0; @endphp
                                     <tr class="hover:bg-gray-50/80 transition-colors">
                                         <td class="px-6 py-3 font-mono text-xs text-gray-400">#{{ $p->id }}</td>
-                                        <td class="px-6 py-3 font-semibold text-gray-800 text-xs">
-                                            {{ $p->beneficiaire->prenom ?? '—' }} {{ $p->beneficiaire->nom ?? '' }}
-                                        </td>
                                         <td class="px-6 py-3 text-xs text-gray-500">
                                             {{ $p->created_at->format('d/m/Y') }}
                                         </td>
                                         <td class="px-6 py-3">
                                             <span
                                                 class="inline-flex items-center font-bold text-xs px-2 py-0.5 rounded-lg
-                                    {{ $s > 15 ? 'bg-sv-green/10 text-sv-green' : ($s >= 0 ? 'bg-blue-50 text-blue-600' : 'bg-red-50 text-red-500') }}">
+                    {{ $s > 15 ? 'bg-sv-green/10 text-sv-green' : ($s >= 0 ? 'bg-blue-50 text-blue-600' : 'bg-red-50 text-red-500') }}">
                                                 {{ $s }} / 30
                                             </span>
                                         </td>
@@ -206,7 +196,7 @@
         </div>
     </section>
 
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
