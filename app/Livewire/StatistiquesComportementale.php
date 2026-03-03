@@ -36,6 +36,19 @@ class StatistiquesComportementale extends Component
     public array $availableCsps     = [];
     public array $availableDiplomes = [];
 
+    public string $sortField = 'num';
+    public string $sortDirection = 'asc';
+
+    public function sortBy(string $field): void
+    {
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortField = $field;
+            $this->sortDirection = 'asc';
+        }
+    }
+
     public function mount(): void
     {
         $ageOrder = ['moins_18', '18_25', '26_35', '36_45', '46_55', '56_65', 'plus_65'];
@@ -180,6 +193,13 @@ class StatistiquesComportementale extends Component
         $ordreTemps       = $byPosition->map(fn($r) => round($r->avg_temps))->toArray();
         $ordreLatence     = $byPosition->map(fn($r) => round($r->avg_latence))->toArray();
         $ordreChangements = $byPosition->map(fn($r) => round($r->avg_changements, 2))->toArray();
+
+        $collection = collect($tableau);
+        if ($this->sortDirection === 'asc') {
+            $tableau = $collection->sortBy($this->sortField)->values()->toArray();
+        } else {
+            $tableau = $collection->sortByDesc($this->sortField)->values()->toArray();
+        }
 
         return [
             'total_passations'  => $totalPassations,
