@@ -8,6 +8,8 @@ use Livewire\Attributes\Computed;
 use App\Models\Passation;
 use App\Models\Beneficiaire;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
 
 class StatistiquesPublic extends Component
 {
@@ -73,6 +75,8 @@ class StatistiquesPublic extends Component
     #[Computed]
     public function chartData(): array
     {
+        $user = Auth::user();
+
         $query = Passation::query()
             ->join('beneficiaires', 'passations.id_beneficiaire', '=', 'beneficiaires.id')
             ->select(
@@ -83,6 +87,19 @@ class StatistiquesPublic extends Component
                 'beneficiaires.diplome'
             );
 
+        if ($user->role === 'travailleur') {
+            $query->where('passations.id_travailleur', $user->id);
+
+        } elseif ($user->role === 'gestionnaire') {
+            $query->whereHas('user', function (Builder $q) use ($user) {
+                $q->where('structure', $user->structure);
+            });
+
+        } else {
+            $query->where('passations.consentement_recherche', 1);
+        }
+
+
         if (!empty($this->selectedAges))     $query->whereIn('beneficiaires.age',     $this->selectedAges);
         if (!empty($this->selectedGenres))   $query->whereIn('beneficiaires.genre',   $this->selectedGenres);
         if (!empty($this->selectedCsps))     $query->whereIn('beneficiaires.csp',     $this->selectedCsps);
@@ -92,7 +109,7 @@ class StatistiquesPublic extends Component
         match ($this->timeRange) {
             'J'      => $query->whereDate('passations.created_at', $now->toDateString()),
             'M'      => $query->whereMonth('passations.created_at', $now->month)
-                ->whereYear('passations.created_at', $now->year),
+                              ->whereYear('passations.created_at', $now->year),
             'A'      => $query->whereYear('passations.created_at', $now->year),
             'Custom' => $query->whereBetween('passations.created_at', [
                 $this->customStartDate . ' 00:00:00',
