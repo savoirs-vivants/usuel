@@ -117,6 +117,7 @@ class StatistiquesComportementale extends Component
                 DB::raw('AVG(tracking.nb_changements) as avg_changements'),
                 DB::raw('AVG(tracking.nb_clics_hors_cible) as avg_hors_cible'),
                 DB::raw('AVG(tracking.nb_pauses) as avg_pauses'),
+                DB::raw('AVG(tracking.resultat) as avg_score'),
                 DB::raw('COUNT(*) as nb_occurrences')
             )
             ->groupBy('tracking.id_question')
@@ -160,6 +161,7 @@ class StatistiquesComportementale extends Component
                 'avg_hors_cible'     => $row ? round($row->avg_hors_cible, 1) : null,
                 'avg_pauses'         => $row ? round($row->avg_pauses, 1) : null,
                 'nb_occurrences'     => $row ? $row->nb_occurrences : 0,
+                'avg_score'          => $row ? round($row->avg_score, 2) : null,
             ];
         }
 

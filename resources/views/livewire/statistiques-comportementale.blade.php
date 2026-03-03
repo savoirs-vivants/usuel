@@ -1,6 +1,4 @@
 <div>
-<style>[x-cloak] { display: none !important; }</style>
-
 <div class="font-sans text-[#1a2340]" x-data="{
     filterOpen: false,
     customVisible: {{ $timeRange === 'Custom' ? 'true' : 'false' }},
@@ -258,6 +256,7 @@
                                     <th class="text-left px-4 py-3 font-bold text-sv-blue uppercase tracking-wider whitespace-nowrap">N°</th>
                                     <th class="text-left px-4 py-3 font-bold text-sv-blue uppercase tracking-wider whitespace-nowrap">Catégorie</th>
                                     <th class="text-left px-4 py-3 font-bold text-sv-blue uppercase tracking-wider">Extrait</th>
+                                    <th class="text-right px-4 py-3 font-bold text-sv-blue uppercase tracking-wider whitespace-nowrap">Score moy. (/1)</th>
                                     <th class="text-right px-4 py-3 font-bold text-sv-blue uppercase tracking-wider whitespace-nowrap">Temps moy. (ms)</th>
                                     <th class="text-right px-4 py-3 font-bold text-sv-blue uppercase tracking-wider whitespace-nowrap">Latence moy. (ms)</th>
                                     <th class="text-right px-4 py-3 font-bold text-sv-blue uppercase tracking-wider whitespace-nowrap">Clics moy.</th>
@@ -279,6 +278,7 @@
                                             {{ $row['intitule'] }}
                                         </td>
                                         @if ($row['nb_occurrences'] > 0)
+                                            <td class="px-4 py-2.5 text-right font-mono font-bold {{ isset($row['avg_score']) ? ($row['avg_score'] > 0 ? 'text-sv-green' : ($row['avg_score'] < 0 ? 'text-red-400' : 'text-gray-400')) : 'text-gray-300' }}">{{ $row['avg_score'] ?? '—' }}</td>
                                             <td class="px-4 py-2.5 text-right font-mono text-gray-700">{{ number_format($row['avg_temps']) }}</td>
                                             <td class="px-4 py-2.5 text-right font-mono text-gray-700">{{ number_format($row['avg_latence']) }}</td>
                                             <td class="px-4 py-2.5 text-right font-mono text-gray-700">{{ $row['avg_clics'] }}</td>
@@ -290,12 +290,12 @@
                                             <td class="px-4 py-2.5 text-right font-mono text-gray-700">{{ $row['avg_hors_cible'] }}</td>
                                             <td class="px-4 py-2.5 text-right font-mono text-gray-700">{{ $row['avg_pauses'] }}</td>
                                         @else
-                                            <td colspan="7" class="px-4 py-2.5 text-center text-gray-300 text-xs italic">Aucune donnée</td>
+                                            <td colspan="8" class="px-4 py-2.5 text-center text-gray-300 text-xs italic">Aucune donnée</td>
                                         @endif
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="10" class="px-4 py-12 text-center text-gray-300 text-xs font-mono">
+                                        <td colspan="11" class="px-4 py-12 text-center text-gray-300 text-xs font-mono">
                                             Aucune donnée de tracking pour cette période.
                                         </td>
                                     </tr>

@@ -22,6 +22,7 @@ class Tracking extends Model
         'nb_clics_hors_cible',
         'nb_pauses',
         'suivi_souris',
+        'resultat',
     ];
 
     protected $casts = [
@@ -31,6 +32,7 @@ class Tracking extends Model
         'nb_changements'     => 'integer',
         'nb_clics_hors_cible'=> 'integer',
         'nb_pauses'          => 'integer',
+        'resultat' => 'float',
     ];
 
     public function passation(): BelongsTo
