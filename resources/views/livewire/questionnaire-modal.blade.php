@@ -81,11 +81,6 @@
                                     <option value="56_65">56 – 65 ans</option>
                                     <option value="plus_65">Plus de 65 ans</option>
                                 </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                                    </svg>
-                                </div>
                             </div>
                             @error('age')
                             <p class="mt-1.5 text-xs text-red-500 flex items-center gap-1">
@@ -115,11 +110,6 @@
                                     <option value="bac5">Bac +5 (Master, Ingénieur…)</option>
                                     <option value="doctorat">Doctorat (Bac +8)</option>
                                 </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                                    </svg>
-                                </div>
                             </div>
                             @error('diplome')
                             <p class="mt-1.5 text-xs text-red-500 flex items-center gap-1">
@@ -148,12 +138,8 @@
                                     <option value="ouvrier">Ouvrier</option>
                                     <option value="retraite">Retraité</option>
                                     <option value="sans_activite">Sans activité professionnelle</option>
+                                    <option value="autre">Autre</option>
                                 </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                                    </svg>
-                                </div>
                             </div>
                             @error('csp')
                             <p class="mt-1.5 text-xs text-red-500 flex items-center gap-1">

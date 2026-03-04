@@ -143,6 +143,7 @@ class StatistiquesPublic extends Component
             'ouvrier'       => 'Ouvrier',
             'retraite'      => 'Retraité',
             'sans_activite' => 'Sans activité professionnelle',
+            'autre'         => 'Autre',
         ];
 
         $ageLabels = [];
@@ -257,6 +258,7 @@ class StatistiquesPublic extends Component
             'ouvrier'       => 'Ouvrier',
             'retraite'      => 'Retraité',
             'sans_activite' => 'Sans activité professionnelle',
+            'autre'         => 'Autre',
         ];
 
         return view('livewire.statistiques-public', compact('labelsMap'));

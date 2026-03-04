@@ -263,6 +263,7 @@ class StatistiquesComportementale extends Component
             'ouvrier' => 'Ouvrier',
             'retraite' => 'Retraité',
             'sans_activite' => 'Sans activité',
+            'autre' => 'Autre',
         ];
 
         return view('livewire.statistiques-comportementale', compact('labelsMap'));
