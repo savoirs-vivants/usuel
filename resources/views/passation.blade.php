@@ -30,38 +30,66 @@
                     <table id="table-passations" class="w-full text-sm">
                         <thead>
                             <tr class="bg-gray-50 border-b border-gray-100">
-                                <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">ID
+                                @if (auth()->user()->role == 'admin')
+                                    <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
+                                        ID
+                                    </th>
+                                @endif
+                                @if (auth()->user()->role !== 'admin')
+                                    <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
+                                        Bénéficiaire
+                                    </th>
+                                @endif
+                                @if (auth()->user()->role === 'gestionnaire')
+                                    <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
+                                        Travailleur social
+                                    </th>
+                                @endif
+
+                                <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
+                                    Date du test
                                 </th>
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
-                                    Travailleur social
+                                    Ordre des questions
                                 </th>
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
-                                    Date du test</th>
+                                    Score
+                                </th>
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
-                                    Ordre des questions</th>
-                                <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
-                                    Score</th>
-                                <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
-                                    Action</th>
+                                    Action
+                                </th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
                             @foreach ($passations as $passation)
                                 <tr class="hover:bg-gray-50/80 transition-colors duration-100" x-data="{ confirmDelete: false }">
-                                    <td class="px-6 py-4 font-semibold text-gray-800">
-                                        {{ $passation->id }}
-                                    </td>
-                                    <td class="px-6 py-4 text-gray-700">{{ $passation->user->name }}
-                                        {{ $passation->user->firstname }}</td>
-                                    <td class="px-6 py-4 text-gray-700">{{ $passation->date->format('d/m/Y') }}</td>
+                                    @if (auth()->user()->role == 'admin')
+                                        <td class="px-6 py-4 font-semibold text-gray-800">
+                                            #{{ $passation->id }}
+                                        </td>
+                                    @endif
+                                    @if (auth()->user()->role !== 'admin')
+                                        <td class="px-6 py-4 text-gray-700 font-medium">
+                                            {{ $passation->beneficiaire->prenom ?? 'Inconnu' }}
+                                            {{ $passation->beneficiaire->nom ?? '' }}
+                                        </td>
+                                    @endif
+                                    @if (auth()->user()->role === 'gestionnaire')
+                                        <td class="px-6 py-4 text-gray-500">
+                                            {{ $passation->user->firstname ?? '' }} {{ $passation->user->name ?? '' }}
+                                        </td>
+                                    @endif
+                                    <td class="px-6 py-4 text-gray-700">
+                                        {{ $passation->date ? $passation->date->format('d/m/Y') : '—' }}</td>
                                     <td class="px-6 py-4 text-gray-700">{{ $passation->mode_ordre }}</td>
-                                    <td class="px-6 py-4 text-gray-500">{{ $passation->score_total }}/30</td>
+                                    <td class="px-6 py-4 text-gray-500">{{ $passation->score_total ?? 0 }}/30</td>
                                     <td class="px-6 py-4">
                                         <div x-show="!confirmDelete" class="flex items-center gap-2">
                                             <a href="{{ route('questionnaire.result', $passation->id) }}"
                                                 class="inline-block text-xs font-bold text-sv-blue border-2 border-sv-blue/20 hover:border-sv-blue rounded-lg px-3 py-1.5 transition-colors text-center">
                                                 Voir les détails
                                             </a>
+
                                             <button @click="confirmDelete = true"
                                                 class="text-xs font-bold text-red-500 border-2 border-red-200 hover:border-red-400 rounded-lg px-3 py-1.5 transition-colors">
                                                 Supprimer

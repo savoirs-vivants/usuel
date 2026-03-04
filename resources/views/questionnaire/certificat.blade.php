@@ -83,9 +83,11 @@
         <p class="text-gray-400 text-sm">Attestation d'évaluation des compétences numériques</p>
         <div class="mt-5 mb-1">
             <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-2">Délivré à</p>
+            @if (auth()->user()->role !== 'admin')
             <span class="inline-block font-bold text-sv-blue text-2xl bg-slate-50 border-b-4 border-sv-green px-6 py-1.5 rounded-xl">
                 {{ $passation->beneficiaire->prenom }} {{ $passation->beneficiaire->nom }}
             </span>
+            @endif
         </div>
     </header>
 
@@ -136,7 +138,7 @@
 
     <div class="shrink-0 mx-10 pt-4 pb-6 mt-auto flex items-end justify-between relative z-10">
         <div>
-            <p class="text-xs text-gray-500 font-medium mb-1">Validé par l'organisme de formation</p>
+            <p class="text-xs text-gray-500 font-medium mb-1">Évalué par l'organisme de formation</p>
             <div class="h-10 w-36 border-b-2 border-gray-300 mb-1.5"></div>
             <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Signature &amp; Cachet</p>
         </div>

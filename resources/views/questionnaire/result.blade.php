@@ -79,21 +79,22 @@
     <div class="flex-1 flex gap-5 px-8 pb-6 min-h-0">
 
         <div class="w-56 shrink-0 flex flex-col gap-3">
-
-            <div
-                class="bg-white rounded-2xl border border-gray-100 shadow-sm px-5 py-4 flex flex-col items-center text-center">
-                <div class="w-12 h-12 rounded-full bg-[#1a9e7e]/10 flex items-center justify-center mb-3">
-                    <span class="text-xl font-bold text-[#1a9e7e]">
-                        {{ strtoupper(substr($passation->beneficiaire->prenom, 0, 1)) }}{{ strtoupper(substr($passation->beneficiaire->nom, 0, 1)) }}
-                    </span>
+            @if (auth()->user()->role !== 'admin')
+                <div
+                    class="bg-white rounded-2xl border border-gray-100 shadow-sm px-5 py-4 flex flex-col items-center text-center">
+                    <div class="w-12 h-12 rounded-full bg-[#1a9e7e]/10 flex items-center justify-center mb-3">
+                        <span class="text-xl font-bold text-[#1a9e7e]">
+                            {{ strtoupper(substr($passation->beneficiaire->prenom, 0, 1)) }}{{ strtoupper(substr($passation->beneficiaire->nom, 0, 1)) }}
+                        </span>
+                    </div>
+                    <p class="font-bold text-[#1a2340] text-sm leading-tight">
+                        {{ $passation->beneficiaire->prenom }} {{ $passation->beneficiaire->nom }}
+                    </p>
+                    <p class="text-[11px] text-gray-400 mt-0.5">
+                        {{ $passation->created_at->format('d/m/Y') }}
+                    </p>
                 </div>
-                <p class="font-bold text-[#1a2340] text-sm leading-tight">
-                    {{ $passation->beneficiaire->prenom }} {{ $passation->beneficiaire->nom }}
-                </p>
-                <p class="text-[11px] text-gray-400 mt-0.5">
-                    {{ $passation->created_at->format('d/m/Y') }}
-                </p>
-            </div>
+            @endif
 
             <div
                 class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col items-center flex-1 justify-center">
