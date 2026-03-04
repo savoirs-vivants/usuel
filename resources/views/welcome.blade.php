@@ -8,7 +8,6 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Courier+Prime:wght@700&display=swap"
         rel="stylesheet">
 
-    {{-- NAV --}}
     <nav class="bg-white border-b-4 border-sv-green sticky top-0 z-50 shadow-sm">
         <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
             <span class="font-mono text-2xl font-bold text-sv-blue">Usuel</span>
@@ -19,9 +18,7 @@
         </div>
     </nav>
 
-    {{-- HERO --}}
     <section class="bg-sv-blue text-white px-6 pt-20 pb-28 relative overflow-hidden">
-        {{-- subtle background shape --}}
         <div class="absolute top-0 right-0 w-96 h-96 rounded-full opacity-5 bg-white -translate-y-1/2 translate-x-1/3"></div>
         <div class="max-w-4xl mx-auto relative">
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 max-w-2xl">
@@ -44,7 +41,6 @@
         </div>
     </section>
 
-    {{-- REASSURANCE STRIP --}}
     <section class="bg-gray-50 border-b border-gray-200 px-6 py-12">
         <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
 
@@ -91,7 +87,6 @@
         </div>
     </section>
 
-    {{-- ABOUT --}}
     <section id="en-savoir-plus" class="bg-white px-6 py-20 border-b border-gray-200">
         <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-14 items-center">
 
@@ -125,7 +120,6 @@
         </div>
     </section>
 
-    {{-- HOW IT WORKS --}}
     <section id="comment-ca-marche" class="bg-gray-50 px-6 py-20 border-b border-gray-200">
         <div class="max-w-4xl mx-auto">
             <p class="text-sv-green font-bold text-xs tracking-widest uppercase mb-3">Étape par étape</p>
@@ -148,7 +142,6 @@
         </div>
     </section>
 
-    {{-- PRIVACY --}}
     <section class="bg-sv-blue text-white px-6 py-16 border-b border-white/10">
         <div class="max-w-4xl mx-auto flex flex-wrap items-center gap-10">
             <p class="text-6xl">🛡️</p>
@@ -162,7 +155,6 @@
         </div>
     </section>
 
-    {{-- PARTNERS --}}
     <section class="bg-gray-50 px-6 py-16 border-b border-gray-200">
         <div class="max-w-4xl mx-auto">
             <p class="text-sv-green font-bold text-xs tracking-widest uppercase mb-3">Ils nous font confiance</p>

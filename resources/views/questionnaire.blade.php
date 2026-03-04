@@ -19,31 +19,32 @@
             </div>
 
             <div class="flex items-center gap-3 shrink-0">
-                <div class="relative">
-                    <select id="mode-select"
-                        class="appearance-none bg-white border border-gray-200 text-[#1a2340] text-sm font-medium rounded-lg pl-4 pr-9 py-2.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1a9e7e] transition">
-                        <option value="fixe">Mode fixe</option>
-                        <option value="aleatoire">Mode aléatoire</option>
-                        <option value="semi_aleatoire">Mode semi-aléatoire</option>
-                        <option value="carre_latin">Carré latin</option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-2.5 flex items-center">
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2.5"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                        </svg>
+                @can('viewAny', App\Models\Question::class)                    <div class="relative">
+                        <select id="mode-select"
+                            class="appearance-none bg-white border border-gray-200 text-[#1a2340] text-sm font-medium rounded-lg pl-4 pr-9 py-2.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1a9e7e] transition">
+                            <option value="fixe">Mode fixe</option>
+                            <option value="aleatoire">Mode aléatoire</option>
+                            <option value="semi_aleatoire">Mode semi-aléatoire</option>
+                            <option value="carre_latin">Carré latin</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-2.5 flex items-center">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2.5"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
                     </div>
-                </div>
 
-                <a href="#"
-                    class="inline-flex items-center gap-2 bg-white border border-gray-200 text-[#1a2340] text-sm font-medium rounded-lg px-4 py-2.5 hover:border-[#1a9e7e] hover:text-[#1a9e7e] hover:bg-emerald-50 transition">
-                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
-                    Gérer les questions
-                </a>
+                    <a href="#"
+                        class="inline-flex items-center gap-2 bg-white border border-gray-200 text-[#1a2340] text-sm font-medium rounded-lg px-4 py-2.5 hover:border-[#1a9e7e] hover:text-[#1a9e7e] hover:bg-emerald-50 transition">
+                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                        Gérer les questions
+                    </a>
+                @endcan
 
                 @livewire('questionnaire-modal')
             </div>
