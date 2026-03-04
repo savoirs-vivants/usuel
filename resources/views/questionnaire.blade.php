@@ -19,7 +19,8 @@
             </div>
 
             <div class="flex items-center gap-3 shrink-0">
-                @can('viewAny', App\Models\Question::class)                    <div class="relative">
+                @can('viewAny', App\Models\Question::class)                    
+                <div class="relative">
                         <select id="mode-select"
                             class="appearance-none bg-white border border-gray-200 text-[#1a2340] text-sm font-medium rounded-lg pl-4 pr-9 py-2.5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1a9e7e] transition">
                             <option value="fixe">Mode fixe</option>

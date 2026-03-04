@@ -27,7 +27,7 @@
                 </div>
 
                 <a href="{{ route('questionnaire.run') ?? '#' }}"
-                    class="flex items-center gap-2 bg-sv-green hover:bg-sv-green/90 text-white font-bold text-sm px-5 py-3 rounded-xl shadow-sm shadow-sv-green/20 transition-all duration-200 hover:-translate-y-0.5">
+                    class="flex items-center gap-2 bg-sv-green hover:opacity-90 transition-opacity text-white font-bold text-sm font-mono px-5 py-3 rounded-xl shadow-lg shadow-sv-green/20">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>

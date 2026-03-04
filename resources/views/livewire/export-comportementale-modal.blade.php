@@ -1,7 +1,7 @@
 <div x-data="{ open: false }" class="relative">
 
     <button @click="open = !open" @click.outside="open = false"
-        class="bg-[#1a9e7e] hover:bg-[#158a6c] text-white px-5 py-2 text-sm rounded-lg font-medium transition-colors shadow-sm flex items-center gap-2">
+        class="flex items-center gap-2 bg-sv-green hover:opacity-90 transition-opacity text-white font-bold text-sm font-mono px-5 py-3 rounded-xl shadow-lg shadow-sv-green/20">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round"
                 d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
