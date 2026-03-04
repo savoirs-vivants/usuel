@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\InvitationMail;
+use Illuminate\Support\Facades\Auth;
 
 class CreateUser extends Component
 {
@@ -29,6 +30,12 @@ class CreateUser extends Component
     public function openModal()
     {
         $this->resetValidation();
+        $currentUser = Auth::user();
+
+        if ($currentUser->role === 'gestionnaire') {
+            $this->structure = $currentUser->structure;
+            $this->role = 'travailleur';
+        }
         $this->isOpen = true;
     }
 

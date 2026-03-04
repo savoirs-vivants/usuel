@@ -56,10 +56,11 @@
                             <label class="block text-sm font-bold text-sv-blue mb-1">Rôle <span class="text-red-500">*</span></label>
                             <select wire:model="role"
                                 class="w-full bg-gray-50 border-2 border-gray-200 rounded-lg p-2.5 outline-none focus:border-sv-green text-sm">
-                                <option value="">-- Choisir --</option>
                                 <option value="travailleur">Travailleur Social</option>
-                                <option value="gestionnaire">Gestionnaire</option>
-                                <option value="admin">Administrateur</option>
+                                @if(auth()->user()->role === 'admin')
+                                    <option value="gestionnaire">Gestionnaire</option>
+                                    <option value="admin">Administrateur</option>
+                                @endif
                             </select>
                             @error('role')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
@@ -67,11 +68,18 @@
                         </div>
                         <div>
                             <label class="block text-sm font-bold text-sv-blue mb-1">Structure</label>
-                            <input type="text" wire:model="structure"
-                                class="w-full bg-gray-50 border-2 border-gray-200 rounded-lg p-2.5 outline-none focus:border-sv-green text-sm">
-                            @error('structure')
-                                <span class="text-red-500 text-xs">{{ $message }}</span>
-                            @enderror
+                            @if(auth()->user()->role === 'gestionnaire')
+                                <input type="text"
+                                    value="{{ auth()->user()->structure }}"
+                                    disabled
+                                    class="w-full bg-gray-200 border-2 border-gray-200 rounded-lg p-2.5 outline-none text-gray-500 text-sm cursor-not-allowed">
+                            @else
+                                <input type="text" wire:model="structure"
+                                    class="w-full bg-gray-50 border-2 border-gray-200 rounded-lg p-2.5 outline-none focus:border-sv-green text-sm">
+                                @error('structure')
+                                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                                @enderror
+                            @endif
                         </div>
                     </div>
 
