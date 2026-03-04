@@ -50,13 +50,20 @@ class QuestionnaireRun extends Component
             $this->showError = true;
             return;
         }
-        $this->insererTracking($tracking);
+
+        if (session('consentement_recherche')) {
+            $this->insererTracking($tracking);
+        }
+
         $this->enregistrerReponse($this->selectedAnswer);
     }
 
     public function jeSaisPasAvecTracking(array $tracking): void
     {
-        $this->insererTracking($tracking);
+        if (session('consentement_recherche')) {
+            $this->insererTracking($tracking);
+        }
+
         $this->enregistrerReponse('E');
     }
 
@@ -119,7 +126,7 @@ class QuestionnaireRun extends Component
             'scenario'               => null,
             'modules'                => null,
         ]);
-        if (!empty($this->trackingIds)) {
+        if (session('consentement_recherche') && !empty($this->trackingIds)) {
             Tracking::whereIn('id', $this->trackingIds)
                 ->update(['id_passation' => $passation->id]);
         }
