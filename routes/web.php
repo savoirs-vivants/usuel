@@ -6,6 +6,7 @@ use App\Http\Controllers\BackOfficeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\PassationController;
+use App\Http\Controllers\QuestionnaireResultController;
 use App\Models\Passation;
 use App\Models\User;
 
@@ -51,10 +52,8 @@ Route::middleware('auth')->group(function () {
         return view('questionnaire.run');
     })->name('questionnaire.run');
 
-    Route::get('/questionnaire/result/{id}', function ($id) {
-        $passation = Passation::with('beneficiaire')->findOrFail($id);
-        return view('questionnaire.result', compact('passation'));
-    })->name('questionnaire.result');
+    Route::get('/questionnaire/result/{id}', [QuestionnaireResultController::class, 'show'])
+        ->name('questionnaire.result');
 
     Route::get('/statistiques/public', function () {
         return view('statistiques');

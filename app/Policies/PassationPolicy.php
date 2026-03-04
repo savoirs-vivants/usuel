@@ -10,7 +10,7 @@ class PassationPolicy
     public function view(User $user, Passation $passation): bool
     {
         if ($user->role === 'travailleur') {
-            return $user->id === $passation->user_id;
+            return $user->id === $passation->id_travailleur;
         }
 
         if ($user->role === 'gestionnaire') {
@@ -22,7 +22,7 @@ class PassationPolicy
 
     public function delete(User $user, Passation $passation): bool
     {
-        return false;
+        return true;
 
     }
 }
