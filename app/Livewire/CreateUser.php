@@ -19,14 +19,6 @@ class CreateUser extends Component
     public $role;
     public $structure;
 
-    protected $rules = [
-        'name'      => 'nullable|string|max:255',
-        'firstname' => 'nullable|string|max:255',
-        'email'     => 'required|email|unique:users,email',
-        'role'      => 'required|string',
-        'structure' => 'nullable|string|max:255',
-    ];
-
     public function openModal()
     {
         $this->resetValidation();
@@ -47,7 +39,17 @@ class CreateUser extends Component
 
     public function save()
     {
-        $this->validate();
+        $this->validate([
+        'name'      => 'nullable|string|max:255',
+        'firstname' => 'nullable|string|max:255',
+        'email'     => 'required|email|unique:users,email',
+        'role'      => 'required|string',
+        'structure' => 'nullable|string|max:255',
+        ], [
+            'email.required' => 'L\'adresse e-mail est obligatoire.',
+            'email.unique'   => 'Cette adresse e-mail est déjà utilisée.',
+            'role.required'  => 'Le rôle de l\'utilisateur est obligatoire.',
+        ]);
 
         $token = Str::uuid()->toString();
 

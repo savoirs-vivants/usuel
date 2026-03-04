@@ -55,7 +55,8 @@
                         <div>
                             <label class="block text-sm font-bold text-sv-blue mb-1">Rôle <span class="text-red-500">*</span></label>
                             <select wire:model="role"
-                                class="w-full bg-gray-50 border-2 border-gray-200 rounded-lg p-2.5 outline-none focus:border-sv-green text-sm">
+                                class="bg-gray-50 border-2 border-gray-200 rounded-lg outline-none focus:border-sv-green text-sm">
+                                <option value="#"></option>
                                 <option value="travailleur">Travailleur Social</option>
                                 @if(auth()->user()->role === 'admin')
                                     <option value="gestionnaire">Gestionnaire</option>
