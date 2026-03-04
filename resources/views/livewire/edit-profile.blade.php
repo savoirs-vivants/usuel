@@ -1,7 +1,6 @@
 <div>
     <form wire:submit.prevent="save">
 
-        {{-- 1. INFORMATIONS PERSONNELLES --}}
         <div class="bg-white rounded-[20px] border border-[#e5e7eb] p-8 mb-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
             <div class="flex items-center gap-3 mb-6 pb-4 border-b border-[#e5e7eb]">
                 <div class="w-9 h-9 rounded-[10px] bg-[#e8f5f2] text-[#16987C] flex items-center justify-center shrink-0">
@@ -46,7 +45,6 @@
             </div>
         </div>
 
-        {{-- 2. MOT DE PASSE --}}
         <div class="bg-white rounded-[20px] border border-[#e5e7eb] p-8 mb-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
             <div class="flex items-center gap-3 mb-6 pb-4 border-b border-[#e5e7eb]">
                 <div class="w-9 h-9 rounded-[10px] bg-[#e8f5f2] text-[#16987C] flex items-center justify-center shrink-0">
@@ -87,7 +85,6 @@
             </div>
         </div>
 
-        {{-- ACTIONS --}}
         <div class="flex items-center justify-between mt-8">
             <a href="{{ url()->previous() }}" class="inline-flex items-center gap-2 text-[#6b7280] font-semibold text-sm transition-colors duration-200 hover:text-[#1a2340]">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7"/></svg>
