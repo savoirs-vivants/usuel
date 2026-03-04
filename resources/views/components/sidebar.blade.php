@@ -46,6 +46,7 @@
             <span class="text-sm">Statistiques</span>
         </a>
 
+        @if(Auth::user()->role !== 'travailleur')
         <a href="{{ route('backoffice') }}"
             class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-150
             {{ Route::is('backoffice') ? 'bg-sv-green text-white shadow-lg shadow-sv-green/20 font-bold' : 'text-white/70 hover:bg-white/10 hover:text-white font-semibold' }}">
@@ -55,6 +56,7 @@
             </svg>
             <span class="text-sm">Utilisateurs</span>
         </a>
+        @endif
 
         <div class="mt-auto pt-4 border-t border-white/10" x-data="{ open: false }">
 

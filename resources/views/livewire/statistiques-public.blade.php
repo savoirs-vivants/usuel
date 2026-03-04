@@ -37,10 +37,12 @@
                 class="px-4 py-2.5 text-sm font-bold text-sv-green border-b-2 border-sv-green -mb-px transition-colors">
                 Public
             </a>
+            @if(auth()->user()->role === 'admin')
             <a href="{{ route('statistiques.comportementale') }}"
                 class="px-4 py-2.5 text-sm font-semibold text-gray-400 border-b-2 border-transparent hover:text-sv-blue hover:border-gray-300 -mb-px transition-colors">
                 Comportementale
             </a>
+            @endif
         </div>
 
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">

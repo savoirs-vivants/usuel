@@ -10,6 +10,7 @@ use App\Models\Beneficiaire;
 use App\Models\Question;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class StatistiquesComportementale extends Component
 {
@@ -51,6 +52,10 @@ class StatistiquesComportementale extends Component
 
     public function mount(): void
     {
+        if (Auth::user()->role !== 'admin') {
+            abort(403, 'Accès non autorisé.');
+        }
+
         $ageOrder = ['moins_18', '18_25', '26_35', '36_45', '46_55', '56_65', 'plus_65'];
         $rawAges  = Beneficiaire::whereNotNull('age')->distinct()->pluck('age')->toArray();
         $this->availableAges     = array_values(array_filter($ageOrder, fn($a) => in_array($a, $rawAges)));
@@ -98,12 +103,12 @@ class StatistiquesComportementale extends Component
         match ($this->timeRange) {
             'J'      => $query->whereDate('passations.created_at', $now->toDateString()),
             'M'      => $query->whereMonth('passations.created_at', $now->month)
-                              ->whereYear('passations.created_at', $now->year),
+                ->whereYear('passations.created_at', $now->year),
             'A'      => $query->whereYear('passations.created_at', $now->year),
             'Custom' => $query->whereBetween('passations.created_at', [
-                             $this->customStartDate . ' 00:00:00',
-                             $this->customEndDate   . ' 23:59:59',
-                         ]),
+                $this->customStartDate . ' 00:00:00',
+                $this->customEndDate   . ' 23:59:59',
+            ]),
             default  => null,
         };
 
@@ -231,14 +236,33 @@ class StatistiquesComportementale extends Component
     public function render()
     {
         $labelsMap = [
-            'moins_18' => 'Moins de 18 ans', '18_25' => '18 – 25 ans', '26_35' => '26 – 35 ans',
-            '36_45' => '36 – 45 ans', '46_55' => '46 – 55 ans', '56_65' => '56 – 65 ans', 'plus_65' => 'Plus de 65 ans',
-            'homme' => 'Homme', 'femme' => 'Femme', 'autre' => 'Autre / Non-binaire', 'non_precise' => 'Non précisé',
-            'aucun' => 'Aucun diplôme', 'brevet' => 'Brevet (DNB)', 'cap_bep' => 'CAP / BEP',
-            'bac' => 'Baccalauréat', 'bac2' => 'Bac +2', 'bac3' => 'Bac +3', 'bac5' => 'Bac +5', 'doctorat' => 'Doctorat',
-            'agriculteur' => 'Agriculteur', 'artisan' => 'Artisan / Commerçant', 'cadre' => 'Cadre',
-            'intermediaire' => 'Prof. intermédiaire', 'employe' => 'Employé', 'ouvrier' => 'Ouvrier',
-            'retraite' => 'Retraité', 'sans_activite' => 'Sans activité',
+            'moins_18' => 'Moins de 18 ans',
+            '18_25' => '18 – 25 ans',
+            '26_35' => '26 – 35 ans',
+            '36_45' => '36 – 45 ans',
+            '46_55' => '46 – 55 ans',
+            '56_65' => '56 – 65 ans',
+            'plus_65' => 'Plus de 65 ans',
+            'homme' => 'Homme',
+            'femme' => 'Femme',
+            'autre' => 'Autre / Non-binaire',
+            'non_precise' => 'Non précisé',
+            'aucun' => 'Aucun diplôme',
+            'brevet' => 'Brevet (DNB)',
+            'cap_bep' => 'CAP / BEP',
+            'bac' => 'Baccalauréat',
+            'bac2' => 'Bac +2',
+            'bac3' => 'Bac +3',
+            'bac5' => 'Bac +5',
+            'doctorat' => 'Doctorat',
+            'agriculteur' => 'Agriculteur',
+            'artisan' => 'Artisan / Commerçant',
+            'cadre' => 'Cadre',
+            'intermediaire' => 'Prof. intermédiaire',
+            'employe' => 'Employé',
+            'ouvrier' => 'Ouvrier',
+            'retraite' => 'Retraité',
+            'sans_activite' => 'Sans activité',
         ];
 
         return view('livewire.statistiques-comportementale', compact('labelsMap'));
