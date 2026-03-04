@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class EditUser extends Component
@@ -18,6 +19,9 @@ class EditUser extends Component
 
     public function mount(User $user): void
     {
+
+        Gate::authorize('update', $this->user);
+
         $this->user      = $user;
         $this->name      = $user->name      ?? '';
         $this->firstname = $user->firstname ?? '';
@@ -28,6 +32,9 @@ class EditUser extends Component
 
     public function save(): void
     {
+
+        Gate::authorize('update', $this->user);
+
         $this->validate([
             'name'      => 'nullable|string|max:255',
             'firstname' => 'nullable|string|max:255',
