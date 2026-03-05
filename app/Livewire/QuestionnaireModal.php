@@ -4,6 +4,8 @@ namespace App\Livewire;
 
 use App\Models\Beneficiaire;
 use Livewire\Component;
+use Livewire\Attributes\On;
+use Illuminate\Support\Facades\Cache;
 
 class QuestionnaireModal extends Component
 {
@@ -31,6 +33,18 @@ class QuestionnaireModal extends Component
     public function fermer(): void
     {
         $this->open = false;
+    }
+
+    #[On('mode-changed')]
+    public function setModeOrdre(string $mode): void
+    {
+        $allowed = ['fixe', 'aleatoire', 'semi_aleatoire', 'carre_latin'];
+        $newMode = in_array($mode, $allowed, true) ? $mode : 'fixe';
+
+        Cache::forever('global_mode_ordre', $newMode);
+
+        $nomMode = str_replace('_', ' ', $newMode);
+        $this->dispatch('notify', message: "Le mode d'ordre a été défini sur : " . ucfirst($nomMode));
     }
 
     public function validerProfil(): void
