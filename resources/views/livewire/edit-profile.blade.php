@@ -14,32 +14,32 @@
             <div class="grid grid-cols-2 gap-5 mb-5">
                 <div>
                     <label class="block text-xs font-bold text-[#1a2340] mb-2">Nom</label>
-                    <input type="text" wire:model="name" class="w-full bg-[#f9fafb] border-2 border-[#f3f4f6] rounded-xl px-4 py-3 text-sm text-[#1a2340] font-medium transition-all duration-200 outline-none placeholder:text-[#9ca3af] placeholder:font-normal focus:bg-white focus:border-[#16987C] focus:ring-[4px] focus:ring-[#16987C]/10" placeholder="Ex: Dupont">
+                    <input type="text" wire:model="name" class="w-full bg-[#f9fafb] border-2 border-[#f3f4f6] rounded-xl px-4 py-3 text-sm text-[#1a2340] font-medium transition-all duration-200 outline-none placeholder:text-[#9ca3af] placeholder:font-normal focus:bg-white focus:border-[#16987C] focus:ring-[4px] focus:ring-[#16987C]/10">
                     @error('name') <span class="text-red-500 text-xs mt-1 block font-medium">{{ $message }}</span> @enderror
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-[#1a2340] mb-2">Prénom</label>
-                    <input type="text" wire:model="firstname" class="w-full bg-[#f9fafb] border-2 border-[#f3f4f6] rounded-xl px-4 py-3 text-sm text-[#1a2340] font-medium transition-all duration-200 outline-none placeholder:text-[#9ca3af] placeholder:font-normal focus:bg-white focus:border-[#16987C] focus:ring-[4px] focus:ring-[#16987C]/10" placeholder="Ex: Marie">
+                    <input type="text" wire:model="firstname" class="w-full bg-[#f9fafb] border-2 border-[#f3f4f6] rounded-xl px-4 py-3 text-sm text-[#1a2340] font-medium transition-all duration-200 outline-none placeholder:text-[#9ca3af] placeholder:font-normal focus:bg-white focus:border-[#16987C] focus:ring-[4px] focus:ring-[#16987C]/10">
                     @error('firstname') <span class="text-red-500 text-xs mt-1 block font-medium">{{ $message }}</span> @enderror
                 </div>
             </div>
 
             <div class="mb-5">
                 <label class="block text-xs font-bold text-[#1a2340] mb-2">Adresse e-mail</label>
-                <input type="email" wire:model="email" class="w-full bg-[#f9fafb] border-2 border-[#f3f4f6] rounded-xl px-4 py-3 text-sm text-[#1a2340] font-medium transition-all duration-200 outline-none placeholder:text-[#9ca3af] placeholder:font-normal focus:bg-white focus:border-[#16987C] focus:ring-[4px] focus:ring-[#16987C]/10" placeholder="marie@exemple.fr">
+                <input type="email" wire:model="email" class="w-full bg-[#f9fafb] border-2 border-[#f3f4f6] rounded-xl px-4 py-3 text-sm text-[#1a2340] font-medium transition-all duration-200 outline-none placeholder:text-[#9ca3af] placeholder:font-normal focus:bg-white focus:border-[#16987C] focus:ring-[4px] focus:ring-[#16987C]/10">
                 @error('email') <span class="text-red-500 text-xs mt-1 block font-medium">{{ $message }}</span> @enderror
             </div>
 
             <div class="mb-5">
                 <label class="block text-xs font-bold text-[#1a2340] mb-2">Structure</label>
-                <input type="text" wire:model="structure" class="w-full bg-[#f9fafb] border-2 border-[#f3f4f6] rounded-xl px-4 py-3 text-sm text-[#1a2340] font-medium transition-all duration-200 outline-none placeholder:text-[#9ca3af] placeholder:font-normal focus:bg-white focus:border-[#16987C] focus:ring-[4px] focus:ring-[#16987C]/10" placeholder="Nom de la structure">
+                <input type="text" wire:model="structure" class="w-full bg-[#f9fafb] border-2 border-[#f3f4f6] rounded-xl px-4 py-3 text-sm text-[#1a2340] font-medium transition-all duration-200 outline-none placeholder:text-[#9ca3af] placeholder:font-normal focus:bg-white focus:border-[#16987C] focus:ring-[4px] focus:ring-[#16987C]/10">
                 @error('structure') <span class="text-red-500 text-xs mt-1 block font-medium">{{ $message }}</span> @enderror
             </div>
 
             <div>
                 <label class="block text-xs font-bold text-gray-400 mb-2">Rôle attribué</label>
                 <div class="w-full bg-[#f3f4f6] border-2 border-[#e5e7eb] rounded-xl px-4 py-3 text-sm text-[#6b7280] font-medium flex justify-between items-center">
-                    <span class="capitalize">{{ Auth::user()->role ?? '—' }}</span>
+                    <span class="capitalize">{{ Auth::user()->role }}</span>
                     <span class="text-[10px] font-bold uppercase tracking-wide bg-white border border-gray-200 px-2 py-1 rounded-md text-[#9ca3af]">Verrouillé</span>
                 </div>
             </div>

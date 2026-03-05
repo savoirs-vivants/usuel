@@ -32,7 +32,7 @@
                         <span x-text="message"></span>
                     </div>
 
-                    <a href="#"
+                    <a href="{{ route('questions.gestion')}}"
                         class="inline-flex items-center gap-2 bg-white border border-gray-200 text-[#1a2340] text-sm font-medium rounded-lg px-4 py-2.5 hover:border-[#1a9e7e] hover:text-[#1a9e7e] hover:bg-emerald-50 transition">
                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="2">

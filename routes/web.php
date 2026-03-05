@@ -48,6 +48,11 @@ Route::middleware('auth')->group(function () {
         return view('questionnaire');
     })->name('questionnaire.index');
 
+    Route::get('/questions/gestion', fn() => view('questions-editor'))
+    ->middleware('auth')
+    ->name('questions.gestion')
+    ->can('viewAny', App\Models\Question::class);
+
     Route::get('/questionnaire/run', function () {
         return view('questionnaire.run');
     })->name('questionnaire.run');
