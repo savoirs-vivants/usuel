@@ -7,6 +7,7 @@ use App\Models\Question;
 use App\Models\Tracking;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Illuminate\Support\Facades\Cache;
 
 class QuestionnaireRun extends Component
 {
@@ -14,6 +15,7 @@ class QuestionnaireRun extends Component
     public int    $totalQuestions = 0;
     public string $selectedAnswer = '';
     public bool   $showError      = false;
+    public string $modeOrdre      = 'fixe';
 
     public array $scores = [
         'Resilience' => 0.0,
@@ -34,8 +36,78 @@ class QuestionnaireRun extends Component
             return;
         }
 
-        $this->questionIds    = Question::orderBy('id')->pluck('id')->toArray();
+        $mode = Cache::get('global_mode_ordre', 'fixe');
+        $this->modeOrdre = $mode;
+
+        $this->questionIds = $this->getOrderedQuestionIds($mode);
         $this->totalQuestions = count($this->questionIds);
+    }
+
+    private function getOrderedQuestionIds(string $mode): array
+    {
+        $allIds = Question::orderBy('id')->pluck('id')->toArray();
+
+        return match ($mode) {
+            'aleatoire'      => $this->modeAleatoire($allIds),
+            'semi_aleatoire' => $this->modeSemiAleatoire($allIds),
+            'carre_latin'    => $this->modeCarreLatin(),
+            default          => $allIds,
+        };
+    }
+
+    private function modeAleatoire(array $ids): array
+    {
+        $collection = collect($ids);
+        return $collection->shuffle()->values()->toArray();
+    }
+
+    private function modeSemiAleatoire(array $ids): array
+    {
+        if (count($ids) <= 2) {
+            return $ids;
+        }
+
+        $first  = array_shift($ids);
+        $last   = array_pop($ids);
+        shuffle($ids);
+
+        return array_merge([$first], $ids, [$last]);
+    }
+
+    private function modeCarreLatin(): array
+    {
+        $questions  = Question::orderBy('id')->get();
+        $byCategory = $questions->groupBy('categorie');
+        $categories = $byCategory->keys()->sort()->values()->toArray();
+        $n          = count($categories);
+
+        if ($n === 0) {
+            return $questions->pluck('id')->toArray();
+        }
+
+        $offset   = Passation::count() % $n;
+        $rotated  = array_merge(
+            array_slice($categories, $offset),
+            array_slice($categories, 0, $offset)
+        );
+
+        $pools = [];
+        foreach ($rotated as $cat) {
+            $pools[$cat] = $byCategory[$cat]->pluck('id')->shuffle()->toArray();
+        }
+
+        $result = [];
+        $maxLen = max(array_map('count', $pools));
+
+        for ($i = 0; $i < $maxLen; $i++) {
+            foreach ($rotated as $cat) {
+                if (isset($pools[$cat][$i])) {
+                    $result[] = $pools[$cat][$i];
+                }
+            }
+        }
+
+        return $result;
     }
 
     public function choisir(string $reponse): void
@@ -96,7 +168,7 @@ class QuestionnaireRun extends Component
         $row = Tracking::create([
             'id_passation'        => null,
             'id_question'         => (int)   ($data['id_question']         ?? 0),
-            'position'            => (int)   ($data['position']            ?? $this->currentIndex),
+            'position'            => (int)   ($data['position'] + 1           ?? $this->currentIndex + 1),
             'temps_total_ms'      => (float) ($data['temps_total_ms']      ?? 0),
             'latence_ms'          => (float) ($data['latence_ms']          ?? 0),
             'nb_clics'            => (int)   ($data['nb_clics']            ?? 0),
@@ -121,12 +193,12 @@ class QuestionnaireRun extends Component
             'id_travailleur'         => Auth::id(),
             'score'                  => $this->scores,
             'consentement_recherche' => $consentementRecherche,
-            'mode_ordre'             => 'fixe',
+            'mode_ordre'             => $this->modeOrdre,
             'date'                   => now()->toDateString(),
             'scenario'               => null,
             'modules'                => null,
         ]);
-        if (session('consentement_recherche') && !empty($this->trackingIds)) {
+        if ($consentementRecherche && !empty($this->trackingIds)) {
             Tracking::whereIn('id', $this->trackingIds)
                 ->update(['id_passation' => $passation->id]);
         }

@@ -40,7 +40,7 @@
                 <label class="block text-xs font-bold text-gray-400 mb-2">Rôle attribué</label>
                 <div class="w-full bg-[#f3f4f6] border-2 border-[#e5e7eb] rounded-xl px-4 py-3 text-sm text-[#6b7280] font-medium flex justify-between items-center">
                     <span class="capitalize">{{ Auth::user()->role ?? '—' }}</span>
-                    <span class="text-[10px] font-bold uppercase tracking-wide bg-white border border-gray-200 px-2 py-1 rounded-md text-[#9ca3af]">Vérouillé</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wide bg-white border border-gray-200 px-2 py-1 rounded-md text-[#9ca3af]">Verrouillé</span>
                 </div>
             </div>
         </div>
