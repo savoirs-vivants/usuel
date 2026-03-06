@@ -45,7 +45,7 @@ class QuestionnaireRun extends Component
 
     private function getOrderedQuestionIds(string $mode): array
     {
-        $allIds = Question::orderBy('id')->pluck('id')->toArray();
+        $allIds = Question::where('active', true)->orderBy('id')->pluck('id')->toArray();
 
         return match ($mode) {
             'aleatoire'      => $this->modeAleatoire($allIds),
@@ -76,7 +76,7 @@ class QuestionnaireRun extends Component
 
     private function modeCarreLatin(): array
     {
-        $questions  = Question::orderBy('id')->get();
+        $questions  = Question::where('active', true)->orderBy('id')->get();
         $byCategory = $questions->groupBy('categorie');
         $categories = $byCategory->keys()->sort()->values()->toArray();
         $n          = count($categories);
