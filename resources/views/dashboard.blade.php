@@ -155,8 +155,21 @@
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="bg-gray-50 border-b border-gray-100">
-                                    <th class="text-left px-6 py-3 font-bold text-sv-blue text-xs uppercase tracking-wider">
-                                        ID</th>
+                                    @if (auth()->user()->role == 'admin')
+                                    <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
+                                        ID
+                                    </th>
+                                @endif
+                                @if (auth()->user()->role !== 'admin')
+                                    <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
+                                        Bénéficiaire
+                                    </th>
+                                @endif
+                                @if (auth()->user()->role === 'gestionnaire')
+                                    <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
+                                        Travailleur social
+                                    </th>
+                                @endif
                                     <th class="text-left px-6 py-3 font-bold text-sv-blue text-xs uppercase tracking-wider">
                                         Date</th>
                                     <th class="text-left px-6 py-3 font-bold text-sv-blue text-xs uppercase tracking-wider">
@@ -169,7 +182,22 @@
                                 @foreach ($dernieresPassations as $p)
                                     @php $s = $p->score_total ?? 0; @endphp
                                     <tr class="hover:bg-gray-50/80 transition-colors">
-                                        <td class="px-6 py-3 font-mono text-xs text-gray-400">#{{ $p->id }}</td>
+                                        @if (auth()->user()->role == 'admin')
+                                        <td class="px-6 py-4 font-medium text-gray-700">
+                                            #{{ $p->id }}
+                                        </td>
+                                    @endif
+                                    @if (auth()->user()->role !== 'admin')
+                                        <td class="px-6 py-4 text-gray-700 font-medium">
+                                            {{ $p->beneficiaire->prenom ?? 'Inconnu' }}
+                                            {{ $p->beneficiaire->nom ?? '' }}
+                                        </td>
+                                    @endif
+                                    @if (auth()->user()->role === 'gestionnaire')
+                                        <td class="px-6 py-4 text-gray-500">
+                                            {{ $p->user->firstname ?? '' }} {{ $p->user->name ?? '' }}
+                                        </td>
+                                    @endif
                                         <td class="px-6 py-3 text-xs text-gray-500">
                                             {{ $p->created_at->format('d/m/Y') }}
                                         </td>
