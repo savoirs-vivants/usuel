@@ -571,7 +571,7 @@
                                 ordreChart = new Chart(document.getElementById('ordreChart'), {
                                     type: 'line',
                                     data: {
-                                        labels: hasO ? data.ordre_positions.map(p => 'Pos. ' + p) : ['Aucune donnée'],
+                                        labels: hasO ? data.ordre_positions.map((p,index) => 'Pos. ' + (index + 1) ) : ['Aucune donnée'],
                                         datasets: [{
                                                 label: 'Temps total moy. (ms)',
                                                 data: hasO ? data.ordre_temps : [0],
