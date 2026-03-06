@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
-    protected $fillable = ['intitule', 'image', 'categorie', 'reponse_correcte', 'choix'];
+    protected $fillable = ['intitule', 'image', 'categorie', 'reponse_correcte', 'choix', 'active'];
 
     protected $casts = [
         'choix' => 'array',
+        'active' => 'boolean',
     ];
 
     public function getChoixSansEAttribute(): array

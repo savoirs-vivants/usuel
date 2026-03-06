@@ -1,6 +1,6 @@
 <div class="flex h-screen font-grotesk overflow-hidden" style="background: #f0f2f8;">
 
-    <aside class="w-72 shrink-0 flex flex-col h-screen relative" style="background: linear-gradient(160deg, #1c2454 0%, #222A60 60%, #1a3a50 100%);">
+    <aside class="w-96 shrink-0 flex flex-col h-screen relative" style="background: linear-gradient(160deg, #1c2454 0%, #222A60 60%, #1a3a50 100%);">
 
         <div class="absolute inset-0 opacity-[0.04] pointer-events-none" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><path d=%22M0 0h60v60H0z%22 fill=%22none%22/><path d=%22M0 0l60 60M60 0L0 60%22 stroke=%22white%22 stroke-width=%220.5%22/></svg>');"></div>
 
@@ -50,30 +50,50 @@
             @endif
 
             @forelse ($questions as $q)
-            <button wire:click="selectQuestion({{ $q['id'] }})"
-                class="w-full text-left rounded-xl p-3.5 transition-all group"
-                style="{{ $selectedId === $q['id'] && !$isNew
-                    ? 'background: rgba(22,152,124,0.18); border: 1px solid rgba(22,152,124,0.35);'
-                    : 'background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);' }}"
-                onmouseover="if(!this.classList.contains('active-q')) { this.style.background='rgba(255,255,255,0.09)'; this.style.border='1px solid rgba(255,255,255,0.12)'; }"
-                onmouseout="if(!this.classList.contains('active-q')) { this.style.background='rgba(255,255,255,0.04)'; this.style.border='1px solid rgba(255,255,255,0.06)'; }">
-                <div class="flex items-start gap-3">
-                    <span class="font-mono text-[11px] font-bold shrink-0 mt-0.5"
-                        style="color: {{ $selectedId === $q['id'] && !$isNew ? '#16987C' : 'rgba(255,255,255,0.25)' }}">
-                        #{{ $q['id'] }}
-                    </span>
-                    <div class="min-w-0">
-                        <p class="text-[10px] font-bold uppercase tracking-wider mb-1"
-                            style="color: {{ $selectedId === $q['id'] && !$isNew ? '#16987C' : 'rgba(255,255,255,0.35)' }}">
-                            {{ $categories[$q['categorie']] ?? $q['categorie'] }}
-                        </p>
-                        <p class="text-[13px] font-medium leading-snug line-clamp-2"
-                            style="color: {{ $selectedId === $q['id'] && !$isNew ? 'white' : 'rgba(255,255,255,0.75)' }}">
-                            {{ $q['intitule'] ?: '(sans intitulé)' }}
-                        </p>
+            <div class="relative group">
+                <button wire:click="selectQuestion({{ $q['id'] }})"
+                    class="w-full text-left rounded-xl p-3.5 transition-all
+                        {{ !$q['active'] ? 'opacity-40 grayscale' : '' }}"
+                    style="{{ $selectedId === $q['id'] && !$isNew
+                        ? 'background: rgba(22,152,124,0.18); border: 1px solid rgba(22,152,124,0.35);'
+                        : 'background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);' }}"
+                    onmouseover="if(!this.classList.contains('active-q')) { this.style.background='rgba(255,255,255,0.09)'; this.style.border='1px solid rgba(255,255,255,0.12)'; }"
+                    onmouseout="if(!this.classList.contains('active-q')) { this.style.background='rgba(255,255,255,0.04)'; this.style.border='1px solid rgba(255,255,255,0.06)'; }">
+                    <div class="flex items-start gap-3 pr-8"> <span class="font-mono text-[11px] font-bold shrink-0 mt-0.5"
+                            style="color: {{ $selectedId === $q['id'] && !$isNew ? '#16987C' : 'rgba(255,255,255,0.25)' }}">
+                            #{{ $q['id'] }}
+                        </span>
+                        <div class="min-w-0">
+                            <p class="text-[10px] font-bold uppercase tracking-wider mb-1 flex items-center gap-1.5"
+                                style="color: {{ $selectedId === $q['id'] && !$isNew ? '#16987C' : 'rgba(255,255,255,0.35)' }}">
+                                {{ $categories[$q['categorie']] ?? $q['categorie'] }}
+                                @if (!$q['active'])
+                                    <span class="px-1.5 py-0.5 rounded text-[8px] font-bold bg-red-500/20 text-red-400 border border-red-500/30">DÉSACTIVÉE</span>
+                                @endif
+                            </p>
+                            <p class="text-[13px] font-medium leading-snug line-clamp-2"
+                                style="color: {{ $selectedId === $q['id'] && !$isNew ? 'white' : 'rgba(255,255,255,0.75)' }}">
+                                {{ $q['intitule'] ?: '(sans intitulé)' }}
+                            </p>
+                        </div>
                     </div>
-                </div>
-            </button>
+                </button>
+
+                <button wire:click="toggleActive({{ $q['id'] }})"
+                    class="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-lg transition-all {{ $q['active'] ? 'text-gray-400 hover:text-white hover:bg-white/10' : 'text-red-400 hover:text-red-300 hover:bg-red-400/10' }}"
+                    title="{{ $q['active'] ? 'Désactiver la question' : 'Réactiver la question' }}">
+                    @if ($q['active'])
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    @else
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                        </svg>
+                    @endif
+                </button>
+            </div>
             @empty
             <div class="flex flex-col items-center justify-center py-12 gap-3">
                 <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(255,255,255,0.06);">

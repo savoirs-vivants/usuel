@@ -68,13 +68,21 @@ class GestionQuestions extends Component
     private function loadQuestions(): void
     {
         $this->questions = Question::orderBy('id')
-            ->get(['id', 'intitule', 'categorie'])
+            ->get(['id', 'intitule', 'categorie', 'active'])
             ->map(fn($q) => [
                 'id'        => $q->id,
                 'intitule'  => $q->intitule ?? '',
                 'categorie' => $q->categorie ?? '',
+                'active'    => (bool) $q->active,
             ])
             ->toArray();
+    }
+
+    public function toggleActive(int $id): void
+    {
+        $q = Question::findOrFail($id);
+        $q->update(['active' => !$q->active]);
+        $this->loadQuestions();
     }
 
     public function selectQuestion(int $id): void
