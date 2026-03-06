@@ -27,6 +27,18 @@ class GestionQuestions extends Component
     public bool   $saved            = false;
     public string $savedMessage     = '';
 
+    public bool $showPreview = false;
+
+    public function previsualiser(): void
+    {
+        $this->showPreview = true;
+    }
+
+    public function fermerPrevisualisation(): void
+    {
+        $this->showPreview = false;
+    }
+
     public array $categories = [
         'Resilience' => 'Résilience',
         'EC'         => 'Esprit Critique',

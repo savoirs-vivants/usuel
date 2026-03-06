@@ -329,17 +329,18 @@
             </div>
 
             <div class="flex items-center justify-between pb-10 pt-2">
-                <a href="#"
-                   class="inline-flex items-center gap-2.5 text-sm font-bold px-5 py-3 rounded-xl transition-all"
-                   style="background: white; border: 1.5px solid rgba(34,42,96,0.12); color: rgba(34,42,96,0.6); box-shadow: 0 1px 4px rgba(34,42,96,0.06);"
-                   onmouseover="this.style.borderColor='rgba(34,42,96,0.3)'; this.style.color='#222A60'"
-                   onmouseout="this.style.borderColor='rgba(34,42,96,0.12)'; this.style.color='rgba(34,42,96,0.6)'">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                    </svg>
-                    Prévisualiser
-                </a>
-
+                    <button type="button" wire:click="previsualiser"
+                        class="inline-flex items-center gap-2.5 text-sm font-bold px-5 py-3 rounded-xl transition-all"
+                        style="background: white; border: 1.5px solid rgba(34,42,96,0.12); color: rgba(34,42,96,0.6); box-shadow: 0 1px 4px rgba(34,42,96,0.06);"
+                        onmouseover="this.style.borderColor='rgba(34,42,96,0.3)'; this.style.color='#222A60'"
+                        onmouseout="this.style.borderColor='rgba(34,42,96,0.12)'; this.style.color='rgba(34,42,96,0.6)'">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        Prévisualiser
+                    </button>
                 <button type="submit"
                     wire:loading.attr="disabled" wire:target="sauvegarder"
                     class="inline-flex items-center gap-2.5 text-white font-bold text-sm px-8 py-3.5 rounded-xl transition-all disabled:opacity-60"
@@ -361,5 +362,83 @@
         </form>
         @endif
     </main>
+@if ($showPreview)
+<div class="fixed inset-0 z-50 min-h-screen bg-white flex flex-col">
+    <div class="shrink-0 px-6 py-4 flex items-center gap-4" style="border-bottom: 1px solid rgba(34,42,96,0.08);">
+        <button wire:click="fermerPrevisualisation"
+            class="inline-flex items-center gap-2 text-sm font-bold px-4 py-2 rounded-xl transition-all"
+            style="background: rgba(34,42,96,0.06); color: rgba(34,42,96,0.6);"
+            onmouseover="this.style.background='rgba(34,42,96,0.12)'; this.style.color='#222A60'"
+            onmouseout="this.style.background='rgba(34,42,96,0.06)'; this.style.color='rgba(34,42,96,0.6)'">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Retour à l'éditeur
+        </button>
+        <span class="text-xs font-bold uppercase tracking-widest" style="color: rgba(34,42,96,0.25);">Prévisualisation</span>
+    </div>
+    <div class="flex-1 overflow-hidden">
+        @php
+            $hasImage = $newImage || ($existingImage && !$removeImage);
+        @endphp
+        @if ($hasImage)
+        <div class="h-full grid grid-cols-2">
 
+            <div class="h-full bg-gray-50 border-r border-gray-100 flex items-center justify-center p-6">
+                @if ($newImage)
+                    <img src="{{ $newImage->temporaryUrl() }}" alt="Illustration"
+                        class="max-w-full max-h-full object-contain rounded-xl shadow-lg">
+                @else
+                    <img src="{{ Storage::url($existingImage) }}" alt="Illustration"
+                        class="max-w-full max-h-full object-contain rounded-xl shadow-lg">
+                @endif
+            </div>
+            <div class="h-full flex flex-col justify-center px-10 py-8 overflow-y-auto">
+                <p class="font-mono font-bold text-xs tracking-widest text-[#1a9e7e] uppercase mb-4">
+                    Prévisualisation
+                </p>
+                <p class="text-xl font-semibold text-[#1a2340] leading-relaxed mb-8">
+                    {{ $intitule ?: '(aucun intitulé)' }}
+                </p>
+                <div class="space-y-2.5">
+                    @foreach ($choix as $i => $reponse)
+                    @if (trim($reponse['texte']) !== '')
+                    <div class="w-full text-left flex items-center gap-4 px-5 py-3 rounded-xl border-2 border-gray-200 bg-gray-100">
+                        <div class="w-5 h-5 shrink-0 rounded-full border-2 border-gray-400 bg-white"></div>
+                        <span class="text-gray-700 font-medium text-sm">
+                            {{ chr(65 + $i) }}) {{ $reponse['texte'] }}
+                        </span>
+                    </div>
+                    @endif
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        @else
+        <div class="h-full flex flex-col items-center justify-center px-6">
+            <div class="w-full max-w-3xl flex flex-col items-center">
+                <h2 class="font-mono font-bold text-sm tracking-widest text-[#1a9e7e] uppercase mb-5">
+                    Prévisualisation
+                </h2>
+                <p class="text-2xl md:text-3xl font-semibold text-[#1a2340] text-center leading-relaxed mb-10 max-w-2xl">
+                    {{ $intitule ?: '(aucun intitulé)' }}
+                </p>
+                <div class="w-full space-y-3">
+                    @foreach ($choix as $i => $reponse)
+                    @if (trim($reponse['texte']) !== '')
+                    <div class="w-full text-left flex items-center gap-4 px-6 py-4 rounded-xl border-2 border-gray-200 bg-gray-100">
+                        <div class="w-5 h-5 shrink-0 rounded-full border-2 border-gray-400 bg-white"></div>
+                        <span class="text-gray-700 font-medium">
+                            {{ chr(65 + $i) }}) {{ $reponse['texte'] }}
+                        </span>
+                    </div>
+                    @endif
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        @endif
+    </div>
+</div>
+@endif
 </div>
