@@ -16,6 +16,8 @@ class QuestionnaireRun extends Component
     public string $selectedAnswer = '';
     public bool   $showError      = false;
     public string $modeOrdre      = 'fixe';
+    public bool $showEndModal = false;
+    public ?int $completedPassationId = null;
 
     public array $scores = [
         'Resilience' => 0.0,
@@ -204,7 +206,15 @@ class QuestionnaireRun extends Component
         }
 
         session()->flash('autoriser_resultat', $passation->id);
-        $this->redirect(route('questionnaire.result', $passation->id));
+        $this->completedPassationId = $passation->id;
+        $this->showEndModal = true;
+    }
+
+    public function validerFinEtRediriger(): void
+    {
+        if ($this->completedPassationId) {
+            $this->redirect(route('questionnaire.result', $this->completedPassationId));
+        }
     }
 
     public function render(): \Illuminate\View\View
