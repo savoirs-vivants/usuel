@@ -85,7 +85,7 @@
                                 @foreach([
                                     ['homme',       '👨', 'Homme'],
                                     ['femme',       '👩', 'Femme'],
-                                    ['autre',       '🧑', 'Autre / Non-binaire'],
+                                    ['autre',       '—', 'Autre / Non-binaire'],
                                     ['non_precise', '—',  'Préfère ne pas préciser'],
                                 ] as [$val, $emoji, $label])
                                 <label class="relative flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer

@@ -20,6 +20,10 @@ Route::post('/inscription/{token}', [InscriptionController::class, 'complete'])-
 Route::get('/connexion', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/connexion', [AuthController::class, 'login'])->name('login.submit');
 
+Route::get('/test-403', function () {
+    abort(403, 'Vous ne pouvez pas modifier le profil d\'un super-admin.');
+});
+
 Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
