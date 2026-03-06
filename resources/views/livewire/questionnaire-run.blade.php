@@ -75,7 +75,7 @@
                 <div class="h-full grid grid-cols-2">
 
                     <div class="h-full bg-gray-50 border-r border-gray-100 flex items-center justify-center p-6">
-                        <img src="{{ asset('storage/questions/' . $currentQuestion->image) }}"
+                        <img src="{{ asset('storage/' . $currentQuestion->image) }}"
                             alt="Illustration question {{ $currentIndex + 1 }}"
                             class="max-w-full max-h-full object-contain rounded-xl shadow-lg"
                             wire:key="img-{{ $currentQuestion->id }}">
