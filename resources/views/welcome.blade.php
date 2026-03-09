@@ -33,7 +33,7 @@
                     class="bg-sv-green text-white font-bold text-base px-8 py-4 rounded-xl hover:opacity-90 transition-opacity">
                     Accéder à la plateforme
                 </a>
-                <a href="#comment-ca-marche"
+                <a href="#en-savoir-plus"
                     class="border-2 border-white text-white font-bold text-base px-8 py-4 rounded-xl hover:bg-white hover:text-sv-blue transition-colors">
                     Découvrir l'outil
                 </a>
