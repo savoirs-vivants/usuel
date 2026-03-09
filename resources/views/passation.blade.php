@@ -50,9 +50,6 @@
                                     Date du test
                                 </th>
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
-                                    Ordre des questions
-                                </th>
-                                <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
                                     Score
                                 </th>
                                 <th class="text-left px-6 py-4 font-bold text-sv-blue text-xs uppercase tracking-wider">
@@ -81,7 +78,6 @@
                                     @endif
                                     <td class="px-6 py-4 text-gray-700">
                                         {{ $passation->date ? $passation->date->format('d/m/Y') : '—' }}</td>
-                                    <td class="px-6 py-4 text-gray-700">{{ $passation->mode_ordre }}</td>
                                     <td class="px-6 py-4 text-gray-500">{{ $passation->score_total ?? 0 }}/30</td>
                                     <td class="px-6 py-4">
                                         <div x-show="!confirmDelete" class="flex items-center gap-2">
