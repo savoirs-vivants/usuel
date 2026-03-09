@@ -8,16 +8,18 @@ use App\Models\Tracking;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Cache;
+use Livewire\Attributes\Url;
 
 class QuestionnaireRun extends Component
 {
+    #[Url(as: 'step')]
     public int    $currentIndex   = 0;
     public int    $totalQuestions = 0;
     public string $selectedAnswer = '';
     public bool   $showError      = false;
     public string $modeOrdre      = 'fixe';
-    public bool $showEndModal = false;
-    public ?int $completedPassationId = null;
+    public bool   $showEndModal   = false;
+    public ?int   $completedPassationId = null;
 
     public array $scores = [
         'Resilience' => 0.0,
@@ -38,11 +40,35 @@ class QuestionnaireRun extends Component
             return;
         }
 
-        $mode = Cache::get('global_mode_ordre', 'fixe');
-        $this->modeOrdre = $mode;
+        $progress = session()->get('questionnaire_progress');
 
-        $this->questionIds = $this->getOrderedQuestionIds($mode);
+        if ($progress && count($progress['questionIds']) > 0) {
+            $this->currentIndex = $progress['currentIndex'];
+            $this->scores       = $progress['scores'];
+            $this->questionIds  = $progress['questionIds'];
+            $this->trackingIds  = $progress['trackingIds'];
+            $this->modeOrdre    = $progress['modeOrdre'];
+        } else {
+            $mode = Cache::get('global_mode_ordre', 'fixe');
+            $this->modeOrdre = $mode;
+            $this->questionIds = $this->getOrderedQuestionIds($mode);
+            $this->currentIndex = 0;
+
+            $this->saveProgress();
+        }
+
         $this->totalQuestions = count($this->questionIds);
+    }
+
+    private function saveProgress(): void
+    {
+        session()->put('questionnaire_progress', [
+            'currentIndex' => $this->currentIndex,
+            'scores'       => $this->scores,
+            'questionIds'  => $this->questionIds,
+            'trackingIds'  => $this->trackingIds,
+            'modeOrdre'    => $this->modeOrdre,
+        ]);
     }
 
     private function getOrderedQuestionIds(string $mode): array
@@ -154,6 +180,7 @@ class QuestionnaireRun extends Component
         $this->selectedAnswer = '';
         $this->showError      = false;
         $this->currentIndex++;
+        $this->saveProgress();
 
         if ($this->currentIndex >= $this->totalQuestions) {
             $this->terminer();
@@ -181,6 +208,7 @@ class QuestionnaireRun extends Component
         ]);
 
         $this->trackingIds[] = $row->id;
+        $this->saveProgress();
     }
 
     private function terminer(): void
@@ -188,7 +216,7 @@ class QuestionnaireRun extends Component
         $beneficiaireId        = session('beneficiaire_id');
         $consentementRecherche = session('consentement_recherche', false);
 
-        session()->forget(['beneficiaire_id', 'consentement_recherche']);
+        session()->forget(['beneficiaire_id', 'consentement_recherche', 'questionnaire_progress']);
 
         $passation = Passation::create([
             'id_beneficiaire'        => $beneficiaireId,
