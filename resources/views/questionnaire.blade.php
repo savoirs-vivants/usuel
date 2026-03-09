@@ -4,15 +4,15 @@
 
 @section('content')
 
-    <div class="ml-[230px] min-h-screen bg-gray-50 px-10 py-10">
+    <div class="min-h-screen bg-gray-50 ml-64 p-8">
 
         <div class="gap-8 mb-8">
             <div class="mb-8">
-                <p class="text-xs font-semibold uppercase tracking-widest text-[#1a9e7e] mb-1">Module d'évaluation</p>
-                <h1 class="font-mono font-bold text-3xl text-[#1a2340]">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Module d'évaluation</p>
+                <h1 class="font-mono font-bold text-3xl text-sv-blue">
                     Littératie numérique
                 </h1>
-                <p class="text-gray-400 text-sm mt-1 max-w-lg">
+                <p class="text-sm text-gray-400 mt-1">
                     Identifiez les besoins numériques de vos publics grâce à ce questionnaire intuitif et simple
                     d'utilisation.
                 </p>

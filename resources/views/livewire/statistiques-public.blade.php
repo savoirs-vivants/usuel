@@ -638,7 +638,7 @@
                                     size: 13
                                 },
                                 callbacks: {
-                                    label: (ctx) => ` Score : ${(ctx.raw).toFixed(2)} / 5`
+                                    label: (ctx) => ` Score : ${(ctx.raw).toFixed(1)} / 5`
                                 }
                             }
                         }
