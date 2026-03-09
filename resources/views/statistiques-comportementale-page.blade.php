@@ -3,8 +3,8 @@
 @section('title', 'Usuel - Statistiques comportementales')
 
 @section('content')
-    <section class="flex min-h-screen bg-gray-100 p-8">
-        <div class="ml-60 flex-1">
+    <section class="flex min-h-screen bg-gray-50">
+        <div class="ml-64 flex-1 p-8">
             @livewire('statistiques-comportementale')
         </div>
     </section>

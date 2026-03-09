@@ -8,11 +8,11 @@
         },
     }">
 
-        <div class="flex items-start justify-between mb-8">
+        <div class="mb-8 flex items-center justify-between">
             <div>
                 <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Analytique</p>
                 <h1 class="font-mono font-bold text-3xl text-sv-blue">Statistiques</h1>
-                <p class="text-sm text-gray-400 mt-1">Analyse comportementale par question.</p>
+                <p class="text-sm text-gray-400 mt-1">Analyse comportementale du public évalué.</p>
             </div>
             @livewire('export-comportementale-modal', [
                 'selectedAges' => $selectedAges,
