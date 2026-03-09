@@ -29,6 +29,11 @@ class StatistiquesComportementale extends Component
     #[Url(as: 'periode')]
     public string $timeRange = 'A';
 
+    #[Url(as: 'mode')]
+    public array $selectedModes = [];
+
+    public array $availableModes = [];
+
     public string $customStartDate = '';
     public string $customEndDate   = '';
 
@@ -64,6 +69,7 @@ class StatistiquesComportementale extends Component
         $this->availableDiplomes = Beneficiaire::whereNotNull('diplome')->distinct()->orderBy('diplome')->pluck('diplome')->toArray();
         $this->customStartDate   = Carbon::now()->startOfMonth()->toDateString();
         $this->customEndDate     = Carbon::now()->endOfMonth()->toDateString();
+        $this->availableModes = Tracking::query()->join('passations', 'tracking.id_passation', '=', 'passations.id')->whereNotNull('passations.mode_ordre')->distinct()->pluck('passations.mode_ordre')->toArray();
     }
 
     public function updated(string $property): void
@@ -81,7 +87,7 @@ class StatistiquesComportementale extends Component
 
     public function resetFilters(): void
     {
-        $this->reset(['selectedAges', 'selectedGenres', 'selectedCsps', 'selectedDiplomes']);
+        $this->reset(['selectedAges', 'selectedGenres', 'selectedCsps', 'selectedDiplomes', 'selectedModes']);
         $this->timeRange = 'A';
         unset($this->trackingData);
         $this->dispatch('update-charts', data: $this->trackingData);
@@ -98,6 +104,7 @@ class StatistiquesComportementale extends Component
         if (!empty($this->selectedGenres))   $query->whereIn('beneficiaires.genre',   $this->selectedGenres);
         if (!empty($this->selectedCsps))     $query->whereIn('beneficiaires.csp',     $this->selectedCsps);
         if (!empty($this->selectedDiplomes)) $query->whereIn('beneficiaires.diplome', $this->selectedDiplomes);
+        if (!empty($this->selectedModes))    $query->whereIn('passations.mode_ordre', $this->selectedModes);
 
         $now = Carbon::now();
         match ($this->timeRange) {

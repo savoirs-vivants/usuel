@@ -104,7 +104,7 @@
                     <div class="p-5 space-y-1">
 
                         @if (!empty($availableAges))
-                            <details class="group" open>
+                            <details class="group">
                                 <summary
                                     class="flex items-center justify-between cursor-pointer py-2.5 px-1 font-bold text-xs uppercase tracking-widest text-gray-400 hover:text-sv-blue list-none select-none transition-colors">
                                     Âge
@@ -130,7 +130,7 @@
                         @endif
 
                         @if (!empty($availableGenres))
-                            <details class="group" open>
+                            <details class="group">
                                 <summary
                                     class="flex items-center justify-between cursor-pointer py-2.5 px-1 font-bold text-xs uppercase tracking-widest text-gray-400 hover:text-sv-blue list-none select-none transition-colors">
                                     Genre

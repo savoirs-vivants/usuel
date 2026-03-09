@@ -97,7 +97,7 @@
                     <div class="p-5 space-y-1">
 
                         @if (!empty($availableAges))
-                            <details class="group" open>
+                            <details class="group">
                                 <summary
                                     class="flex items-center justify-between cursor-pointer py-2.5 px-1 font-bold text-xs uppercase tracking-widest text-gray-400 hover:text-sv-blue list-none select-none transition-colors">
                                     Âge
@@ -123,7 +123,7 @@
                         @endif
 
                         @if (!empty($availableGenres))
-                            <details class="group" open>
+                            <details class="group">
                                 <summary
                                     class="flex items-center justify-between cursor-pointer py-2.5 px-1 font-bold text-xs uppercase tracking-widest text-gray-400 hover:text-sv-blue list-none select-none transition-colors">
                                     Genre
@@ -197,6 +197,41 @@
                                     @endforeach
                                 </div>
                             </details>
+                        @endif
+                        @if (!empty($availableModes))
+                            <details class="group">
+                                <summary
+                                    class="flex items-center justify-between cursor-pointer py-2.5 px-1 font-bold text-xs uppercase tracking-widest text-gray-400 hover:text-sv-blue list-none select-none transition-colors">
+                                    Mode de passation
+                                    <svg class="w-3.5 h-3.5 transition-transform duration-200 group-open:rotate-180"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </summary>
+                                <div class="pb-3 pt-1 flex flex-col gap-1.5 px-1">
+                                    @foreach ($availableModes as $val)
+                                        <label
+                                            class="flex items-center gap-3 text-sm text-gray-600 cursor-pointer hover:text-sv-blue py-0.5 transition-colors">
+                                            <input type="checkbox" wire:model.live="selectedModes"
+                                                value="{{ $val }}"
+                                                class="w-3.5 h-3.5 text-sv-green rounded border-gray-300 focus:ring-sv-green">
+
+                                            @php
+                                                $nomMode = match($val) {
+                                                    'fixe' => 'Mode fixe',
+                                                    'aleatoire' => 'Mode aléatoire',
+                                                    'semi_aleatoire' => 'Mode semi-aléatoire',
+                                                    'carre_latin' => 'Carré latin',
+                                                    default => ucfirst(str_replace('_', ' ', $val))
+                                                };
+                                            @endphp
+                                            {{ $nomMode }}
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </details>
+                            <div class="border-t border-gray-50 my-1"></div>
                         @endif
 
                     </div>
