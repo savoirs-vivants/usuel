@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\PassationController;
 use App\Http\Controllers\QuestionnaireResultController;
+use App\Http\Controllers\PasswordResetController;
 use App\Models\Passation;
 use App\Models\User;
 
@@ -19,6 +20,11 @@ Route::post('/inscription/{token}', [InscriptionController::class, 'complete'])-
 
 Route::get('/connexion', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/connexion', [AuthController::class, 'login'])->name('login.submit');
+
+Route::get('/mot-de-passe-oublie', [PasswordResetController::class, 'showForgot'])->name('password.forgot');
+Route::post('/mot-de-passe-oublie', [PasswordResetController::class, 'sendReset'])->name('password.send');
+Route::get('/reinitialiser/{token}/{email}', [PasswordResetController::class, 'showReset'])->name('password.reset');
+Route::post('/reinitialiser', [PasswordResetController::class, 'reset'])->name('password.update');
 
 Route::middleware('auth')->group(function () {
 

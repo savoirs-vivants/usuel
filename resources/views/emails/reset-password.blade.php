@@ -11,7 +11,6 @@
             <td align="center">
                 <table width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;">
 
-                    {{-- Logo --}}
                     <tr>
                         <td align="center" style="padding-bottom: 28px;">
                             <table cellpadding="0" cellspacing="0">
@@ -24,11 +23,9 @@
                         </td>
                     </tr>
 
-                    {{-- Card --}}
                     <tr>
                         <td style="background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 32px rgba(34,42,96,0.10);">
 
-                            {{-- Header banner --}}
                             <table width="100%" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td style="background: linear-gradient(135deg, #222A60 0%, #1a3a6b 100%); padding: 36px 40px 32px;">
@@ -47,7 +44,6 @@
                                 </tr>
                             </table>
 
-                            {{-- Body --}}
                             <table width="100%" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td style="padding: 36px 40px 16px;">
@@ -58,7 +54,6 @@
                                             Cliquez sur le bouton ci-dessous pour choisir un nouveau mot de passe. Ce lien est valable <strong style="color:#374151;">60 minutes</strong>.
                                         </p>
 
-                                        {{-- CTA --}}
                                         <table cellpadding="0" cellspacing="0" width="100%">
                                             <tr>
                                                 <td align="center" style="padding-bottom: 28px;">
@@ -70,7 +65,6 @@
                                             </tr>
                                         </table>
 
-                                        {{-- Divider --}}
                                         <table width="100%" cellpadding="0" cellspacing="0">
                                             <tr>
                                                 <td style="border-top: 1px solid #f3f4f6; padding-top: 24px;">
@@ -85,7 +79,6 @@
                                 </tr>
                             </table>
 
-                            {{-- Footer card --}}
                             <table width="100%" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td style="background:#f9fafb; border-top:1px solid #f3f4f6; padding:20px 40px; border-radius: 0 0 24px 24px;">
@@ -99,7 +92,6 @@
                         </td>
                     </tr>
 
-                    {{-- Footer --}}
                     <tr>
                         <td align="center" style="padding-top: 28px;">
                             <p style="margin:0; font-size:12px; color:#9ca3af;">© {{ date('Y') }} Usuel — Plateforme d'évaluation des compétences numériques</p>

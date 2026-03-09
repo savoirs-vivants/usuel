@@ -15,8 +15,8 @@
 </head>
 <body class="font-grotesk bg-gray-50 text-sv-blue antialiased">
 
-        @if(!Route::is('welcome') && !Route::is('login') && !Route::is('inscription') && !Route::is('questionnaire.run') && !Route::is('questions.gestion'))
-
+        @if(!Route::is('welcome') && !Route::is('login') && !Route::is('inscription') && !Route::is('questionnaire.run') && !Route::is('questions.gestion') && !Route::is('password.forgot') && !Route::is('password.reset'))
+        
         <div>
             @include('components.sidebar')
             <main>
