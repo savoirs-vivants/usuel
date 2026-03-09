@@ -185,12 +185,11 @@ class StatistiquesPublic extends Component
 
         $dimensions = ['Résilience', 'Esprit Critique', 'Comp. sociales', 'Comp. Technique', 'Trait. info', 'Création'];
         $dimKeys    = ['Resilience', 'EC', 'CSDLEN', 'CT', 'TDLinfo', 'CDC'];
-        $dimScores  = [];
+        $dimScores       = [];
+        $sums            = array_fill_keys($dimKeys, 0);
+        $validPassations = 0;
 
         if ($totalPassations > 0) {
-            $sums            = array_fill_keys($dimKeys, 0);
-            $validPassations = 0;
-
             foreach ($passations as $passation) {
                 $scoreArray = is_string($passation->score)
                     ? json_decode($passation->score, true)
@@ -203,13 +202,11 @@ class StatistiquesPublic extends Component
                     }
                 }
             }
+        }
 
-            foreach ($dimKeys as $key) {
-                $moyenne    = $validPassations > 0 ? ($sums[$key] / $validPassations) : 0;
-                $dimScores[] = round($moyenne, 1);
-            }
-        } else {
-            $dimScores = array_fill(0, count($dimKeys), 0);
+        foreach ($dimKeys as $key) {
+            $moyenne     = $validPassations > 0 ? ($sums[$key] / $validPassations) : 0;
+            $dimScores[] = round($moyenne + 5, 2);
         }
 
         return [

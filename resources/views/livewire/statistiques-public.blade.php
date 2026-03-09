@@ -37,11 +37,11 @@
                 class="px-4 py-2.5 text-sm font-bold text-sv-green border-b-2 border-sv-green -mb-px transition-colors">
                 Public
             </a>
-            @if(auth()->user()->role === 'admin')
-            <a href="{{ route('statistiques.comportementale') }}"
-                class="px-4 py-2.5 text-sm font-semibold text-gray-400 border-b-2 border-transparent hover:text-sv-blue hover:border-gray-300 -mb-px transition-colors">
-                Comportementale
-            </a>
+            @if (auth()->user()->role === 'admin')
+                <a href="{{ route('statistiques.comportementale') }}"
+                    class="px-4 py-2.5 text-sm font-semibold text-gray-400 border-b-2 border-transparent hover:text-sv-blue hover:border-gray-300 -mb-px transition-colors">
+                    Comportementale
+                </a>
             @endif
         </div>
 
@@ -585,8 +585,6 @@
                             pointBorderWidth: 2,
                             pointRadius: 5,
                             pointHoverRadius: 8,
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: CHART_COLORS.teal,
                         }]
                     },
                     options: {
@@ -594,21 +592,16 @@
                         maintainAspectRatio: false,
                         scales: {
                             r: {
-                                beginAtZero: false,
                                 min: 0,
-                                max: 5,
+                                max: 10, 
                                 ticks: {
-                                    stepSize: 1,
+                                    stepSize: 2,
                                     backdropColor: 'transparent',
                                     color: '#9ca3af',
                                     font: {
-                                        size: 11,
-                                        weight: '500'
+                                        size: 11
                                     },
-
-                                    callback: function(value) {
-                                        return (value);
-                                    }
+                                    callback: value => (value - 5).toFixed(0) 
                                 },
                                 grid: {
                                     color: 'rgba(0,0,0,0.06)'
@@ -631,14 +624,8 @@
                             },
                             tooltip: {
                                 backgroundColor: '#1a2340',
-                                titleFont: {
-                                    weight: 'bold'
-                                },
-                                bodyFont: {
-                                    size: 13
-                                },
                                 callbacks: {
-                                    label: (ctx) => ` Score : ${(ctx.raw).toFixed(1)} / 5`
+                                    label: ctx => ` Score : ${(ctx.raw - 5).toFixed(1)} / 5`
                                 }
                             }
                         }
