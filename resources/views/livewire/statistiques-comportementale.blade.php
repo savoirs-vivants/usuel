@@ -19,6 +19,7 @@
                 'selectedGenres' => $selectedGenres,
                 'selectedCsps' => $selectedCsps,
                 'selectedDiplomes' => $selectedDiplomes,
+                'selectedModes' => $selectedModes,
                 'timeRange' => $timeRange,
                 'customStartDate' => $customStartDate,
                 'customEndDate' => $customEndDate,

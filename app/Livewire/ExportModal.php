@@ -10,15 +10,31 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use Livewire\Attributes\Reactive;
+use Illuminate\Support\Facades\Auth;
+
 
 class ExportModal extends Component
 {
+    #[Reactive]
     public array  $selectedAges     = [];
+
+    #[Reactive]
     public array  $selectedGenres   = [];
+
+    #[Reactive]
     public array  $selectedCsps     = [];
+
+    #[Reactive]
     public array  $selectedDiplomes = [];
+
+    #[Reactive]
     public string $timeRange        = 'A';
+
+    #[Reactive]
     public string $customStartDate  = '';
+
+    #[Reactive]
     public string $customEndDate    = '';
 
     private function getFilteredPassations()
@@ -36,6 +52,16 @@ class ExportModal extends Component
                 'beneficiaires.csp',
                 'beneficiaires.diplome'
             );
+
+            $user = Auth::user();
+        if ($user->role === 'travailleur') {
+            $query->where('passations.id_travailleur', $user->id);
+        } elseif ($user->role === 'gestionnaire') {
+            $query->join('users', 'passations.id_travailleur', '=', 'users.id')
+                  ->where('users.structure', $user->structure);
+        } else {
+            $query->where('passations.consentement_recherche', 1);
+        }
 
         if (!empty($this->selectedAges))     $query->whereIn('beneficiaires.age',     $this->selectedAges);
         if (!empty($this->selectedGenres))   $query->whereIn('beneficiaires.genre',   $this->selectedGenres);

@@ -11,15 +11,32 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use Livewire\Attributes\Reactive;
 
 class ExportComportementaleModal extends Component
 {
+    #[Reactive]
     public array  $selectedAges     = [];
+
+    #[Reactive]
     public array  $selectedGenres   = [];
+
+    #[Reactive]
     public array  $selectedCsps     = [];
+
+    #[Reactive]
     public array  $selectedDiplomes = [];
+
+    #[Reactive]
+    public array  $selectedModes    = [];
+
+    #[Reactive]
     public string $timeRange        = 'A';
+
+    #[Reactive]
     public string $customStartDate  = '';
+
+    #[Reactive]
     public string $customEndDate    = '';
 
     private function baseQuery()
@@ -27,12 +44,14 @@ class ExportComportementaleModal extends Component
         $query = Tracking::query()
             ->join('passations', 'tracking.id_passation', '=', 'passations.id')
             ->join('beneficiaires', 'passations.id_beneficiaire', '=', 'beneficiaires.id')
-            ->whereNotNull('tracking.id_passation');
+            ->whereNotNull('tracking.id_passation')
+            ->where('passations.consentement_recherche', 1);
 
         if (!empty($this->selectedAges))     $query->whereIn('beneficiaires.age',     $this->selectedAges);
         if (!empty($this->selectedGenres))   $query->whereIn('beneficiaires.genre',   $this->selectedGenres);
         if (!empty($this->selectedCsps))     $query->whereIn('beneficiaires.csp',     $this->selectedCsps);
         if (!empty($this->selectedDiplomes)) $query->whereIn('beneficiaires.diplome', $this->selectedDiplomes);
+        if (!empty($this->selectedModes))    $query->whereIn('passations.mode_ordre', $this->selectedModes);
 
         $now = Carbon::now();
         match ($this->timeRange) {
