@@ -14,6 +14,8 @@ class BackOfficeController extends Controller
         Gate::authorize('viewAny', User::class);
 
         $query = User::query();
+        
+        $query->where('id', '!=', Auth::id());
 
         if (Auth::user()->role === 'gestionnaire') {
             $query->where('structure', Auth::user()->structure)
