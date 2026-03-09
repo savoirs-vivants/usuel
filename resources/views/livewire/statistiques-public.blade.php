@@ -15,7 +15,7 @@
             });
         }
     }">
-        <div class="flex items-start justify-between mb-8">
+        <div class="mb-8 flex items-center justify-between">
             <div>
                 <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Analytique</p>
                 <h1 class="font-mono font-bold text-3xl text-sv-blue">Statistiques</h1>
