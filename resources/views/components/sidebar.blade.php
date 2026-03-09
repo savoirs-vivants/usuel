@@ -94,9 +94,8 @@
     </nav>
     <div class="px-4 pb-4 pt-3 space-y-1.5 border-t border-white/10">
 
-        <div class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-white/5 border border-white/8">
-            <div class="w-8 h-8 rounded-lg bg-sv-green flex items-center justify-center shrink-0 text-white font-bold text-xs uppercase"
-                style="box-shadow: 0 2px 8px rgba(22,152,124,0.4);">
+        <div class="flex items-center gap-2.5 px-3 py-2.5">
+            <div class="w-8 h-8 rounded-lg bg-sv-green flex items-center justify-center shrink-0 text-white font-bold text-xs uppercase">
                 {{ substr(Auth::user()->firstname ?? (Auth::user()->email ?? 'U'), 0, 1) }}
             </div>
             <div class="flex-1 min-w-0">

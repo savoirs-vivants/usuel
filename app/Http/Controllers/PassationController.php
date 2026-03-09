@@ -18,12 +18,10 @@ class PassationController extends Controller
 
         if ($user->role === 'travailleur') {
             $query->where('id_travailleur', $user->id);
-
         } elseif ($user->role === 'gestionnaire') {
             $query->whereHas('user', function (Builder $q) use ($user) {
                 $q->where('structure', $user->structure);
             });
-
         } else {
             $query->where('consentement_recherche', 1);
         }
@@ -47,6 +45,20 @@ class PassationController extends Controller
         $passation->delete();
 
         session()->flash('toast_message', 'Passation supprimée');
+        session()->flash('toast_type', 'success');
+
+        return redirect()->route('passations');
+    }
+
+    public function destroyMultiple(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        Passation::whereIn('id', $ids)->each(function ($p) {
+            Gate::authorize('delete', $p);
+        });
+        Passation::whereIn('id', $ids)->delete();
+
+        session()->flash('toast_message', count($ids) . ' passation(s) supprimée(s)');
         session()->flash('toast_type', 'success');
 
         return redirect()->route('passations');

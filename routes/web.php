@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/backoffice/user/{user}/edit', function (User $user) {
         return view('edit-user-page', compact('user'));
     })->name('user.edit');
+    Route::delete('backoffice/bulk', [BackofficeController::class, 'destroyMultiple'])->name('backoffice.destroyMultiple');
     Route::delete('/backoffice/users/{user}', [BackOfficeController::class, 'destroy'])->name('backoffice.destroy');
 
     Route::get('/passations', [PassationController::class, 'index'])->name('passations');
@@ -41,7 +42,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/passations/{passation}/certificat', [PassationController::class, 'certificat'])
         ->name('passation.certificat');
 
+    Route::delete('passations/bulk', [PassationController::class, 'destroyMultiple'])->name('passation.destroyMultiple');
     Route::delete('/passations/{passation}', [PassationController::class, 'destroy'])->name('passation.destroy');
+
 
 
     Route::get('/questionnaire', function () {
