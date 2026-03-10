@@ -205,7 +205,17 @@
     </section>
 
     <footer class="bg-sv-blue text-white/70 text-center py-7 text-sm">
-        <p>© Association Savoirs Vivants — Projet de recherche en littératie numérique.</p>
-    </footer>
+    <p class="mb-3">© Association Savoirs Vivants — Projet de recherche en littératie numérique.</p>
+
+    <div class="flex items-center justify-center gap-3 text-xs font-medium">
+        <a href="{{ route('mentions') }}" class="hover:text-white transition-colors underline decoration-white/20 hover:decoration-white">
+            Mentions légales
+        </a>
+        <span class="opacity-40">&bull;</span>
+        <a href="{{ route('confidentialite') }}" class="hover:text-white transition-colors underline decoration-white/20 hover:decoration-white">
+            Politique de confidentialité
+        </a>
+    </div>
+</footer>
 
 @endsection

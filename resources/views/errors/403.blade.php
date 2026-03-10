@@ -25,20 +25,13 @@
             Désolé, vous n'avez pas les permissions nécessaires pour consulter cette page ou effectuer cette action.
         </p>
 
-        <a href="{{ url()->previous() }}"
+        <a href="javascript:history.back()"
            class="inline-flex items-center justify-center gap-2 bg-[#1a2340] hover:bg-[#111827] text-white text-sm font-bold px-6 py-3.5 rounded-xl transition-all shadow-md hover:scale-[1.02] w-full group">
             <svg class="w-4 h-4 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
             Retourner à la page précédente
         </a>
-
-        @if($exception->getMessage() && $exception->getMessage() !== 'This action is unauthorized.')
-            <p class="mt-6 text-xs text-red-400 font-medium">
-                Détail : {{ $exception->getMessage() }}
-            </p>
-        @endif
-
     </div>
 
 </body>

@@ -133,7 +133,7 @@
                                 </button>
                             </div>
 
-                            <div class="flex items-center gap-2 bg-white px-4 py-2 border-2 border-gray-200 rounded-2xl shadow-sm shrink-0 h-[44px]">
+                            <div class="flex items-center gap-2 bg-white px-4 py-2 border-2 rounded-2xl shadow-sm shrink-0 h-[44px]">
                                 <label for="per_page" class="text-xs font-bold text-gray-400 uppercase tracking-wide hidden sm:inline">Nombres par page : </label>
                                 <select name="per_page" id="per_page" onchange="document.getElementById('search-form').submit()"
                                     class="bg-transparent text-sm font-bold text-sv-blue outline-none cursor-pointer">

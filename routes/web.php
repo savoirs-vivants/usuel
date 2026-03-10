@@ -26,6 +26,15 @@ Route::post('/mot-de-passe-oublie', [PasswordResetController::class, 'sendReset'
 Route::get('/reinitialiser/{token}/{email}', [PasswordResetController::class, 'showReset'])->name('password.reset');
 Route::post('/reinitialiser', [PasswordResetController::class, 'reset'])->name('password.update');
 
+Route::get('/mentions-legales', function () {
+    return view('mentions');
+})->name('mentions');
+
+Route::get('/politique-confidentialite', function () {
+    return view('confidentialite');
+})->name('confidentialite');
+
+
 Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

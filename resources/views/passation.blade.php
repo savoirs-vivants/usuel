@@ -7,15 +7,11 @@
 <section class="flex min-h-screen bg-gray-50">
     <div class="ml-64 flex-1 p-8">
 
-        <div class="mb-8 flex items-center justify-between">
+        <div class="mb-8">
             <div>
                 <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Gestion</p>
                 <h1 class="font-mono font-bold text-3xl text-sv-blue">Passations</h1>
                 <p class="text-sm text-gray-400 mt-1">Liste de toutes les passations enregistrées</p>
-            </div>
-            <div class="bg-sv-blue/5 border border-sv-blue/10 rounded-2xl px-5 py-3 text-center">
-                <p class="font-mono font-bold text-2xl text-sv-blue">{{ $passations->total() }}</p>
-                <p class="text-xs text-gray-400 font-semibold mt-0.5">passation(s)</p>
             </div>
         </div>
 
