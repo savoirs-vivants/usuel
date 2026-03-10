@@ -159,15 +159,11 @@
         <div class="max-w-4xl mx-auto">
             <p class="text-sv-green font-bold text-xs tracking-widest uppercase mb-3">Ils nous font confiance</p>
             <h2 class="text-3xl md:text-4xl font-extrabold text-sv-blue mb-8">Nos partenaires</h2>
-            
+
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-5">
-                <div class="bg-white border border-gray-100 rounded-xl p-4 flex flex-col items-center justify-center gap-3 shadow-sm hover:shadow-md transition-shadow">
-                    <img src="{{ asset('storage/logo_icube.png') }}" alt="Laboratoire ICube" class="h-12 w-auto object-contain">
-                    <p class="text-[10px] font-bold text-sv-blue uppercase tracking-widest text-center leading-tight">
-                        Laboratoire <br> ICube
-                    </p>
-                </div>
+                <img src="{{ asset('storage/logo_icube.png') }}" alt="Laboratoire ICube" class="h-12 w-auto object-contain">
             </div>
+        </div>
         </div>
     </section>
 

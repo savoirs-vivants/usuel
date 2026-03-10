@@ -14,7 +14,7 @@ class PassationController extends Controller
     {
         $user = Auth::user();
 
-        $query = Passation::with(['beneficiaire', 'user'])->latest();
+        $query = Passation::with(['beneficiaire', 'user'])->orderBy('date', 'desc');
 
         if ($user->role === 'travailleur') {
             $query->where('id_travailleur', $user->id);

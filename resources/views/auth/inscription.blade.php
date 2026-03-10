@@ -3,67 +3,122 @@
 @section('title', 'Finaliser mon inscription')
 
 @section('content')
-<section class="flex min-h-screen items-center justify-center bg-gray-100">
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
+<section class="bg-gray-50 min-h-screen flex items-center justify-center px-4 sm:px-6 py-12">
 
-        <h1 class="font-mono font-bold text-2xl text-sv-blue mb-1">Finaliser votre inscription</h1>
-        <p class="text-gray-400 text-sm mb-6">Bienvenue {{ $user->firstname ?? $user->name }}, choisissez votre mot de passe.</p>
+    <div class="w-full max-w-md relative z-10">
 
-        {{-- Affichage d'une erreur globale si la confirmation échoue --}}
-        @if ($errors->has('password'))
-            <div class="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-xs font-bold flex items-center">
-                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                </svg>
-                Les mots de passe ne correspondent pas ou sont invalides.
-            </div>
-        @endif
+        <div class="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
 
-        <form method="POST" action="{{ route('inscription.complete', $token) }}" class="space-y-4">
-            @csrf
-
-            <div>
-                <label class="block text-sm font-bold text-sv-blue mb-1">Mot de passe</label>
-                <div class="relative">
-                    <input type="password" name="password" id="password" required
-                        class="w-full bg-gray-50 border-2 @error('password') border-red-300 @else border-gray-200 @enderror rounded-xl p-3 pr-10 outline-none focus:border-sv-green text-sm">
-                    <button type="button" onclick="togglePassword('password', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-sv-green">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                        </svg>
-                    </button>
+            <div class="px-8 pt-10 text-center border-b border-gray-50">
+                <div class="w-16 h-16 bg-sv-green/10 rounded-2xl flex items-center justify-center mx-auto mb-5">
+                    <svg class="w-8 h-8 text-sv-green" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
+                    </svg>
                 </div>
+                <h1 class="font-sans font-bold text-2xl text-sv-blue tracking-tight">Création du mot de passe</h1>
+                <p class="text-gray-500 mt-2 text-sm leading-relaxed">
+                    Bienvenue <strong>{{ $user->firstname ?? $user->name }}</strong>.<br>
+                    Finalisez votre compte pour accéder à la plateforme.
+                </p>
             </div>
 
-            <div>
-                <label class="block text-sm font-bold text-sv-blue mb-1">Confirmer le mot de passe</label>
-                <div class="relative">
-                    <input type="password" name="password_confirmation" id="password_confirmation" required
-                        class="w-full bg-gray-50 border-2 @error('password') border-red-300 @else border-gray-200 @enderror rounded-xl p-3 pr-10 outline-none focus:border-sv-green text-sm">
-                    <button type="button" onclick="togglePassword('password_confirmation', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-sv-green">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            <div class="px-8 pb-8">
+
+                @if ($errors->has('password'))
+                    <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-medium flex items-start gap-3">
+                        <svg class="w-5 h-5 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                         </svg>
-                    </button>
-                </div>
+                        <span>Les mots de passe ne correspondent pas ou sont invalides.</span>
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('inscription.complete', $token) }}" class="space-y-6">
+                    @csrf
+
+                    <div class="space-y-2">
+                        <label for="password" class="block text-sm font-bold text-gray-700">
+                            Nouveau mot de passe
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                            </div>
+                            <input type="password" name="password" id="password" required placeholder="••••••••"
+                                class="w-full bg-gray-50 border @error('password') border-red-300 ring-4 ring-red-50 @else border-gray-200 @enderror text-gray-900 text-base rounded-xl
+                                       focus:bg-white focus:ring-4 focus:ring-sv-green/10 focus:border-sv-green outline-none
+                                       block pl-11 pr-12 py-3.5 transition-all duration-200 placeholder:text-gray-400">
+                            <button type="button" onclick="togglePassword('password', this)"
+                                class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors focus:outline-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 eye-icon">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="password_confirmation" class="block text-sm font-bold text-gray-700">
+                            Confirmer le mot de passe
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                            </div>
+                            <input type="password" name="password_confirmation" id="password_confirmation" required placeholder="••••••••"
+                                class="w-full bg-gray-50 border @error('password') border-red-300 ring-4 ring-red-50 @else border-gray-200 @enderror text-gray-900 text-base rounded-xl
+                                       focus:bg-white focus:ring-4 focus:ring-sv-green/10 focus:border-sv-green outline-none
+                                       block pl-11 pr-12 py-3.5 transition-all duration-200 placeholder:text-gray-400">
+                            <button type="button" onclick="togglePassword('password_confirmation', this)"
+                                class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors focus:outline-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 eye-icon">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <button type="submit"
+                            class="w-full bg-sv-blue hover:bg-[#111827] text-white font-bold text-base rounded-xl
+                                   px-5 py-4 shadow-lg shadow-sv-blue/20 hover:shadow-xl hover:-translate-y-0.5
+                                   transition-all duration-200 flex items-center justify-center gap-2 group">
+                            Valider et accéder
+                            <svg class="w-5 h-5 text-white/70 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </button>
+                    </div>
+                </form>
             </div>
 
-            <button type="submit"
-                class="w-full mt-2 bg-sv-green hover:opacity-90 text-white font-bold py-3 rounded-xl transition-opacity">
-                Confirmer et accéder à la plateforme
-            </button>
-        </form>
+        </div>
+
     </div>
 </section>
 
 <script>
     function togglePassword(inputId, button) {
         const input = document.getElementById(inputId);
-        input.type = input.type === "password" ? "text" : "password";
-        button.classList.toggle('text-sv-green');
-        button.classList.toggle('text-gray-400');
+        const icon = button.querySelector('.eye-icon');
+
+        if (input.type === "password") {
+            input.type = "text";
+            button.classList.add('text-sv-green');
+            button.classList.remove('text-gray-400');
+            icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />`;
+        } else {
+            input.type = "password";
+            button.classList.remove('text-sv-green');
+            button.classList.add('text-gray-400');
+            icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />`;
+        }
     }
 </script>
 @endsection
