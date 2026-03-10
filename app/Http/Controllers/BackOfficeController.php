@@ -14,6 +14,7 @@ class BackOfficeController extends Controller
         Gate::authorize('viewAny', User::class);
 
         $search = $request->query('search');
+        $perPage = $request->query('per_page', 5);
 
         $query = User::query();
 
@@ -33,9 +34,9 @@ class BackOfficeController extends Controller
             });
         }
 
-        $users = $query->latest()->get();
+        $users = $query->latest()->paginate($perPage)->withQueryString();
 
-        return view('backoffice', compact('users', 'search'));
+        return view('backoffice', compact('users', 'search', 'perPage'));
     }
 
     public function edit(User $user)

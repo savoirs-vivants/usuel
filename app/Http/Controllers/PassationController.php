@@ -15,6 +15,7 @@ class PassationController extends Controller
         $user = Auth::user();
 
         $search = $request->query('search');
+        $perPage = $request->query('per_page', 5);
 
         $query = Passation::with(['beneficiaire', 'user'])->orderBy('date', 'desc');
 
@@ -38,9 +39,9 @@ class PassationController extends Controller
             });
         }
 
-        $passations = $query->get();
+        $passations = $query->paginate($perPage)->withQueryString();
 
-        return view('passation', compact('passations', 'search'));
+        return view('passation', compact('passations', 'search', 'perPage'));
     }
 
     public function certificat(Passation $passation)

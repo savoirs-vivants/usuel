@@ -20,7 +20,7 @@
 
             <div x-data="{
                 selected: [],
-                allIds: {{ $users->pluck('id')->toJson() }},
+                allIds: {{ collect($users->items())->pluck('id')->toJson() }},
                 get allSelected() { return this.allIds.length > 0 && this.selected.length === this.allIds.length; },
                 get someSelected() { return this.selected.length > 0 && !this.allSelected; },
                 toggleAll() { this.selected = this.allSelected ? [] : [...this.allIds]; },
@@ -117,6 +117,19 @@
                             Supprimer la sélection
                         </button>
                     </div>
+                            <div class="flex items-center gap-2 bg-white px-4 py-2 border-2 border-gray-200 rounded-2xl shadow-sm shrink-0">
+                                <label for="per_page" class="text-xs font-bold text-gray-400 uppercase tracking-wide">Afficher</label>
+                                <select name="per_page" id="per_page" onchange="this.form.submit()"
+                                    class="bg-transparent text-sm font-bold text-sv-blue outline-none cursor-pointer">
+                                    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                    <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                                    <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
                 </div>
 
                 <div x-show="confirmBulkDelete" x-cloak
@@ -306,6 +319,13 @@
                                 @endforeach
                             </tbody>
                         </table>
+
+                        @if ($users->hasPages())
+                            <div class="px-6 py-5 border-t border-gray-100 bg-gray-50/50">
+                                {{ $users->links('components.pagination-fr') }}
+                            </div>
+                        @endif
+
                     @else
                         <div class="text-center py-20">
                             <div class="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-4">
