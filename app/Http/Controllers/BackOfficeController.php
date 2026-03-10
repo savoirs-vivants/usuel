@@ -15,6 +15,7 @@ class BackOfficeController extends Controller
 
         $search = $request->query('search');
         $perPage = $request->query('per_page', 5);
+        $structureFilter = $request->query('structure');
 
         $query = User::query();
 
@@ -23,6 +24,10 @@ class BackOfficeController extends Controller
         if (Auth::user()->role === 'gestionnaire') {
             $query->where('structure', Auth::user()->structure)
                   ->where('role', 'travailleur');
+        }
+
+        if (!empty($structureFilter)) {
+            $query->where('structure', $structureFilter);
         }
 
         if (!empty($search)) {
@@ -34,9 +39,15 @@ class BackOfficeController extends Controller
             });
         }
 
+        $structures = User::whereNotNull('structure')
+                          ->where('structure', '!=', '')
+                          ->distinct()
+                          ->orderBy('structure')
+                          ->pluck('structure');
+
         $users = $query->latest()->paginate($perPage)->withQueryString();
 
-        return view('backoffice', compact('users', 'search', 'perPage'));
+        return view('backoffice', compact('users', 'search', 'perPage', 'structures', 'structureFilter'));
     }
 
     public function edit(User $user)

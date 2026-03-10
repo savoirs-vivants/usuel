@@ -64,72 +64,90 @@
 
                 <div class="mb-4">
 
-                <form action="{{ route('backoffice') }}" method="GET" class="w-full flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <form action="{{ route('backoffice') }}" method="GET" id="search-form" class="w-full flex flex-col lg:flex-row lg:items-center justify-between gap-4">
 
-                <div class="flex items-center gap-2 w-full lg:max-w-md">
-                    <div class="relative flex-1">
-                        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                        <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Rechercher un utilisateur"
-                            class="w-full bg-white border-2 border-gray-200 focus:border-sv-green outline-none rounded-2xl pl-12 pr-10 py-2.5 text-sm text-gray-700 font-medium shadow-sm transition-colors duration-200 placeholder-gray-300">
+                        <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-1">
 
-                        @if(!empty($search))
-                            <a href="{{ route('backoffice', ['per_page' => $perPage]) }}" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 bg-gray-50 rounded-full p-1 transition-colors" title="Effacer la recherche">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                            <div class="relative w-full max-w-sm">
+                                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
-                            </a>
-                        @endif
-                    </div>
+                                <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Nom, email..."
+                                    class="w-full bg-white border-2 border-gray-200 focus:border-sv-green outline-none rounded-2xl pl-12 pr-10 py-2.5 text-sm text-gray-700 font-medium shadow-sm transition-colors duration-200 placeholder-gray-300">
 
-                    <button type="submit" class="bg-sv-blue hover:bg-sv-blue/90 text-white px-5 py-2.5 rounded-2xl text-sm font-bold shadow-sm transition-colors shrink-0">
-                        Rechercher
-                    </button>
-                </div>
-                <div class="flex items-center gap-4">
+                                @if(!empty($search))
+                                    <a href="{{ route('backoffice', ['per_page' => $perPage, 'structure' => $structureFilter]) }}" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 bg-gray-50 rounded-full p-1 transition-colors" title="Effacer la recherche">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </a>
+                                @endif
+                            </div>
+                            <button type="submit" class="bg-sv-blue hover:bg-sv-blue/90 text-white px-5 py-2.5 rounded-2xl text-sm font-bold shadow-sm transition-colors shrink-0">
+                                Rechercher
+                            </button>
+                        </div>
 
-                <div x-show="selected.length > 0" x-cloak
-                    x-transition:enter="transition ease-out duration-200"
-                    x-transition:enter-start="opacity-0 translate-y-1"
-                    x-transition:enter-end="opacity-100 translate-y-0"
-                    class="flex items-center gap-3 bg-white border border-gray-200 rounded-2xl px-4 py-2.5 shadow-sm">
-                    <div class="flex items-center gap-2">
-                        <div class="w-6 h-6 rounded-lg bg-sv-blue flex items-center justify-center">
-                            <span class="text-white font-mono font-bold text-xs" x-text="selected.length"></span>
+                        <div class="flex items-center gap-4">
+                            @if(Auth::user()->role === 'admin')
+                            <div class="relative w-full sm:w-64">
+                                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                </svg>
+                                <select name="structure" onchange="document.getElementById('search-form').submit()"
+                                    class="w-full bg-white border-2 border-gray-200 focus:border-sv-green outline-none rounded-2xl pl-10 pr-4 py-2.5 text-sm text-gray-700 font-medium shadow-sm transition-colors duration-200 cursor-pointer appearance-none">
+                                    <option value="">Toutes les structures</option>
+                                    @foreach($structures as $structure)
+                                        <option value="{{ $structure }}" {{ ($structureFilter == $structure) ? 'selected' : '' }}>
+                                            {{ Str::limit($structure, 25) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @endif
+                            <div x-show="selected.length > 0" x-cloak
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 translate-y-1"
+                                x-transition:enter-end="opacity-100 translate-y-0"
+                                class="flex items-center gap-3 bg-white border border-gray-200 rounded-2xl px-4 py-2 shadow-sm h-[44px]">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 rounded-lg bg-sv-blue flex items-center justify-center">
+                                        <span class="text-white font-mono font-bold text-xs" x-text="selected.length"></span>
+                                    </div>
+                                    <span class="text-sm font-semibold text-gray-600 hidden sm:inline">
+                                        sélectionné<span x-show="selected.length > 1">s</span>
+                                    </span>
+                                </div>
+                                <div class="w-px h-4 bg-gray-200"></div>
+                                <button type="button" @click="selected = []"
+                                    class="text-xs font-bold text-gray-400 hover:text-gray-600 transition-colors">
+                                    Annuler
+                                </button>
+                                <button type="button" @click="confirmBulkDelete = true"
+                                    class="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-red-500 hover:bg-red-600 rounded-xl px-3 py-1.5 transition-colors">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    <span class="hidden sm:inline">Supprimer</span>
+                                </button>
+                            </div>
+
+                            <div class="flex items-center gap-2 bg-white px-4 py-2 border-2 border-gray-200 rounded-2xl shadow-sm shrink-0 h-[44px]">
+                                <label for="per_page" class="text-xs font-bold text-gray-400 uppercase tracking-wide hidden sm:inline">Nombres par page : </label>
+                                <select name="per_page" id="per_page" onchange="document.getElementById('search-form').submit()"
+                                    class="bg-transparent text-sm font-bold text-sv-blue outline-none cursor-pointer">
+                                    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                    <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                                    <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
+                                </select>
+                            </div>
+
                         </div>
-                        <span class="text-sm font-semibold text-gray-600">
-                            sélectionnée<span x-show="selected.length > 1">s</span>
-                        </span>
-                    </div>
-                    <div class="w-px h-4 bg-gray-200"></div>
-                    <button type="button" @click="selected = []"
-                        class="text-xs font-bold text-gray-400 hover:text-gray-600 transition-colors">
-                        Désélectionner
-                    </button>
-                    <button type="button" @click="confirmBulkDelete = true"
-                        class="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-red-500 hover:bg-red-600 rounded-xl px-3 py-1.5 transition-colors">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                        Supprimer la sélection
-                    </button>
+                    </form>
                 </div>
-                        <div class="flex items-center gap-2 bg-white px-4 py-2 border-2 border-gray-200 rounded-2xl shadow-sm shrink-0">
-                            <label for="per_page" class="text-xs font-bold text-gray-400 uppercase tracking-wide">Afficher</label>
-                            <select name="per_page" id="per_page" onchange="this.form.submit()"
-                                class="bg-transparent text-sm font-bold text-sv-blue outline-none cursor-pointer">
-                                <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
-                                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
-                                <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
-                                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
-                                <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
-                            </select>
-                        </div>
-                    </div>
-                </form>
-            </div>
 
                 <div x-show="confirmBulkDelete" x-cloak
                     class="fixed inset-0 z-50 flex items-center justify-center bg-sv-blue/60 backdrop-blur-sm">

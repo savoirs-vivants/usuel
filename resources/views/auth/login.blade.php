@@ -47,7 +47,7 @@
                                     </svg>
                                 </div>
                                 <input type="email" name="email" id="email" required
-                                    placeholder="prenom.nom@exemple.fr"
+                                    placeholder="exemple@example.com"
                                     class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-base rounded-xl
                                            focus:bg-white focus:ring-4 focus:ring-sv-green/10 focus:border-sv-green outline-none
                                            block pl-11 pr-4 py-3.5 transition-all duration-200 placeholder:text-gray-400">
