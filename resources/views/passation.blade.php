@@ -7,7 +7,6 @@
 <section class="flex min-h-screen bg-gray-50">
     <div class="ml-64 flex-1 p-8">
 
-        {{-- En-tête --}}
         <div class="mb-8 flex items-center justify-between">
             <div>
                 <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Gestion</p>
@@ -15,7 +14,6 @@
                 <p class="text-sm text-gray-400 mt-1">Liste de toutes les passations enregistrées</p>
             </div>
             <div class="bg-sv-blue/5 border border-sv-blue/10 rounded-2xl px-5 py-3 text-center">
-                {{-- On utilise total() pour afficher le vrai nombre d'éléments, pas juste ceux de la page --}}
                 <p class="font-mono font-bold text-2xl text-sv-blue">{{ $passations->total() }}</p>
                 <p class="text-xs text-gray-400 font-semibold mt-0.5">passation(s)</p>
             </div>
@@ -39,18 +37,20 @@
             confirmBulkDelete: false,
         }">
 
-            <div class="mb-4 flex items-center justify-between gap-4">
+                <div class="mb-4">
 
-                <form action="{{ route('passations') }}" method="GET" class="relative max-w-md flex-1 flex gap-2">
+                <form action="{{ route('passations') }}" method="GET" class="w-full flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+
+                <div class="flex items-center gap-2 w-full lg:max-w-md">
                     <div class="relative flex-1">
                         <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                         <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Rechercher un bénéficiaire ou un ID…"
-                            class="w-full bg-white border-2 border-gray-200 focus:border-sv-green outline-none rounded-2xl pl-12 pr-4 py-2.5 text-sm text-gray-700 font-medium shadow-sm transition-colors duration-200 placeholder-gray-300">
+                            class="w-full bg-white border-2 border-gray-200 focus:border-sv-green outline-none rounded-2xl pl-12 pr-10 py-2.5 text-sm text-gray-700 font-medium shadow-sm transition-colors duration-200 placeholder-gray-300">
 
                         @if(!empty($search))
-                            <a href="{{ route('passations') }}" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 bg-gray-50 rounded-full p-1 transition-colors">
+                            <a href="{{ route('passations', ['per_page' => $perPage]) }}" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 bg-gray-50 rounded-full p-1 transition-colors" title="Effacer la recherche">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
@@ -58,10 +58,11 @@
                         @endif
                     </div>
 
-                    <button type="submit" class="bg-sv-blue hover:bg-[#1a2340]/90 text-white px-5 py-2.5 rounded-2xl text-sm font-bold shadow-sm transition-colors">
+                    <button type="submit" class="bg-sv-blue hover:bg-sv-blue/90 text-white px-5 py-2.5 rounded-2xl text-sm font-bold shadow-sm transition-colors shrink-0">
                         Rechercher
                     </button>
-                </form>
+                </div>
+                <div class="flex items-center gap-4">
 
                 <div x-show="selected.length > 0" x-cloak
                     x-transition:enter="transition ease-out duration-200"
@@ -77,11 +78,11 @@
                         </span>
                     </div>
                     <div class="w-px h-4 bg-gray-200"></div>
-                    <button @click="selected = []"
+                    <button type="button" @click="selected = []"
                         class="text-xs font-bold text-gray-400 hover:text-gray-600 transition-colors">
                         Désélectionner
                     </button>
-                    <button @click="confirmBulkDelete = true"
+                    <button type="button" @click="confirmBulkDelete = true"
                         class="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-red-500 hover:bg-red-600 rounded-xl px-3 py-1.5 transition-colors">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

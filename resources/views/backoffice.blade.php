@@ -64,7 +64,7 @@
 
                 <div class="mb-4 flex items-center gap-4">
 
-                    <form action="{{ route('backoffice') }}" method="GET" class="relative max-w-md flex-1 flex gap-2">
+                    <form action="{{ route('backoffice') }}" method="GET" id="search-form" class="relative max-w-md flex-1 flex gap-2">
                         <div class="relative flex-1">
                             <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
@@ -76,7 +76,7 @@
                                 class="w-full bg-white border-2 border-gray-200 focus:border-sv-green outline-none rounded-2xl pl-12 pr-4 py-2.5 text-sm text-gray-700 font-medium shadow-sm transition-colors duration-200 placeholder-gray-300">
 
                             @if(!empty($search))
-                                <a href="{{ route('backoffice') }}" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 bg-gray-50 rounded-full p-1 transition-colors">
+                                <a href="{{ route('backoffice', ['per_page' => $perPage]) }}" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 bg-gray-50 rounded-full p-1 transition-colors">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
                                     </svg>
@@ -88,8 +88,6 @@
                             Rechercher
                         </button>
                     </form>
-
-                    <div x-show="selected.length > 0" x-cloak x-transition:enter="transition ease-out duration-200" ...
 
                     <div x-show="selected.length > 0" x-cloak x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0 translate-y-1"
@@ -117,19 +115,19 @@
                             Supprimer la sélection
                         </button>
                     </div>
-                            <div class="flex items-center gap-2 bg-white px-4 py-2 border-2 border-gray-200 rounded-2xl shadow-sm shrink-0">
-                                <label for="per_page" class="text-xs font-bold text-gray-400 uppercase tracking-wide">Afficher</label>
-                                <select name="per_page" id="per_page" onchange="this.form.submit()"
-                                    class="bg-transparent text-sm font-bold text-sv-blue outline-none cursor-pointer">
-                                    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
-                                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
-                                    <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
-                                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
-                                    <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
+
+                    <div class="flex items-center gap-2 bg-white px-4 py-2 border-2 border-gray-200 rounded-2xl shadow-sm shrink-0">
+                        <label for="per_page" class="text-xs font-bold text-gray-400 uppercase tracking-wide">Afficher</label>
+                        <select name="per_page" id="per_page" form="search-form" onchange="document.getElementById('search-form').submit()"
+                            class="bg-transparent text-sm font-bold text-sv-blue outline-none cursor-pointer">
+                            <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                            <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                            <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                            <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                            <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
+                        </select>
+                    </div>
+
                 </div>
 
                 <div x-show="confirmBulkDelete" x-cloak
