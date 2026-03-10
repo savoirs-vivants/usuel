@@ -67,7 +67,7 @@
             </svg>
             Imprimer le certificat
         </a>
-        <a href="{{ route('passations') }}"
+        <a href="{{ url()->previous() }}"
             class="inline-flex items-center gap-2 bg-[#1a9e7e] hover:bg-[#158a6c] text-white font-semibold px-5 py-2.5 rounded-lg transition text-sm shadow-sm">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />

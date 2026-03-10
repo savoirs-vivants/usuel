@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\Gate;
 
 class BackOfficeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         Gate::authorize('viewAny', User::class);
+
+        $search = $request->query('search');
 
         $query = User::query();
 
@@ -19,12 +21,21 @@ class BackOfficeController extends Controller
 
         if (Auth::user()->role === 'gestionnaire') {
             $query->where('structure', Auth::user()->structure)
-                ->where('role', 'travailleur');
+                  ->where('role', 'travailleur');
         }
 
-        $users = $query->get();
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('firstname', 'LIKE', "%{$search}%")
+                  ->orWhere('email', 'LIKE', "%{$search}%")
+                  ->orWhere('structure', 'LIKE', "%{$search}%");
+            });
+        }
 
-        return view('backoffice', compact('users'));
+        $users = $query->latest()->get();
+
+        return view('backoffice', compact('users', 'search'));
     }
 
     public function edit(User $user)

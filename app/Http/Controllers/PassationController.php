@@ -10,9 +10,11 @@ use Illuminate\Support\Facades\Gate;
 
 class PassationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
+
+        $search = $request->query('search');
 
         $query = Passation::with(['beneficiaire', 'user'])->orderBy('date', 'desc');
 
@@ -26,9 +28,19 @@ class PassationController extends Controller
             $query->where('consentement_recherche', 1);
         }
 
+        if (!empty($search)) {
+            $query->where(function (Builder $q) use ($search) {
+                $q->where('id', $search)
+                  ->orWhereHas('beneficiaire', function (Builder $qb) use ($search) {
+                      $qb->where('nom', 'LIKE', "%{$search}%")
+                         ->orWhere('prenom', 'LIKE', "%{$search}%");
+                  });
+            });
+        }
+
         $passations = $query->get();
 
-        return view('passation', compact('passations'));
+        return view('passation', compact('passations', 'search'));
     }
 
     public function certificat(Passation $passation)
