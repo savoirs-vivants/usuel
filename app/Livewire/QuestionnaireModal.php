@@ -6,6 +6,7 @@ use App\Models\Beneficiaire;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class QuestionnaireModal extends Component
 {
@@ -81,14 +82,21 @@ class QuestionnaireModal extends Component
             'nom.min'         => 'Le nom doit comporter au moins 2 caractères.',
         ]);
 
-        $beneficiaire = Beneficiaire::create([
-            'nom'     => trim($this->nom),
-            'prenom'  => trim($this->prenom),
-            'genre'   => $this->genre,
-            'age'     => $this->age,
-            'diplome' => $this->diplome,
-            'csp'     => $this->csp,
-        ]);
+        $prenomPropre = Str::title(trim($this->prenom));
+        $nomPropre = Str::upper(trim($this->nom));
+
+        $beneficiaire = Beneficiaire::updateOrCreate(
+            [
+                'nom'    => $nomPropre,
+                'prenom' => $prenomPropre,
+            ],
+            [
+                'genre'   => $this->genre,
+                'age'     => $this->age,
+                'diplome' => $this->diplome,
+                'csp'     => $this->csp,
+            ]
+        );
 
         session(['beneficiaire_id' => $beneficiaire->id]);
         session()->save();
