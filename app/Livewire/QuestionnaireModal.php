@@ -7,6 +7,7 @@ use Livewire\Component;
 use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class QuestionnaireModal extends Component
 {
@@ -85,18 +86,33 @@ class QuestionnaireModal extends Component
         $prenomPropre = Str::title(trim($this->prenom));
         $nomPropre = Str::upper(trim($this->nom));
 
-        $beneficiaire = Beneficiaire::updateOrCreate(
-            [
-                'nom'    => $nomPropre,
-                'prenom' => $prenomPropre,
-            ],
-            [
+        $user = Auth::user();
+
+        $beneficiaire = Beneficiaire::where('nom', $nomPropre)
+            ->where('prenom', $prenomPropre)
+            ->whereHas('passations.user', function ($query) use ($user) {
+                $query->where('structure', $user->structure);
+            })
+            ->first();
+
+        if ($beneficiaire) {
+            $beneficiaire->update([
                 'genre'   => $this->genre,
                 'age'     => $this->age,
                 'diplome' => $this->diplome,
                 'csp'     => $this->csp,
-            ]
-        );
+            ]);
+        }
+        else {
+            $beneficiaire = Beneficiaire::create([
+                'nom'     => $nomPropre,
+                'prenom'  => $prenomPropre,
+                'genre'   => $this->genre,
+                'age'     => $this->age,
+                'diplome' => $this->diplome,
+                'csp'     => $this->csp,
+            ]);
+        }
 
         session(['beneficiaire_id' => $beneficiaire->id]);
         session()->save();
