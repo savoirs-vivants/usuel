@@ -18,6 +18,7 @@ class QuestionnaireModal extends Component
     public string $age     = '';
     public string $diplome = '';
     public string $csp     = '';
+    public string $langue = 'fr';
 
     public string $nom    = '';
     public string $prenom = '';
@@ -28,6 +29,7 @@ class QuestionnaireModal extends Component
     public function ouvrir(): void
     {
         $this->reset(['genre', 'age', 'diplome', 'csp', 'nom', 'prenom', 'consentement']);
+        $this->langue = 'fr';
         $this->step = 1;
         $this->open = true;
     }
@@ -63,6 +65,7 @@ class QuestionnaireModal extends Component
             'csp.required'     => 'Veuillez sélectionner une catégorie socio-professionnelle.',
         ]);
 
+
         $this->step = 2;
     }
 
@@ -76,6 +79,7 @@ class QuestionnaireModal extends Component
         $this->validate([
             'prenom' => 'required|string|min:2|max:60',
             'nom'    => 'required|string|min:2|max:60',
+            'langue'  => 'required|string',
         ], [
             'prenom.required' => 'Le prénom est obligatoire.',
             'prenom.min'      => 'Le prénom doit comporter au moins 2 caractères.',
@@ -114,6 +118,7 @@ class QuestionnaireModal extends Component
             ]);
         }
 
+        session(['langue' => $this->langue]);
         session(['beneficiaire_id' => $beneficiaire->id]);
         session()->save();
 
@@ -127,6 +132,8 @@ class QuestionnaireModal extends Component
         ]);
 
         session(['consentement_recherche' => (bool) $this->consentement]);
+
+        session()->forget('questionnaire_progress');
 
         $this->redirect(route('questionnaire.run'), navigate: true);
     }

@@ -347,6 +347,26 @@
                             </p>
                             @enderror
                         </div>
+                        <div>
+                            <label for="langue" class="block font-grotesk text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
+                                Langue du questionnaire
+                            </label>
+                            <div class="relative">
+                                <select id="langue" wire:model="langue"
+                                        class="w-full appearance-none font-grotesk bg-gray-50 border-2 rounded-2xl
+                                               pl-5 pr-12 py-3.5 text-sm font-medium text-sv-blue
+                                               cursor-pointer focus:outline-none focus:ring-4 focus:ring-sv-green/20
+                                               focus:border-sv-green transition-all duration-150 border-gray-100 hover:border-gray-300">
+                                    <option value="fr">Français (par défaut)</option>
+                                    <option value="en">Anglais (English)</option>
+                                    <option value="es">Espagnol (Español)</option>
+                                    <option value="de">Allemand (Deutsch)</option>
+                                    <option value="ar">Arabe (العربية)</option>
+                                    <option value="ru">Russe (Русский)</option>
+                                    <option value="tr">Turc (Türkçe)</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="flex flex-col gap-3 mt-8">
