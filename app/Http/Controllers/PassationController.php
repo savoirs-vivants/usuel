@@ -55,7 +55,13 @@ class PassationController extends Controller
     {
         Gate::authorize('delete', $passation);
 
+        $beneficiaire = $passation->beneficiaire;
+
         $passation->delete();
+
+        if ($beneficiaire->passations()->count() === 0) {
+            $beneficiaire->delete();
+        }
 
         session()->flash('toast_message', 'Passation supprimée');
         session()->flash('toast_type', 'success');
@@ -66,10 +72,26 @@ class PassationController extends Controller
     public function destroyMultiple(Request $request)
     {
         $ids = $request->input('ids', []);
-        Passation::whereIn('id', $ids)->each(function ($p) {
+
+        $passations = Passation::whereIn('id', $ids)->with('beneficiaire')->get();
+        $beneficiairesAverifier = collect();
+
+        foreach ($passations as $p) {
             Gate::authorize('delete', $p);
-        });
+            if ($p->beneficiaire) {
+                $beneficiairesAverifier->push($p->beneficiaire);
+            }
+        }
+
         Passation::whereIn('id', $ids)->delete();
+
+        $beneficiairesAverifier = $beneficiairesAverifier->unique('id');
+
+        foreach ($beneficiairesAverifier as $beneficiaire) {
+            if ($beneficiaire->passations()->count() === 0) {
+                $beneficiaire->delete();
+            }
+        }
 
         session()->flash('toast_message', count($ids) . ' passation(s) supprimée(s)');
         session()->flash('toast_type', 'success');
