@@ -89,6 +89,7 @@ class StatistiquesComportementale extends Component
     {
         $this->reset(['selectedAges', 'selectedGenres', 'selectedCsps', 'selectedDiplomes', 'selectedModes']);
         $this->timeRange = 'A';
+        $this->sortField = 'num';
         unset($this->trackingData);
         $this->dispatch('update-charts', data: $this->trackingData);
     }

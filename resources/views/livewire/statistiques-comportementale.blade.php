@@ -37,8 +37,7 @@
             </a>
         </div>
 
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-6">
             <div class="px-6 py-4 border-b border-gray-50 flex items-center justify-between">
                 <div class="flex items-center gap-5">
                     <button @click="filterOpen = !filterOpen"
@@ -238,7 +237,7 @@
                     </div>
                 </div>
 
-                <div class="w-full min-w-0 p-6 bg-gray-50/40 overflow-hidden">
+                <div wire:ignore class="w-full min-w-0 p-6 bg-gray-50/40 overflow-hidden pb-0">
 
                     <div class="mb-6 flex items-center gap-3">
                         <div class="w-8 h-8 rounded-xl bg-sv-green/10 flex items-center justify-center shrink-0">
@@ -311,8 +310,10 @@
                         </div>
                         <div class="relative h-56"><canvas id="ordreChart"></canvas></div>
                     </div>
-
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                </div>
+            </div>
+        </div>
+         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                         <div class="px-5 py-4 border-b border-gray-50 flex items-center justify-between">
                             <div>
                                 <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Données</p>

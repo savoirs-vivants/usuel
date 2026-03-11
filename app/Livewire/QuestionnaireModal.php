@@ -57,7 +57,7 @@ class QuestionnaireModal extends Component
             'genre'   => 'required|in:homme,femme,autre,non_precise',
             'age'     => 'required|in:moins_18,18_25,26_35,36_45,46_55,56_65,plus_65',
             'diplome' => 'required|in:aucun,brevet,cap_bep,bac,bac2,bac3,bac5,doctorat',
-            'csp'     => 'required|in:agriculteur,artisan,cadre,intermediaire,employe,ouvrier,retraite,sans_activite',
+            'csp'     => 'required|in:agriculteur,artisan,cadre,intermediaire,employe,ouvrier,retraite,sans_activite,autre',
         ], [
             'genre.required'   => 'Veuillez sélectionner un genre.',
             'age.required'     => "Veuillez sélectionner une tranche d'âge.",
