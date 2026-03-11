@@ -115,11 +115,11 @@
                             Question {{ $currentIndex + 1 }} / {{ $totalQuestions }}
                         </p>
                         <p class="text-xl font-semibold text-[#1a2340] leading-relaxed mb-8">
-                            {{ $currentQuestion->intitule }}
+                            {{ $translatedIntitule }}
                         </p>
 
                         <div class="space-y-2.5 mb-7">
-                            @foreach ($currentQuestion->choixSansE as $lettre => $choixData)
+                            @foreach ($translatedChoix as $lettre => $choixData)
                                 <button wire:key="q-{{ $currentQuestion->id }}-choix-{{ $lettre }}"
                                     wire:click="choisir('{{ $lettre }}')"
                                     @click="recordChoice('{{ $lettre }}')" data-choice="true"
@@ -134,7 +134,7 @@
                                         @endif
                                     </div>
                                     <span class="text-gray-700 font-medium text-sm">
-                                        {{ $lettre }}) {{ $choixData['texte'] ?? $choixData }}
+                                     {{ $choixData['texte'] ?? $choixData }}
                                     </span>
                                 </button>
                             @endforeach
@@ -152,13 +152,13 @@
                         <div class="flex gap-3">
                             <button @click="jeSaisPasQ()" data-choice="true"
                                 class="flex-1 px-6 py-3 rounded-xl font-bold text-white bg-[#1a9e7e]/70 hover:bg-[#1a9e7e] transition-all duration-200 text-sm">
-                                Je ne sais pas
+                                {{ $btnJeSaisPas }}
                             </button>
                             <button @click="validerQ()" @if ($selectedAnswer === '') disabled @endif
                                 data-choice="true"
                                 class="flex-1 px-6 py-3 rounded-xl font-bold text-white transition-all duration-200 text-sm
                                 {{ $selectedAnswer === '' ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-[#1a2340] hover:bg-[#111827] hover:scale-[1.02] shadow-md' }}">
-                                Valider →
+                                {{ $btnValider }} →
                             </button>
                         </div>
                     </div>
@@ -170,11 +170,11 @@
                             Question {{ $currentIndex + 1 }} / {{ $totalQuestions }}
                         </h2>
                         <p class="text-2xl md:text-3xl font-semibold text-[#1a2340] text-center leading-relaxed mb-10 max-w-2xl">
-                            {{ $currentQuestion->intitule }}
+                            {{ $translatedIntitule }}
                         </p>
 
                         <div class="w-full space-y-3 mb-8">
-                            @foreach ($currentQuestion->choixSansE as $lettre => $choixData)
+                            @foreach ($translatedChoix as $lettre => $choixData)
                                 <button wire:key="q-{{ $currentQuestion->id }}-choix-{{ $lettre }}"
                                     @click="recordChoice('{{ $lettre }}'); $wire.choisir('{{ $lettre }}')"
                                     data-choice="true"
@@ -189,7 +189,7 @@
                                         @endif
                                     </div>
                                     <span class="text-gray-700 font-medium">
-                                        {{ $lettre }}) {{ $choixData['texte'] ?? $choixData }}
+                                        {{ $choixData['texte'] ?? $choixData }}
                                     </span>
                                 </button>
                             @endforeach
@@ -207,13 +207,13 @@
                         <div class="flex gap-3 w-full max-w-sm">
                             <button @click="jeSaisPasQ()" data-choice="true"
                                 class="flex-1 px-6 py-3.5 rounded-xl font-bold text-white bg-[#1a9e7e]/70 hover:bg-[#1a9e7e] transition-all duration-200 text-sm">
-                                Je ne sais pas
+                                {{ $btnJeSaisPas }}
                             </button>
                             <button @click="validerQ()" @if ($selectedAnswer === '') disabled @endif
                                 data-choice="true"
                                 class="flex-1 px-6 py-3.5 rounded-xl font-bold text-white transition-all duration-200 text-sm
                                 {{ $selectedAnswer === '' ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-[#1a2340] hover:bg-[#111827] hover:scale-[1.02] shadow-md' }}">
-                                Valider →
+                                {{ $btnValider }} →
                             </button>
                         </div>
                     </div>

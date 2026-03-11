@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Url;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class QuestionnaireRun extends Component
 {
@@ -20,6 +21,7 @@ class QuestionnaireRun extends Component
     public string $modeOrdre      = 'fixe';
     public bool   $showEndModal   = false;
     public ?int   $completedPassationId = null;
+    public string $langue = 'fr';
 
     public array $scores = [
         'Resilience' => 0.0,
@@ -40,6 +42,8 @@ class QuestionnaireRun extends Component
             return;
         }
 
+        $this->langue = session('langue', 'fr');
+
         $progress = session()->get('questionnaire_progress');
 
         if ($progress && count($progress['questionIds']) > 0) {
@@ -48,6 +52,7 @@ class QuestionnaireRun extends Component
             $this->questionIds  = $progress['questionIds'];
             $this->trackingIds  = $progress['trackingIds'];
             $this->modeOrdre    = $progress['modeOrdre'];
+            $this->langue       = $progress['langue'] ?? 'fr';
         } else {
             $mode = Cache::get('global_mode_ordre', 'fixe');
             $this->modeOrdre = $mode;
@@ -68,6 +73,7 @@ class QuestionnaireRun extends Component
             'questionIds'  => $this->questionIds,
             'trackingIds'  => $this->trackingIds,
             'modeOrdre'    => $this->modeOrdre,
+            'langue'       => $this->langue,
         ]);
     }
 
@@ -215,12 +221,14 @@ class QuestionnaireRun extends Component
     {
         $beneficiaireId        = session('beneficiaire_id');
         $consentementRecherche = session('consentement_recherche', false);
+        $langueChoisie          = session('langue', 'fr');
 
-        session()->forget(['beneficiaire_id', 'consentement_recherche', 'questionnaire_progress']);
+        session()->forget(['beneficiaire_id', 'consentement_recherche', 'questionnaire_progress', 'langue']);
 
         $passation = Passation::create([
             'id_beneficiaire'        => $beneficiaireId,
             'id_travailleur'         => Auth::id(),
+            'langue'                 => $langueChoisie,
             'score'                  => $this->scores,
             'consentement_recherche' => $consentementRecherche,
             'mode_ordre'             => $this->modeOrdre,
@@ -238,6 +246,22 @@ class QuestionnaireRun extends Component
         $this->showEndModal = true;
     }
 
+    private function traduire(string $texte): string
+    {
+        if ($this->langue === 'fr' || empty(trim($texte))) {
+            return $texte;
+        }
+
+        $cacheKey = "trans_{$this->langue}_" . md5($texte);
+
+        return Cache::rememberForever($cacheKey, function () use ($texte) {
+            $tr = new GoogleTranslate();
+            $tr->setSource('fr');
+            $tr->setTarget($this->langue);
+            return $tr->translate($texte);
+        });
+    }
+
     public function validerFinEtRediriger(): void
     {
         if ($this->completedPassationId) {
@@ -248,12 +272,31 @@ class QuestionnaireRun extends Component
     public function render(): \Illuminate\View\View
     {
         $currentQuestion = null;
+        $translatedIntitule = '';
+        $translatedChoix = [];
+
         if ($this->currentIndex < $this->totalQuestions) {
             $currentQuestion = Question::find($this->questionIds[$this->currentIndex]);
+
+            if ($currentQuestion) {
+                $translatedIntitule = $this->traduire($currentQuestion->intitule);
+
+                foreach ($currentQuestion->choixSansE as $lettre => $choixData) {
+                    $texteOriginal = is_array($choixData) ? ($choixData['texte'] ?? '') : $choixData;
+
+                    $translatedChoix[$lettre] = is_array($choixData)
+                        ? array_merge($choixData, ['texte' => $this->traduire($texteOriginal)])
+                        : $this->traduire($texteOriginal);
+                }
+            }
         }
 
         return view('livewire.questionnaire-run', [
-            'currentQuestion' => $currentQuestion,
+            'currentQuestion'    => $currentQuestion,
+            'translatedIntitule' => $translatedIntitule,
+            'translatedChoix'    => $translatedChoix,
+            'btnJeSaisPas'       => $this->traduire('Je ne sais pas'),
+            'btnValider'         => $this->traduire('Valider'),
         ]);
     }
 }

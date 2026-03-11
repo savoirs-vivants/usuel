@@ -11,6 +11,7 @@ class Passation extends Model
     protected $fillable = [
         'id_beneficiaire',
         'id_travailleur',
+        'langue',
         'score',
         'scenario',
         'modules',
