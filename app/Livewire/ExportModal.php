@@ -45,6 +45,7 @@ class ExportModal extends Component
                 'passations.id',
                 'passations.score',
                 'passations.created_at',
+                'passations.langue',
                 'beneficiaires.prenom',
                 'beneficiaires.nom',
                 'beneficiaires.age',
@@ -144,6 +145,8 @@ class ExportModal extends Component
             'agriculteur' => 'Agriculteur', 'artisan' => 'Artisan / Commerçant', 'cadre' => 'Cadre',
             'intermediaire' => 'Prof. intermédiaire', 'employe' => 'Employé', 'ouvrier' => 'Ouvrier',
             'retraite' => 'Retraité', 'sans_activite' => 'Sans activité',
+            'fr' => 'Français', 'en' => 'Anglais', 'es' => 'Espagnol', 'de' => 'Allemand',
+            'ar' => 'Arabe', 'ru' => 'Russe', 'tr' => 'Turc',
         ];
     }
 
@@ -166,7 +169,9 @@ class ExportModal extends Component
         $labelsMap  = $this->getLabelsMap();
         $filename   = 'statistiques_' . now()->format('Ymd_His') . '.csv';
 
-        return response()->streamDownload(function () use ($d, $labelsMap) {
+        $isAdmin    = Auth::user()->role === 'admin';
+
+        return response()->streamDownload(function () use ($d, $labelsMap, $isAdmin) {
             $f = fopen('php://output', 'w');
             fprintf($f, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
@@ -207,23 +212,40 @@ class ExportModal extends Component
             fputcsv($f, [], ';');
 
             fputcsv($f, ['--- DÉTAIL DES PASSATIONS ---'], ';');
-            fputcsv($f, ['ID', 'Prénom', 'Nom', 'Âge', 'Genre', 'Catégorie Socio Professionnelle', 'Diplôme', ...$d['dimLabels'], 'Score total (/30)', 'Date'], ';');
+
+            $headers = ['ID'];
+            if (!$isAdmin) {
+                $headers[] = 'Prénom';
+                $headers[] = 'Nom';
+            }
+            array_push($headers, 'Âge', 'Genre', 'Catégorie Socio Professionnelle', 'Diplôme', 'Langue', ...$d['dimLabels']);
+            array_push($headers, 'Score total (/30)', 'Date');
+
+            fputcsv($f, $headers, ';');
+
             foreach ($d['passations'] as $p) {
                 $scores    = is_string($p->score) ? json_decode($p->score, true) : $p->score;
                 $scores    = is_array($scores) ? $scores : [];
+
+                $rowData = [$p->id];
+                if (!$isAdmin) {
+                    $rowData[] = $p->prenom ?? '';
+                    $rowData[] = $p->nom    ?? '';
+                }
+
                 $dimScores = array_map(fn($k) => $scores[$k] ?? 0, $d['dimKeys']);
-                fputcsv($f, [
-                    $p->id,
-                    $p->prenom ?? '',
-                    $p->nom    ?? '',
-                    $labelsMap[$p->age]     ?? $p->age,
-                    $labelsMap[$p->genre]   ?? $p->genre,
-                    $labelsMap[$p->csp]     ?? $p->csp,
-                    $labelsMap[$p->diplome] ?? $p->diplome,
-                    ...$dimScores,
-                    round(array_sum($dimScores), 2),
-                    Carbon::parse($p->created_at)->format('d/m/Y H:i'),
-                ], ';');
+                $totalScore = round(array_sum($dimScores), 2);
+
+                $rowData[] = $labelsMap[$p->age]     ?? $p->age;
+                $rowData[] = $labelsMap[$p->genre]   ?? $p->genre;
+                $rowData[] = $labelsMap[$p->csp]     ?? $p->csp;
+                $rowData[] = $labelsMap[$p->diplome] ?? $p->diplome;
+                $rowData[] = $labelsMap[$p->langue]  ?? ($p->langue ?: 'Français');
+                array_push($rowData, ...$dimScores);
+                $rowData[] = $totalScore;
+                $rowData[] = Carbon::parse($p->created_at)->format('d/m/Y H:i');
+
+                fputcsv($f, $rowData, ';');
             }
 
             fclose($f);
@@ -238,6 +260,7 @@ class ExportModal extends Component
         $d         = $this->getAggregatedData();
         $labelsMap = $this->getLabelsMap();
         $filename  = 'statistiques_' . now()->format('Ymd_His') . '.xlsx';
+        $isAdmin   = Auth::user()->role === 'admin';
 
         $spreadsheet = new Spreadsheet();
         $spreadsheet->getProperties()->setTitle('Statistiques');
@@ -306,7 +329,15 @@ class ExportModal extends Component
         foreach (['A', 'B'] as $col) $sd->getColumnDimension($col)->setAutoSize(true);
 
         $sp = $spreadsheet->createSheet()->setTitle('Détail passations');
-        $headers = ['ID', 'Prénom', 'Nom', 'Âge', 'Genre', 'Catégorie Socio Professionnelle', 'Diplôme', ...$d['dimLabels'], 'Score total (/30)', 'Date'];
+
+        $headers = ['ID'];
+        if (!$isAdmin) {
+            $headers[] = 'Prénom';
+            $headers[] = 'Nom';
+        }
+        array_push($headers, 'Âge', 'Genre', 'Catégorie Socio Professionnelle', 'Diplôme', 'Langue', ...$d['dimLabels']);
+        array_push($headers, 'Score total (/30)', 'Date');
+
         foreach ($headers as $col => $header) {
             $sp->setCellValue([$col + 1, 1], $header);
         }
@@ -317,19 +348,25 @@ class ExportModal extends Component
         foreach ($d['passations'] as $p) {
             $scores    = is_string($p->score) ? json_decode($p->score, true) : $p->score;
             $scores    = is_array($scores) ? $scores : [];
+
+            $rowData = [$p->id];
+            if (!$isAdmin) {
+                $rowData[] = $p->prenom ?? '';
+                $rowData[] = $p->nom    ?? '';
+            }
+
             $dimScores = array_map(fn($k) => $scores[$k] ?? 0, $d['dimKeys']);
-            $rowData   = [
-                $p->id,
-                $p->prenom ?? '',
-                $p->nom    ?? '',
-                $labelsMap[$p->age]     ?? $p->age,
-                $labelsMap[$p->genre]   ?? $p->genre,
-                $labelsMap[$p->csp]     ?? $p->csp,
-                $labelsMap[$p->diplome] ?? $p->diplome,
-                ...$dimScores,
-                round(array_sum($dimScores), 2),
-                Carbon::parse($p->created_at)->format('d/m/Y H:i'),
-            ];
+            $totalScore = round(array_sum($dimScores), 2);
+
+            $rowData[] = $labelsMap[$p->age]     ?? $p->age;
+            $rowData[] = $labelsMap[$p->genre]   ?? $p->genre;
+            $rowData[] = $labelsMap[$p->csp]     ?? $p->csp;
+            $rowData[] = $labelsMap[$p->diplome] ?? $p->diplome;
+            $rowData[] = $labelsMap[$p->langue]  ?? ($p->langue ?: 'Français');
+            array_push($rowData, ...$dimScores);
+            $rowData[] = $totalScore;
+            $rowData[] = Carbon::parse($p->created_at)->format('d/m/Y H:i');
+
             foreach ($rowData as $col => $value) {
                 $sp->setCellValue([$col + 1, $row], $value);
             }
