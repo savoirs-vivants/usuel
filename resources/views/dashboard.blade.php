@@ -14,14 +14,14 @@
         <div class="ml-64 flex-1">
 
     <div class="bg-white border-b border-gray-100 px-8 py-7">
-        <div class="flex items-center justify-between">
+        <div data-aos="fade-up" class="flex items-center justify-between">
             <div>
                 <p class="text-xs text-gray-400 font-medium mb-1">{{ now()->isoFormat('dddd D MMMM YYYY') }}</p>
                 <h1 class="font-mono font-bold text-3xl text-sv-blue">{{ $salut }}, {{ $prenom }} 👋</h1>
                 <p class="text-gray-400 text-sm mt-1">Voici un résumé de l'activité de votre plateforme.</p>
             </div>
             <a href="{{ route('questionnaire.run') ?? '#' }}"
-                class="inline-flex items-center gap-2.5 bg-sv-green hover:bg-sv-green/90 text-white font-bold text-sm px-6 py-3.5 rounded-2xl shadow-lg shadow-sv-green/25 transition-all duration-150 hover:scale-[1.02]">
+                class="inline-flex items-center gap-2.5 bg-sv-green hover:bg-sv-green/90 text-white font-bold text-sm px-6 py-3.5 rounded-2xl shadow-lg shadow-sv-green/25 transition-all duration-150 hover:scale-[1.02] hover-scale">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
                 </svg>
@@ -34,7 +34,7 @@
 
         <div class="grid grid-cols-3 gap-4">
 
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <div data-aos="fade-up" data-aos-delay="100" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover-lift">
                 <div class="flex items-center justify-between mb-4">
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Ce mois-ci</p>
                     <div class="w-9 h-9 bg-sv-green/10 rounded-xl flex items-center justify-center">
@@ -57,7 +57,7 @@
                 @endif
             </div>
 
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <div data-aos="fade-up" data-aos-delay="200" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover-lift">
                 <div class="flex items-center justify-between mb-4">
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Bénéficiaires</p>
                     <div class="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center">
@@ -71,7 +71,7 @@
                 <p class="text-sm text-gray-400 font-medium">personnes évaluées</p>
             </div>
 
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <div data-aos="fade-up" data-aos-delay="300" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover-lift">
                 <div class="flex items-center justify-between mb-4">
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Total</p>
                     <div class="w-9 h-9 bg-purple-50 rounded-xl flex items-center justify-center">
@@ -89,7 +89,7 @@
 
         <div class="grid grid-cols-3 gap-4">
 
-            <div class="col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <div data-aos="fade-up" data-aos-delay="400" class="col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
                 <p class="font-bold text-sv-blue text-sm mb-0.5">Activité des 6 derniers mois</p>
                 <p class="text-xs text-gray-400 mb-5">Nombre de passations réalisées par mois</p>
                 <div style="height: 170px;">
@@ -97,7 +97,7 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <div data-aos="fade-up" data-aos-delay="500" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
                 <p class="font-bold text-sv-blue text-sm mb-0.5">Répartition des scores</p>
                 <p class="text-xs text-gray-400 mb-5">Toutes les passations</p>
                 @if ($totalPassations > 0)
@@ -116,14 +116,14 @@
 
         </div>
 
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div data-aos="fade-up" data-aos-delay="600" class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                 <div>
                     <p class="font-bold text-sv-blue text-sm">Dernières passations</p>
                     <p class="text-xs text-gray-400 mt-0.5">Les 5 passations les plus récentes</p>
                 </div>
                 <a href="{{ route('passations') }}"
-                    class="inline-flex items-center gap-1.5 text-xs font-bold text-sv-green hover:text-sv-green/70 transition-colors">
+                    class="inline-flex items-center gap-1.5 text-xs font-bold text-sv-green hover:text-sv-green/70 transition-colors hover-scale">
                     Voir tout
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>

@@ -12,6 +12,8 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body class="font-grotesk bg-gray-50 text-sv-blue antialiased">
 
@@ -31,5 +33,18 @@
 
     @livewireScripts
     @include('components.toast-notification')
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 600,
+                easing: 'ease-out-cubic',
+                once: true,
+                offset: 50,
+                delay: 0
+            });
+        });
+    </script>
 </body>
 </html>

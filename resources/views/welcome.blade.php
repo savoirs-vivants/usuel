@@ -8,11 +8,11 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Courier+Prime:wght@700&display=swap"
         rel="stylesheet">
 
-    <nav class="bg-white border-b-4 border-sv-green sticky top-0 z-50 shadow-sm">
+    <nav class="bg-white border-b-4 border-sv-green sticky top-0 z-50 shadow-sm" data-aos="fade-down" data-aos-duration="600">
         <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
             <span class="font-mono text-2xl font-bold text-sv-blue">Usuel</span>
             <a href="{{ route('login') }}"
-                class="bg-sv-green text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:opacity-90 transition-opacity">
+                class="bg-sv-green text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:opacity-90 transition-opacity hover-scale">
                 Se connecter
             </a>
         </div>
@@ -21,20 +21,20 @@
     <section class="bg-sv-blue text-white px-6 pt-20 pb-28 relative overflow-hidden">
         <div class="absolute top-0 right-0 w-96 h-96 rounded-full opacity-5 bg-white -translate-y-1/2 translate-x-1/3"></div>
         <div class="max-w-4xl mx-auto relative">
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 max-w-2xl">
+            <h1 data-aos="fade-up" data-aos-delay="100" class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 max-w-2xl">
                 Évaluez les compétences numériques de vos bénéficiaires
             </h1>
-            <p class="text-lg md:text-xl leading-relaxed opacity-85 max-w-xl mb-10 font-medium">
+            <p data-aos="fade-up" data-aos-delay="200" class="text-lg md:text-xl leading-relaxed opacity-85 max-w-xl mb-10 font-medium">
                 Usuel accompagne les travailleurs sociaux et formateurs pour diagnostiquer précisément le niveau de
                 littératie numérique et construire des parcours adaptés.
             </p>
-            <div class="flex flex-wrap gap-4">
+            <div data-aos="fade-up" data-aos-delay="300" class="flex flex-wrap gap-4">
                 <a href="{{ route('login') }}"
-                    class="bg-sv-green text-white font-bold text-base px-8 py-4 rounded-xl hover:opacity-90 transition-opacity">
+                    class="bg-sv-green text-white font-bold text-base px-8 py-4 rounded-xl hover:opacity-90 transition-opacity hover-scale">
                     Accéder à la plateforme
                 </a>
                 <a href="#en-savoir-plus"
-                    class="border-2 border-white text-white font-bold text-base px-8 py-4 rounded-xl hover:bg-white hover:text-sv-blue transition-colors">
+                    class="border-2 border-white text-white font-bold text-base px-8 py-4 rounded-xl hover:bg-white hover:text-sv-blue transition-colors hover-scale">
                     Découvrir l'outil
                 </a>
             </div>
@@ -44,7 +44,7 @@
     <section class="bg-gray-50 border-b border-gray-200 px-6 py-12">
         <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
 
-            <div class="flex items-start gap-4">
+            <div data-aos="fade-up" data-aos-delay="100" class="flex items-start gap-4">
                 <div
                     class="w-12 h-12 min-w-[3rem] bg-white border-2 border-sv-green rounded-2xl flex items-center justify-center text-xl">
                     ⚡</div>
@@ -54,7 +54,7 @@
                 </div>
             </div>
 
-            <div class="flex items-start gap-4">
+            <div data-aos="fade-up" data-aos-delay="200" class="flex items-start gap-4">
                 <div
                     class="w-12 h-12 min-w-[3rem] bg-white border-2 border-sv-green rounded-2xl flex items-center justify-center text-xl">
                     🔒</div>
@@ -64,7 +64,7 @@
                 </div>
             </div>
 
-            <div class="flex items-start gap-4">
+            <div data-aos="fade-up" data-aos-delay="300" class="flex items-start gap-4">
                 <div
                     class="w-12 h-12 min-w-[3rem] bg-white border-2 border-sv-green rounded-2xl flex items-center justify-center text-xl">
                     📊</div>
@@ -74,7 +74,7 @@
                 </div>
             </div>
 
-            <div class="flex items-start gap-4">
+            <div data-aos="fade-up" data-aos-delay="400" class="flex items-start gap-4">
                 <div
                     class="w-12 h-12 min-w-[3rem] bg-white border-2 border-sv-green rounded-2xl flex items-center justify-center text-xl">
                     🆓</div>
@@ -90,14 +90,14 @@
     <section id="en-savoir-plus" class="bg-white px-6 py-20 border-b border-gray-200">
         <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-14 items-center">
 
-            <div>
+            <div data-aos="fade-right" data-aos-duration="600">
                 <p class="text-sv-green font-bold text-xs tracking-widest uppercase mb-3">Le projet</p>
                 <h2 class="text-3xl md:text-4xl font-extrabold text-sv-blue leading-tight mb-5">
                     Un outil pensé pour les professionnels de terrain
                 </h2>
                 <p class="text-gray-600 text-base leading-relaxed mb-4">
                     Usuel permet aux travailleurs sociaux et formateurs d'identifier précisément les freins numériques de
-                    chaque bénéficiaire — sans que ce dernier ait besoin de compétences techniques pour y répondre.
+                    chaque beneficiary — sans que ce dernier ait besoin de compétences techniques pour y répondre.
                 </p>
                 <p class="text-gray-600 text-base leading-relaxed">
                     En transformant des indicateurs techniques en orientations concrètes, Usuel facilite la construction de
@@ -105,7 +105,7 @@
                 </p>
             </div>
 
-            <div class="bg-sv-blue rounded-2xl p-8 text-white">
+            <div data-aos="fade-left" data-aos-duration="600" data-aos-delay="200" class="bg-sv-blue rounded-2xl p-8 text-white">
                 <p class="text-xs font-bold tracking-widest uppercase opacity-60 mb-5">Compétences évaluées</p>
                 <ul class="space-y-0">
                     @foreach (['Utiliser un ordinateur ou un smartphone', 'Naviguer sur Internet en sécurité', 'Envoyer des e-mails et messages', 'Faire des démarches administratives en ligne', 'Reconnaître les arnaques et fausses informations'] as $item)
@@ -122,14 +122,14 @@
 
     <section id="comment-ca-marche" class="bg-gray-50 px-6 py-20 border-b border-gray-200">
         <div class="max-w-4xl mx-auto">
-            <p class="text-sv-green font-bold text-xs tracking-widest uppercase mb-3">Étape par étape</p>
-            <h2 class="text-3xl md:text-4xl font-extrabold text-sv-blue mb-12">Comment ça marche ?</h2>
+            <p data-aos="fade-up" class="text-sv-green font-bold text-xs tracking-widest uppercase mb-3">Étape par étape</p>
+            <h2 data-aos="fade-up" data-aos-delay="100" class="text-3xl md:text-4xl font-extrabold text-sv-blue mb-12">Comment ça marche ?</h2>
 
             <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
 
                 @foreach ([['01', '🧑‍💼', 'Créez un accès', 'Ouvrez une session sécurisée pour votre bénéficiaire en quelques clics.'], ['02', '💬', 'Le bénéficiaire répond', 'Des questions simples sur son quotidien numérique. Pas de jargon technique.'], ['03', '📋', 'Analysez les résultats', 'Vous recevez un rapport clair avec le niveau identifié et les axes de progression.'], ['04', '🚀', 'Orientez vers la formation', 'Proposez le parcours le plus adapté grâce aux recommandations générées.']] as [$num, $icon, $title, $desc])
-                    <div
-                        class="bg-white border-2 border-gray-200 rounded-2xl p-6 hover:border-sv-green hover:-translate-y-1 transition-all duration-200">
+                    <div data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 + 100 }}"
+                        class="bg-white border-2 border-gray-200 rounded-2xl p-6 hover:border-sv-green hover:-translate-y-1 transition-all duration-200 hover-lift">
                         <p class="font-extrabold text-4xl text-sv-green opacity-20 leading-none mb-3">{{ $num }}
                         </p>
                         <p class="text-3xl mb-3">{{ $icon }}</p>
@@ -143,7 +143,7 @@
     </section>
 
     <section class="bg-sv-blue text-white px-6 py-16 border-b border-white/10">
-        <div class="max-w-4xl mx-auto flex flex-wrap items-center gap-10">
+        <div data-aos="fade-up" class="max-w-4xl mx-auto flex flex-wrap items-center gap-10">
             <p class="text-6xl">🛡️</p>
             <div class="flex-1 min-w-[260px]">
                 <h2 class="text-2xl md:text-3xl font-extrabold mb-3">Les données de vos bénéficiaires sont protégées</h2>
@@ -157,10 +157,10 @@
 
     <section class="bg-gray-50 px-6 py-16 border-b border-gray-200">
         <div class="max-w-4xl mx-auto">
-            <p class="text-sv-green font-bold text-xs tracking-widest uppercase mb-3">Ils nous font confiance</p>
-            <h2 class="text-3xl md:text-4xl font-extrabold text-sv-blue mb-8">Nos partenaires</h2>
+            <p data-aos="fade-up" class="text-sv-green font-bold text-xs tracking-widest uppercase mb-3">Ils nous font confiance</p>
+            <h2 data-aos="fade-up" data-aos-delay="100" class="text-3xl md:text-4xl font-extrabold text-sv-blue mb-8">Nos partenaires</h2>
 
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-5">
+            <div data-aos="fade-up" data-aos-delay="200" class="grid grid-cols-2 sm:grid-cols-4 gap-5">
                 <img src="{{ asset('storage/logo_icube.png') }}" alt="Laboratoire ICube" class="h-12 w-auto object-contain">
             </div>
         </div>
@@ -168,7 +168,7 @@
     </section>
 
     <section class="bg-white px-6 py-20 border-b border-gray-200 text-center">
-        <div class="max-w-2xl mx-auto">
+        <div data-aos="zoom-in" class="max-w-2xl mx-auto">
             <p class="text-sv-green font-bold text-xs tracking-widest uppercase mb-3">Prêt à commencer ?</p>
             <h2 class="text-3xl md:text-4xl font-extrabold text-sv-blue mb-5">
                 Accompagnez mieux vos bénéficiaires dès aujourd'hui
@@ -177,7 +177,7 @@
                 Gratuit, rapide et sécurisé.
             </p>
             <a href="{{ route('login') }}"
-                class="inline-block bg-sv-green text-white font-bold text-lg px-10 py-5 rounded-xl hover:opacity-90 transition-opacity">
+                class="inline-block bg-sv-green text-white font-bold text-lg px-10 py-5 rounded-xl hover:opacity-90 transition-opacity hover-scale">
                 Accéder à la plateforme →
             </a>
         </div>
