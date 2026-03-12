@@ -102,11 +102,4 @@
         </div>
 
     </form>
-
-    <script>
-        function togglePwd(id) {
-            const input = document.getElementById(id);
-            input.type = input.type === 'password' ? 'text' : 'password';
-        }
-    </script>
 </div>
