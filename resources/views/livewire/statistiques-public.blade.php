@@ -1,22 +1,7 @@
 <section class="flex min-h-screen bg-gray-50">
     <div class="ml-64 flex-1 p-8">
         <div>
-            <div class="font-sans text-[#1a2340]" x-data="{
-                filterOpen: false,
-                timeRange: '{{ $timeRange }}',
-                customVisible: {{ $timeRange === 'Custom' ? 'true' : 'false' }},
-
-                setRange(range) {
-                    this.timeRange = range;
-                    this.customVisible = (range === 'Custom');
-                },
-
-                init() {
-                    $wire.on('update-charts', (data) => {
-                        this.timeRange = '{{ $timeRange }}';
-                    });
-                }
-            }">
+            <div class="font-sans text-[#1a2340]" x-data="statsHandler({ timeRange: '{{ $timeRange }}' })">
                 <div class="mb-8 flex items-center justify-between">
                     <div>
                         <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Analytique</p>
