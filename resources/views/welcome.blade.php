@@ -4,10 +4,6 @@
 
 @section('content')
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Courier+Prime:wght@700&display=swap"
-        rel="stylesheet">
-
     <nav class="bg-white border-b-4 border-sv-green sticky top-0 z-50 shadow-sm" data-aos="fade-down" data-aos-duration="600">
         <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
             <span class="font-mono text-2xl font-bold text-sv-blue">Usuel</span>
