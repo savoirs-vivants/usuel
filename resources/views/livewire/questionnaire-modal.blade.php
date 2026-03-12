@@ -403,7 +403,7 @@
                                         Lecture audio des questions
                                     </p>
                                     <p class="font-grotesk text-xs text-gray-400 mt-0.5 leading-snug">
-                                        Les questions et réponses seront lues à voix haute (pour les personnes ne sachant pas lire).
+                                        Les questions et réponses seront lues à voix haute.
                                     </p>
                                 </div>
                                 <div class="shrink-0 relative w-11 h-6 rounded-full transition-all duration-200

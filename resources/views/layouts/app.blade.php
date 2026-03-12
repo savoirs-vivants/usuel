@@ -37,7 +37,8 @@
             !Route::is('password.forgot') &&
             !Route::is('password.reset') &&
             !Route::is('confidentialite') &&
-            !Route::is('mentions'))
+            !Route::is('mentions') &&
+            !Route::is('questionnaire.result'))
         <div>
             @include('components.sidebar')
             <main>
