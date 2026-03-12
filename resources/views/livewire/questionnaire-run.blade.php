@@ -1,16 +1,91 @@
 <div class="min-h-screen bg-white flex flex-col" x-data="{
         tracker: null,
+        audioEnabled: {{ $audio ? 'true' : 'false' }},
+        isSpeaking: false,
+        speechLang: '{{ $langue }}',
+
+        /*
+         * Correspondance langue → BCP-47 pour la Web Speech API.
+         * On ajoute des variantes régionales courantes pour améliorer
+         * la disponibilité de la voix sur les différents OS/navigateurs.
+         */
+        langMap: {
+            fr: 'fr-FR',
+            en: 'en-GB',
+            es: 'es-ES',
+            de: 'de-DE',
+            ar: 'ar-SA',
+            ru: 'ru-RU',
+            tr: 'tr-TR',
+        },
 
         init() {
             this.startTracker();
+
+            // Lecture automatique de la première question au chargement
+            // (petit délai pour laisser le DOM se stabiliser)
+            if (this.audioEnabled) {
+                setTimeout(() => this.speakQuestion(), 400);
+            }
         },
+
+        speak(text) {
+            if (!this.audioEnabled || !('speechSynthesis' in window) || !text) return;
+
+            window.speechSynthesis.cancel();
+            this.isSpeaking = true;
+
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang  = this.langMap[this.speechLang] ?? 'fr-FR';
+            utter.rate  = 0.92;
+            utter.pitch = 1;
+
+            utter.onend   = () => { this.isSpeaking = false; };
+            utter.onerror = () => { this.isSpeaking = false; };
+
+            window.speechSynthesis.speak(utter);
+        },
+
+        /*
+         * Construit le texte complet à lire : question + liste des choix.
+         * On récupère les textes directement depuis le DOM pour rester
+         * synchronisé avec les traductions rendues côté serveur.
+         */
+        speakQuestion() {
+            if (!this.audioEnabled) return;
+
+            const questionEl = document.getElementById('audio-intitule');
+            const choixEls   = document.querySelectorAll('[data-audio-choix]');
+
+            if (!questionEl) return;
+
+            let text = questionEl.innerText.trim();
+
+            choixEls.forEach((el, i) => {
+                const lettre = String.fromCharCode(65 + i); // A, B, C…
+                text += `… ${lettre} : ${el.innerText.trim()}`;
+            });
+
+            this.speak(text);
+        },
+
+        stopSpeech() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+            this.isSpeaking = false;
+        },
+
 
         startTracker() {
             if (this.tracker) { this.tracker.destroy(); this.tracker = null; }
 
             const el = document.getElementById('q-meta-data');
             if (el && el.dataset.qid) {
-                this.tracker = new window.QuestionTracker(parseInt(el.dataset.qid), parseInt(el.dataset.pos));
+                this.tracker = new window.QuestionTracker(
+                    parseInt(el.dataset.qid),
+                    parseInt(el.dataset.pos)
+                );
             }
         },
 
@@ -19,6 +94,7 @@
         },
 
         async validerQ() {
+            this.stopSpeech();
             const data = this.tracker ? this.tracker.collect() : {};
             if (this.tracker) { this.tracker.destroy(); this.tracker = null; }
 
@@ -26,10 +102,14 @@
 
             this.$nextTick(() => {
                 this.startTracker();
+                if (this.audioEnabled) {
+                    setTimeout(() => this.speakQuestion(), 300);
+                }
             });
         },
 
         async jeSaisPasQ() {
+            this.stopSpeech();
             const data = this.tracker ? this.tracker.collect() : {};
             if (this.tracker) { this.tracker.destroy(); this.tracker = null; }
 
@@ -37,6 +117,9 @@
 
             this.$nextTick(() => {
                 this.startTracker();
+                if (this.audioEnabled) {
+                    setTimeout(() => this.speakQuestion(), 300);
+                }
             });
         }
     }">
@@ -77,7 +160,6 @@
                         </svg>
                     </button>
                 </div>
-
             </div>
         </div>
 
@@ -86,6 +168,19 @@
 
         <div class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 px-6 py-3">
             <div class="flex items-center gap-3 max-w-5xl mx-auto">
+                @if($audio)
+                <button @click="speakQuestion()"
+                        :class="isSpeaking
+                            ? 'bg-sv-green text-white shadow-md shadow-sv-green/30 scale-105'
+                            : 'bg-sv-green/10 text-sv-green hover:bg-sv-green/20'"
+                        class="shrink-0 flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200"
+                        title="Relire la question">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/>
+                    </svg>
+                </button>
+                @endif
                 <span class="font-mono text-xs font-bold text-[#1a9e7e] shrink-0 w-20 text-right">
                     {{ $currentIndex + 1 }} / {{ $totalQuestions }}
                 </span>
@@ -114,7 +209,8 @@
                         <p class="font-mono font-bold text-xs tracking-widest text-[#1a9e7e] uppercase mb-4">
                             Question {{ $currentIndex + 1 }} / {{ $totalQuestions }}
                         </p>
-                        <p class="text-xl font-semibold text-[#1a2340] leading-relaxed mb-8">
+                        <p id="audio-intitule"
+                           class="text-xl font-semibold text-[#1a2340] leading-relaxed mb-8">
                             {{ $translatedIntitule }}
                         </p>
 
@@ -124,17 +220,18 @@
                                     wire:click="choisir('{{ $lettre }}')"
                                     @click="recordChoice('{{ $lettre }}')" data-choice="true"
                                     class="w-full text-left flex items-center gap-4 px-5 py-3 rounded-xl border-2 transition-all duration-200
-                                {{ $selectedAnswer === $lettre
-                                    ? 'border-[#1a9e7e] bg-[#1a9e7e]/10 shadow-sm'
-                                    : 'border-gray-200 bg-gray-100 hover:border-gray-300 hover:bg-gray-200/50' }}">
+                                        {{ $selectedAnswer === $lettre
+                                            ? 'border-[#1a9e7e] bg-[#1a9e7e]/10 shadow-sm'
+                                            : 'border-gray-200 bg-gray-100 hover:border-gray-300 hover:bg-gray-200/50' }}">
                                     <div class="w-5 h-5 shrink-0 rounded-full border-2 flex items-center justify-center
-                                {{ $selectedAnswer === $lettre ? 'border-[#1a9e7e]' : 'border-gray-400 bg-white' }}">
+                                        {{ $selectedAnswer === $lettre ? 'border-[#1a9e7e]' : 'border-gray-400 bg-white' }}">
                                         @if ($selectedAnswer === $lettre)
                                             <div class="w-2.5 h-2.5 bg-[#1a9e7e] rounded-full"></div>
                                         @endif
                                     </div>
-                                    <span class="text-gray-700 font-medium text-sm">
-                                     {{ $choixData['texte'] ?? $choixData }}
+                                    <span data-audio-choix
+                                          class="text-gray-700 font-medium text-sm">
+                                        {{ $choixData['texte'] ?? $choixData }}
                                     </span>
                                 </button>
                             @endforeach
@@ -157,7 +254,7 @@
                             <button @click="validerQ()" @if ($selectedAnswer === '') disabled @endif
                                 data-choice="true"
                                 class="flex-1 px-6 py-3 rounded-xl font-bold text-white transition-all duration-200 text-sm
-                                {{ $selectedAnswer === '' ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-[#1a2340] hover:bg-[#111827] hover:scale-[1.02] shadow-md' }}">
+                                    {{ $selectedAnswer === '' ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-[#1a2340] hover:bg-[#111827] hover:scale-[1.02] shadow-md' }}">
                                 {{ $btnValider }} →
                             </button>
                         </div>
@@ -169,7 +266,8 @@
                         <h2 class="font-mono font-bold text-sm tracking-widest text-[#1a9e7e] uppercase mb-5">
                             Question {{ $currentIndex + 1 }} / {{ $totalQuestions }}
                         </h2>
-                        <p class="text-2xl md:text-3xl font-semibold text-[#1a2340] text-center leading-relaxed mb-10 max-w-2xl">
+                        <p id="audio-intitule"
+                           class="text-2xl md:text-3xl font-semibold text-[#1a2340] text-center leading-relaxed mb-10 max-w-2xl">
                             {{ $translatedIntitule }}
                         </p>
 
@@ -179,16 +277,17 @@
                                     @click="recordChoice('{{ $lettre }}'); $wire.choisir('{{ $lettre }}')"
                                     data-choice="true"
                                     class="w-full text-left flex items-center gap-4 px-6 py-4 rounded-xl border-2 transition-all duration-200
-                                {{ $selectedAnswer === $lettre
-                                    ? 'border-[#1a9e7e] bg-[#1a9e7e]/10 shadow-sm'
-                                    : 'border-gray-200 bg-gray-100 hover:border-gray-300 hover:bg-gray-200/50' }}">
+                                        {{ $selectedAnswer === $lettre
+                                            ? 'border-[#1a9e7e] bg-[#1a9e7e]/10 shadow-sm'
+                                            : 'border-gray-200 bg-gray-100 hover:border-gray-300 hover:bg-gray-200/50' }}">
                                     <div class="w-5 h-5 shrink-0 rounded-full border-2 flex items-center justify-center
-                                {{ $selectedAnswer === $lettre ? 'border-[#1a9e7e]' : 'border-gray-400 bg-white' }}">
+                                        {{ $selectedAnswer === $lettre ? 'border-[#1a9e7e]' : 'border-gray-400 bg-white' }}">
                                         @if ($selectedAnswer === $lettre)
                                             <div class="w-2.5 h-2.5 bg-[#1a9e7e] rounded-full"></div>
                                         @endif
                                     </div>
-                                    <span class="text-gray-700 font-medium">
+                                    <span data-audio-choix
+                                          class="text-gray-700 font-medium">
                                         {{ $choixData['texte'] ?? $choixData }}
                                     </span>
                                 </button>
@@ -212,7 +311,7 @@
                             <button @click="validerQ()" @if ($selectedAnswer === '') disabled @endif
                                 data-choice="true"
                                 class="flex-1 px-6 py-3.5 rounded-xl font-bold text-white transition-all duration-200 text-sm
-                                {{ $selectedAnswer === '' ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-[#1a2340] hover:bg-[#111827] hover:scale-[1.02] shadow-md' }}">
+                                    {{ $selectedAnswer === '' ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-[#1a2340] hover:bg-[#111827] hover:scale-[1.02] shadow-md' }}">
                                 {{ $btnValider }} →
                             </button>
                         </div>
@@ -230,7 +329,8 @@
             <p class="text-gray-500 font-mono animate-pulse">Chargement de la question suivante…</p>
         </div>
     @endif
-</div> <script>
+</div>
+<script>
     window.QuestionTracker = class QuestionTracker {
         constructor(questionId, position) {
             this.questionId = questionId;
@@ -265,20 +365,20 @@
 
         collect() {
             return {
-                id_question: this.questionId,
-                position: this.position,
-                temps_total_ms: Date.now() - this._startTime,
-                latence_ms: this._firstInteractionAt ? this._firstInteractionAt - this._startTime : 0,
-                nb_clics: this.nbClics,
-                nb_changements: this.nbChangements,
-                nb_clics_hors_cible: this.nbClicsHorsCible,
-                nb_pauses: this.nbPauses,
-                suivi_souris: JSON.stringify(this.mouseTrail),
+                id_question:          this.questionId,
+                position:             this.position,
+                temps_total_ms:       Date.now() - this._startTime,
+                latence_ms:           this._firstInteractionAt ? this._firstInteractionAt - this._startTime : 0,
+                nb_clics:             this.nbClics,
+                nb_changements:       this.nbChangements,
+                nb_clics_hors_cible:  this.nbClicsHorsCible,
+                nb_pauses:            this.nbPauses,
+                suivi_souris:         JSON.stringify(this.mouseTrail),
             };
         }
 
         destroy() {
-            document.removeEventListener('click', this._onDocClick);
+            document.removeEventListener('click',     this._onDocClick);
             document.removeEventListener('mousemove', this._onMouseMove);
             clearInterval(this._mouseSampleInterval);
             clearInterval(this._pauseInterval);
@@ -296,22 +396,15 @@
                 this.nbClics++;
                 if (!e.target.closest('[data-choice]')) this.nbClicsHorsCible++;
             };
-            document.addEventListener('click', this._onDocClick, {
-                passive: true
-            });
+            document.addEventListener('click', this._onDocClick, { passive: true });
         }
 
         _bindMouseTracking() {
             this._onMouseMove = (e) => {
                 this._touch();
-                this._lastMousePos = {
-                    x: Math.round(e.clientX),
-                    y: Math.round(e.clientY)
-                };
+                this._lastMousePos = { x: Math.round(e.clientX), y: Math.round(e.clientY) };
             };
-            document.addEventListener('mousemove', this._onMouseMove, {
-                passive: true
-            });
+            document.addEventListener('mousemove', this._onMouseMove, { passive: true });
             this._mouseSampleInterval = setInterval(() => {
                 if (!this._lastMousePos) return;
                 const t = Date.now() - this._startTime;

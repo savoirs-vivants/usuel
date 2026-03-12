@@ -365,7 +365,54 @@
                                     <option value="ru">Russe (Русский)</option>
                                     <option value="tr">Turc (Türkçe)</option>
                                 </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </div>
                             </div>
+                        </div>
+                        <div>
+                            <label class="block font-grotesk text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
+                                Accessibilité
+                            </label>
+                            <label wire:click="$toggle('audio')"
+                                   class="flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-150 select-none
+                                          {{ $audio
+                                             ? 'border-sv-green bg-sv-green/5 shadow-sm shadow-sv-green/20'
+                                             : 'border-gray-100 bg-gray-50 hover:border-gray-300 hover:bg-white' }}">
+
+                                <span class="flex items-center justify-center w-10 h-10 rounded-xl shrink-0 transition-all duration-150
+                                             {{ $audio ? 'bg-sv-green text-white' : 'bg-gray-100 text-gray-400' }}">
+                                    @if($audio)
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/>
+                                        </svg>
+                                    @else
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M11 5L6 9H2v6h4l5 4V5z"/>
+                                            <line x1="23" y1="9" x2="17" y2="15" stroke-linecap="round"/>
+                                            <line x1="17" y1="9" x2="23" y2="15" stroke-linecap="round"/>
+                                        </svg>
+                                    @endif
+                                </span>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-grotesk text-sm font-semibold {{ $audio ? 'text-sv-blue' : 'text-gray-600' }}">
+                                        Lecture audio des questions
+                                    </p>
+                                    <p class="font-grotesk text-xs text-gray-400 mt-0.5 leading-snug">
+                                        Les questions et réponses seront lues à voix haute (pour les personnes ne sachant pas lire).
+                                    </p>
+                                </div>
+                                <div class="shrink-0 relative w-11 h-6 rounded-full transition-all duration-200
+                                            {{ $audio ? 'bg-sv-green' : 'bg-gray-200' }}">
+                                    <span class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-all duration-200
+                                                 {{ $audio ? 'translate-x-5' : 'translate-x-0' }}">
+                                    </span>
+                                </div>
+                            </label>
                         </div>
                     </div>
 

@@ -12,6 +12,7 @@ class Passation extends Model
         'id_beneficiaire',
         'id_travailleur',
         'langue',
+        'audio',
         'score',
         'scenario',
         'modules',
@@ -23,10 +24,10 @@ class Passation extends Model
     protected $casts = [
         'score'                  => 'array',
         'consentement_recherche' => 'boolean',
+        'audio'                  => 'boolean',
         'date'                   => 'date',
-        'created_at' => 'datetime',
+        'created_at'             => 'datetime',
     ];
-
 
     public function beneficiaire()
     {
@@ -37,7 +38,6 @@ class Passation extends Model
     {
         return $this->belongsTo(User::class, 'id_travailleur');
     }
-
 
     public function getScoreTotalAttribute(): float
     {

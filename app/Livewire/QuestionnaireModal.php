@@ -19,6 +19,7 @@ class QuestionnaireModal extends Component
     public string $diplome = '';
     public string $csp     = '';
     public string $langue = 'fr';
+    public bool   $audio   = false;
 
     public string $nom    = '';
     public string $prenom = '';
@@ -28,7 +29,7 @@ class QuestionnaireModal extends Component
 
     public function ouvrir(): void
     {
-        $this->reset(['genre', 'age', 'diplome', 'csp', 'nom', 'prenom', 'consentement']);
+        $this->reset(['genre', 'age', 'diplome', 'csp', 'nom', 'prenom', 'consentement', 'audio']);
         $this->langue = 'fr';
         $this->step = 1;
         $this->open = true;
@@ -119,6 +120,7 @@ class QuestionnaireModal extends Component
         }
 
         session(['langue' => $this->langue]);
+        session(['audio'  => $this->audio]);
         session(['beneficiaire_id' => $beneficiaire->id]);
         session()->save();
 

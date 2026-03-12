@@ -22,6 +22,7 @@ class QuestionnaireRun extends Component
     public bool   $showEndModal   = false;
     public ?int   $completedPassationId = null;
     public string $langue = 'fr';
+    public bool   $audio  = false;
 
     public array $scores = [
         'Resilience' => 0.0,
@@ -43,6 +44,7 @@ class QuestionnaireRun extends Component
         }
 
         $this->langue = session('langue', 'fr');
+        $this->audio  = (bool) session('audio', false);
 
         $progress = session()->get('questionnaire_progress');
 
@@ -53,6 +55,7 @@ class QuestionnaireRun extends Component
             $this->trackingIds  = $progress['trackingIds'];
             $this->modeOrdre    = $progress['modeOrdre'];
             $this->langue       = $progress['langue'] ?? 'fr';
+            $this->audio        = (bool) ($progress['audio'] ?? false);
         } else {
             $mode = Cache::get('global_mode_ordre', 'fixe');
             $this->modeOrdre = $mode;
@@ -74,6 +77,7 @@ class QuestionnaireRun extends Component
             'trackingIds'  => $this->trackingIds,
             'modeOrdre'    => $this->modeOrdre,
             'langue'       => $this->langue,
+            'audio'        => $this->audio,
         ]);
     }
 
@@ -91,8 +95,7 @@ class QuestionnaireRun extends Component
 
     private function modeAleatoire(array $ids): array
     {
-        $collection = collect($ids);
-        return $collection->shuffle()->values()->toArray();
+        return collect($ids)->shuffle()->values()->toArray();
     }
 
     private function modeSemiAleatoire(array $ids): array
@@ -127,11 +130,8 @@ class QuestionnaireRun extends Component
         );
 
         $result = [];
-
         foreach ($rotated as $cat) {
-            $questionsDuBloc = $byCategory[$cat]->pluck('id')->shuffle()->toArray();
-
-            $result = array_merge($result, $questionsDuBloc);
+            $result = array_merge($result, $byCategory[$cat]->pluck('id')->shuffle()->toArray());
         }
 
         return $result;
@@ -214,14 +214,16 @@ class QuestionnaireRun extends Component
     {
         $beneficiaireId        = session('beneficiaire_id');
         $consentementRecherche = session('consentement_recherche', false);
-        $langueChoisie          = session('langue', 'fr');
+        $langueChoisie         = session('langue', 'fr');
+        $audioChoisi           = (bool) session('audio', false);
 
-        session()->forget(['beneficiaire_id', 'consentement_recherche', 'questionnaire_progress', 'langue']);
+        session()->forget(['beneficiaire_id', 'consentement_recherche', 'questionnaire_progress', 'langue', 'audio']);
 
         $passation = Passation::create([
             'id_beneficiaire'        => $beneficiaireId,
             'id_travailleur'         => Auth::id(),
             'langue'                 => $langueChoisie,
+            'audio'                  => $audioChoisi,
             'score'                  => $this->scores,
             'consentement_recherche' => $consentementRecherche,
             'mode_ordre'             => $this->modeOrdre,
