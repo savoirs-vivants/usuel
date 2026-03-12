@@ -94,126 +94,18 @@
             </div>
 
             <div class="relative flex">
-                <div x-show="filterOpen" x-transition:enter="transition ease-out duration-200"
-                    x-transition:enter-start="opacity-0 -translate-x-2"
-                    x-transition:enter-end="opacity-100 translate-x-0"
-                    x-transition:leave="transition ease-in duration-150"
-                    x-transition:leave-start="opacity-100 translate-x-0"
-                    x-transition:leave-end="opacity-0 -translate-x-2" x-cloak
-                    class="absolute top-0 left-0 z-20 w-68 bg-white border-r border-b border-gray-100 shadow-lg rounded-bl-2xl overflow-y-auto">
-                    <div class="p-5 space-y-1">
-
-                        @if (!empty($availableAges))
-                            <details class="group">
-                                <summary
-                                    class="flex items-center justify-between cursor-pointer py-2.5 px-1 font-bold text-xs uppercase tracking-widest text-gray-400 hover:text-sv-blue list-none select-none transition-colors">
-                                    Âge
-                                    <svg class="w-3.5 h-3.5 transition-transform duration-200 group-open:rotate-180"
-                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </summary>
-                                <div class="pb-3 pt-1 flex flex-col gap-1.5 px-1">
-                                    @foreach ($availableAges as $val)
-                                        <label
-                                            class="flex items-center gap-3 text-sm text-gray-600 cursor-pointer hover:text-sv-blue py-0.5 transition-colors">
-                                            <input type="checkbox" wire:model.live="selectedAges"
-                                                value="{{ $val }}"
-                                                class="w-3.5 h-3.5 text-sv-green rounded border-gray-300 focus:ring-sv-green">
-                                            {{ $labelsMap[$val] ?? $val }}
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </details>
-                            <div class="border-t border-gray-50 my-1"></div>
-                        @endif
-
-                        @if (!empty($availableGenres))
-                            <details class="group">
-                                <summary
-                                    class="flex items-center justify-between cursor-pointer py-2.5 px-1 font-bold text-xs uppercase tracking-widest text-gray-400 hover:text-sv-blue list-none select-none transition-colors">
-                                    Genre
-                                    <svg class="w-3.5 h-3.5 transition-transform duration-200 group-open:rotate-180"
-                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </summary>
-                                <div class="pb-3 pt-1 flex flex-col gap-1.5 px-1">
-                                    @foreach ($availableGenres as $val)
-                                        <label
-                                            class="flex items-center gap-3 text-sm text-gray-600 cursor-pointer hover:text-sv-blue py-0.5 transition-colors">
-                                            <input type="checkbox" wire:model.live="selectedGenres"
-                                                value="{{ $val }}"
-                                                class="w-3.5 h-3.5 text-sv-green rounded border-gray-300 focus:ring-sv-green">
-                                            {{ $labelsMap[$val] ?? $val }}
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </details>
-                            <div class="border-t border-gray-50 my-1"></div>
-                        @endif
-
-                        @if (!empty($availableCsps))
-                            <details class="group">
-                                <summary
-                                    class="flex items-center justify-between cursor-pointer py-2.5 px-1 font-bold text-xs uppercase tracking-widest text-gray-400 hover:text-sv-blue list-none select-none transition-colors">
-                                    Catégorie Socio-Professionnelle
-                                    <svg class="w-3.5 h-3.5 transition-transform duration-200 group-open:rotate-180"
-                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </summary>
-                                <div class="pb-3 pt-1 flex flex-col gap-1.5 px-1">
-                                    @foreach ($availableCsps as $val)
-                                        <label
-                                            class="flex items-center gap-3 text-sm text-gray-600 cursor-pointer hover:text-sv-blue py-0.5 transition-colors">
-                                            <input type="checkbox" wire:model.live="selectedCsps"
-                                                value="{{ $val }}"
-                                                class="w-3.5 h-3.5 text-sv-green rounded border-gray-300 focus:ring-sv-green">
-                                            {{ $labelsMap[$val] ?? $val }}
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </details>
-                            <div class="border-t border-gray-50 my-1"></div>
-                        @endif
-
-                        @if (!empty($availableDiplomes))
-                            <details class="group">
-                                <summary
-                                    class="flex items-center justify-between cursor-pointer py-2.5 px-1 font-bold text-xs uppercase tracking-widest text-gray-400 hover:text-sv-blue list-none select-none transition-colors">
-                                    Diplôme
-                                    <svg class="w-3.5 h-3.5 transition-transform duration-200 group-open:rotate-180"
-                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </summary>
-                                <div class="pb-3 pt-1 flex flex-col gap-1.5 px-1">
-                                    @foreach ($availableDiplomes as $val)
-                                        <label
-                                            class="flex items-center gap-3 text-sm text-gray-600 cursor-pointer hover:text-sv-blue py-0.5 transition-colors">
-                                            <input type="checkbox" wire:model.live="selectedDiplomes"
-                                                value="{{ $val }}"
-                                                class="w-3.5 h-3.5 text-sv-green rounded border-gray-300 focus:ring-sv-green">
-                                            {{ $labelsMap[$val] ?? $val }}
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </details>
-                        @endif
-
-                    </div>
-                </div>
+                @include('components.stats-filters', [
+                    'availableAges' => $availableAges,
+                    'availableGenres' => $availableGenres,
+                    'availableCsps' => $availableCsps,
+                    'availableDiplomes' => $availableDiplomes,
+                    'labelsMap' => $labelsMap,
+                ])
 
                 <div class="w-full min-w-0 p-6 bg-gray-50/40 overflow-hidden">
                     <div class="mb-6 flex items-center gap-3">
                         <div class="w-8 h-8 rounded-xl bg-sv-green/10 flex items-center justify-center shrink-0">
-                            <svg class="w-4 h-4 text-sv-green" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 text-sv-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                             </svg>
@@ -310,8 +202,6 @@
         </div>
     </div>
 
-<div id="chart-data"
-    data-chart-data='@json($this->chartData)'
-    hidden>
-</div>
+    <div id="chart-data" data-chart-data='@json($this->chartData)' hidden>
+    </div>
 </div>
