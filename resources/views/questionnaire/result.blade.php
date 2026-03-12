@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Résultats – {{ $passation->beneficiaire->nom }} {{ $passation->beneficiaire->prenom }}</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/charts.js'])
     <style>
         html, body { height: 100%; overflow: hidden; }
 
@@ -190,89 +192,10 @@
         </div>
 
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const rawScores = @json($scores);
-            const labelsMap = @json($labelsMap);
-            const catColors = @json($catColors);
-
-            const keys       = Object.keys(rawScores);
-            const labels     = keys.map(k => labelsMap[k] ?? k);
-            const values     = keys.map(k => parseFloat(rawScores[k]));
-            const colors     = keys.map(k => catColors[k] ?? '#6b7280');
-            const normalized = values.map(v => Math.round((v + 5) * 10) / 10);
-
-            const ctx = document.getElementById('radarChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels,
-                    datasets: [{
-                        label: 'Score',
-                        data: normalized,
-                        backgroundColor: 'rgba(26, 158, 126, 0.08)',
-                        borderColor: '#1a9e7e',
-                        borderWidth: 2.5,
-                        pointBackgroundColor: colors,
-                        pointBorderColor: '#ffffff',
-                        pointBorderWidth: 2.5,
-                        pointRadius: 7,
-                        pointHoverRadius: 10,
-                        pointHoverBackgroundColor: colors,
-                        pointHoverBorderColor: '#fff',
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: {
-                        duration: 1100,
-                        easing: 'easeOutQuart',
-                        delay: ctx => ctx.dataIndex * 80,
-                    },
-                    scales: {
-                        r: {
-                            min: 0,
-                            max: 10,
-                            ticks: {
-                                stepSize: 2,
-                                callback: val => (val - 5) >= 0 ? `${val-5}` : `${val-5}`,
-                                font: { size: 10 },
-                                color: '#9ca3af',
-                                backdropColor: 'transparent',
-                            },
-                            grid:       { color: 'rgba(26,35,64,0.06)' },
-                            angleLines: { color: 'rgba(26,35,64,0.08)' },
-                            pointLabels: {
-                                font:  { size: 12, weight: '700' },
-                                color: '#374151',
-                            },
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: '#1a2340',
-                            borderColor: 'rgba(26,158,126,0.3)',
-                            borderWidth: 1,
-                            titleColor: 'rgba(255,255,255,0.85)',
-                            bodyColor: '#1a9e7e',
-                            padding: 12,
-                            cornerRadius: 12,
-                            callbacks: {
-                                label: ctx => {
-                                    const real = values[ctx.dataIndex];
-                                    return `  ${real > 0 ?  '' : ''}${real} pts`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        });
-    </script>
-
+<div id="chart-data"
+         data-radar-scores='@json($scores)'
+         data-radar-labels='@json($labelsMap)'
+         data-radar-colors='@json($catColors)'>
+    </div>
 </body>
 </html>

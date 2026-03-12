@@ -1,8 +1,3 @@
-/**
- * charts.js — Graphiques Chart.js centralisés
- * Données transmises via data-* sur #chart-data (pas de <script> dans les Blade).
- */
-
 document.addEventListener('DOMContentLoaded', function () {
 
     /* ─────────────────────────────────────────
@@ -552,6 +547,93 @@ document.addEventListener('DOMContentLoaded', function () {
             const payload = e.detail;
             const data = Array.isArray(payload) ? payload[0] : (payload.data ?? payload);
             initComportementaleCharts(data);
+        });
+    }
+
+    /* ═══════════════════════════════════════════
+     * 4. RÉSULTAT INDIVIDUEL — RADAR
+     * ═══════════════════════════════════════════ */
+
+    const ctxRadar = document.getElementById('radarChart');
+
+    if (ctxRadar) {
+        // Lecture des données depuis les attributs data-* (passées par Blade)
+        const rawScores = readData('radarScores') || {};
+        const labelsMap = readData('radarLabels') || {};
+        const catColors = readData('radarColors') || {};
+
+        const keys       = Object.keys(rawScores);
+        const labels     = keys.map(k => labelsMap[k] ?? k);
+        const values     = keys.map(k => parseFloat(rawScores[k]));
+        const colors     = keys.map(k => catColors[k] ?? '#6b7280');
+        // Normalisation (ex: si le score va de -5 à 5, on ajoute +5 pour l'affichage radar)
+        const normalized = values.map(v => Math.round((v + 5) * 10) / 10);
+
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Score',
+                    data: normalized,
+                    backgroundColor: 'rgba(26, 158, 126, 0.08)',
+                    borderColor: '#1a9e7e',
+                    borderWidth: 2.5,
+                    pointBackgroundColor: colors,
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2.5,
+                    pointRadius: 7,
+                    pointHoverRadius: 10,
+                    pointHoverBackgroundColor: colors,
+                    pointHoverBorderColor: '#fff',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                    duration: 1100,
+                    easing: 'easeOutQuart',
+                    delay: ctx => ctx.dataIndex * 80,
+                },
+                scales: {
+                    r: {
+                        min: 0,
+                        max: 10,
+                        ticks: {
+                            stepSize: 2,
+                            callback: val => (val - 5) >= 0 ? `${val - 5}` : `${val - 5}`,
+                            font: { size: 10 },
+                            color: '#9ca3af',
+                            backdropColor: 'transparent',
+                        },
+                        grid: { color: 'rgba(26,35,64,0.06)' },
+                        angleLines: { color: 'rgba(26,35,64,0.08)' },
+                        pointLabels: {
+                            font: { size: 12, weight: '700' },
+                            color: '#374151',
+                        },
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1a2340',
+                        borderColor: 'rgba(26,158,126,0.3)',
+                        borderWidth: 1,
+                        titleColor: 'rgba(255,255,255,0.85)',
+                        bodyColor: '#1a9e7e',
+                        padding: 12,
+                        cornerRadius: 12,
+                        callbacks: {
+                            label: ctx => {
+                                const real = values[ctx.dataIndex];
+                                return `  Score : ${real > 0 ? '' : ''}${real} pts`;
+                            }
+                        }
+                    }
+                }
+            }
         });
     }
 
