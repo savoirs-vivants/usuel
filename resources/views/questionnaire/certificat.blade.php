@@ -1,35 +1,8 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Certificat – {{ $passation->beneficiaire->prenom }} {{ $passation->beneficiaire->nom }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'sv-blue':  '#1a2340',
-                        'sv-green': '#1a9e7e',
-                    },
-                    fontFamily: {
-                        sans: ['Space Grotesk', 'Inter'],
-                        mono: ['Space Mono', 'monospace'],
-                    }
-                }
-            }
-        }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
-    <style>
-        @media print {
-            @page { size: A4 portrait; margin: 0; }
-            body  { background: white !important; padding: 0 !important; }
-            .no-print { display: none !important; }
-            * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        }
-    </style>
-</head>
+@extends('layouts.print')
+
+@section('title', 'Certificat – ' . $passation->beneficiaire->prenom . ' ' . $passation->beneficiaire->nom)
+
+@section('content')
 
 @php
     $scores     = $passation->score ?? [];
@@ -48,8 +21,6 @@
     $dashoffset    = max(0, $circumference - ($circumference * (($scoreTotal + 30) / 60)));
 @endphp
 
-<body class="bg-gray-200 print:bg-white min-h-screen flex justify-center items-start p-8 font-sans">
-
 <button onclick="window.print()"
     class="no-print fixed top-4 right-4 z-50 flex items-center gap-2 bg-sv-blue hover:bg-sv-green text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-lg transition-colors duration-200">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -60,7 +31,6 @@
     </svg>
     Imprimer / Enregistrer en PDF
 </button>
-
 
 <div class="bg-white relative overflow-hidden flex flex-col shadow-2xl"
      style="width:210mm; min-height:297mm;">
@@ -151,8 +121,9 @@
     </div>
 
 </div>{{-- fin .a4 --}}
+@endsection
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+@push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -221,6 +192,4 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
-
-</body>
-</html>
+@endpush
