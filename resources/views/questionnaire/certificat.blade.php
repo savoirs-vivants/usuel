@@ -21,6 +21,11 @@
     $dashoffset    = max(0, $circumference - ($circumference * (($scoreTotal + 30) / 60)));
 @endphp
 
+<div id="chart-data" class="hidden"
+     data-radar-scores='@json($scores)'
+     data-radar-labels='@json($labelsMap)'>
+</div>
+
 <button onclick="window.print()"
     class="no-print fixed top-4 right-4 z-50 flex items-center gap-2 bg-sv-blue hover:bg-sv-green text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-lg transition-colors duration-200">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -113,83 +118,12 @@
             <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Signature &amp; Cachet</p>
         </div>
         <div class="flex flex-col items-end gap-1.5">
-            <div id="qrcode" class="border border-gray-200 rounded-lg p-1.5 bg-white shadow-sm"></div>
+            <div id="qrcode" data-url="https://usuel.savoirsvivants.fr/" class="border border-gray-200 rounded-lg p-1.5 bg-white shadow-sm"></div>
             <p class="font-mono text-sv-blue text-xs font-bold">
                 ID : CERT-{{ $passation->id }}
             </p>
         </div>
     </div>
 
-</div>{{-- fin .a4 --}}
+</div>
 @endsection
-
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    new QRCode(document.getElementById('qrcode'), {
-        text: '{{ route('welcome') }}',
-        width: 80,
-        height: 80,
-        colorDark: '#1a2340',
-        colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.M
-    });
-
-    const rawScores = @json($scores);
-    const labelsMap = @json($labelsMap);
-
-    const keys   = Object.keys(rawScores);
-    const labels = keys.map(k => labelsMap[k] || k);
-    const values = keys.map(k => parseFloat(rawScores[k]));
-    const data   = values.map(v => v + 5);
-
-    new Chart(document.getElementById('radarChart'), {
-        type: 'radar',
-        data: {
-            labels,
-            datasets: [{
-                data,
-                backgroundColor: 'rgba(26,158,126,0.15)',
-                borderColor: '#1a9e7e',
-                borderWidth: 2.5,
-                pointBackgroundColor: '#1a2340',
-                pointBorderColor: '#fff',
-                pointBorderWidth: 2,
-                pointRadius: 4,
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            layout: { padding: 12 },
-            scales: {
-                r: {
-                    min: 0, max: 10,
-                    ticks: { display: false },
-                    grid:       { color: 'rgba(0,0,0,0.06)' },
-                    angleLines: { color: 'rgba(0,0,0,0.06)' },
-                    pointLabels: {
-                        font: { size: 10, family: 'Inter', weight: '600' },
-                        color: '#1a2340',
-                        padding: 8,
-                    },
-                }
-            },
-            plugins: {
-                legend:  { display: false },
-                tooltip: { enabled: false },
-            },
-            animation: {
-                onComplete: () => {
-                    if (new URLSearchParams(window.location.search).get('print') === '1') {
-                        window.print();
-                    }
-                }
-            }
-        }
-    });
-});
-</script>
-@endpush
