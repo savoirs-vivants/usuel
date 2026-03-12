@@ -46,6 +46,7 @@ class ExportModal extends Component
                 'passations.score',
                 'passations.created_at',
                 'passations.langue',
+                'passations.audio',
                 'beneficiaires.prenom',
                 'beneficiaires.nom',
                 'beneficiaires.age',
@@ -218,7 +219,7 @@ class ExportModal extends Component
                 $headers[] = 'Prénom';
                 $headers[] = 'Nom';
             }
-            array_push($headers, 'Âge', 'Genre', 'Catégorie Socio Professionnelle', 'Diplôme', 'Langue', ...$d['dimLabels']);
+            array_push($headers, 'Âge', 'Genre', 'Catégorie Socio Professionnelle', 'Diplôme', 'Langue', 'Mode audio', ...$d['dimLabels']);
             array_push($headers, 'Score total (/30)', 'Date');
 
             fputcsv($f, $headers, ';');
@@ -241,6 +242,7 @@ class ExportModal extends Component
                 $rowData[] = $labelsMap[$p->csp]     ?? $p->csp;
                 $rowData[] = $labelsMap[$p->diplome] ?? $p->diplome;
                 $rowData[] = $labelsMap[$p->langue]  ?? ($p->langue ?: 'Français');
+                $rowData[] = $p->audio ? 'Oui' : 'Non';
                 array_push($rowData, ...$dimScores);
                 $rowData[] = $totalScore;
                 $rowData[] = Carbon::parse($p->created_at)->format('d/m/Y H:i');
@@ -335,7 +337,7 @@ class ExportModal extends Component
             $headers[] = 'Prénom';
             $headers[] = 'Nom';
         }
-        array_push($headers, 'Âge', 'Genre', 'Catégorie Socio Professionnelle', 'Diplôme', 'Langue', ...$d['dimLabels']);
+        array_push($headers, 'Âge', 'Genre', 'Catégorie Socio Professionnelle', 'Diplôme', 'Langue', 'Mode audio', ...$d['dimLabels']);
         array_push($headers, 'Score total (/30)', 'Date');
 
         foreach ($headers as $col => $header) {
@@ -363,6 +365,7 @@ class ExportModal extends Component
             $rowData[] = $labelsMap[$p->csp]     ?? $p->csp;
             $rowData[] = $labelsMap[$p->diplome] ?? $p->diplome;
             $rowData[] = $labelsMap[$p->langue]  ?? ($p->langue ?: 'Français');
+            $rowData[] = $p->audio ? 'Oui' : 'Non';
             array_push($rowData, ...$dimScores);
             $rowData[] = $totalScore;
             $rowData[] = Carbon::parse($p->created_at)->format('d/m/Y H:i');
