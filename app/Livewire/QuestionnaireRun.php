@@ -120,25 +120,18 @@ class QuestionnaireRun extends Component
         }
 
         $offset   = Passation::count() % $n;
+
         $rotated  = array_merge(
             array_slice($categories, $offset),
             array_slice($categories, 0, $offset)
         );
 
-        $pools = [];
-        foreach ($rotated as $cat) {
-            $pools[$cat] = $byCategory[$cat]->pluck('id')->shuffle()->toArray();
-        }
-
         $result = [];
-        $maxLen = max(array_map('count', $pools));
 
-        for ($i = 0; $i < $maxLen; $i++) {
-            foreach ($rotated as $cat) {
-                if (isset($pools[$cat][$i])) {
-                    $result[] = $pools[$cat][$i];
-                }
-            }
+        foreach ($rotated as $cat) {
+            $questionsDuBloc = $byCategory[$cat]->pluck('id')->shuffle()->toArray();
+
+            $result = array_merge($result, $questionsDuBloc);
         }
 
         return $result;
