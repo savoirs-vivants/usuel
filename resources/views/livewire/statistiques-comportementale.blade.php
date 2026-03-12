@@ -218,12 +218,12 @@
                                                 class="w-3.5 h-3.5 text-sv-green rounded border-gray-300 focus:ring-sv-green">
 
                                             @php
-                                                $nomMode = match($val) {
+                                                $nomMode = match ($val) {
                                                     'fixe' => 'Mode fixe',
                                                     'aleatoire' => 'Mode aléatoire',
                                                     'semi_aleatoire' => 'Mode semi-aléatoire',
                                                     'carre_latin' => 'Carré latin',
-                                                    default => ucfirst(str_replace('_', ' ', $val))
+                                                    default => ucfirst(str_replace('_', ' ', $val)),
                                                 };
                                             @endphp
                                             {{ $nomMode }}
@@ -313,429 +313,129 @@
                 </div>
             </div>
         </div>
-         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                        <div class="px-5 py-4 border-b border-gray-50 flex items-center justify-between">
-                            <div>
-                                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Données</p>
-                                <p class="font-bold text-sv-blue text-sm mt-0.5">Tableau d'analyse par question</p>
-                            </div>
-                            <span class="text-xs text-gray-400 font-medium">Moyennes sur toutes les passations
-                                filtrées</span>
-                        </div>
-                        <div class="overflow-auto" style="max-height: 420px;">
-                            <table class="w-full text-xs min-w-[900px]">
-                                <thead class="sticky top-0 z-10">
-                                    <tr class="bg-gray-50 border-b border-gray-100">
-                                        @php
-                                            $cols = [
-                                                ['key' => 'num', 'label' => 'N°', 'align' => 'left'],
-                                                ['key' => 'categorie', 'label' => 'Catégorie', 'align' => 'left'],
-                                                ['key' => 'intitule', 'label' => 'Extrait', 'align' => 'left'],
-                                                ['key' => 'avg_score', 'label' => 'Score moy.', 'align' => 'right'],
-                                                [
-                                                    'key' => 'avg_temps',
-                                                    'label' => 'Temps moy. (ms)',
-                                                    'align' => 'right',
-                                                ],
-                                                [
-                                                    'key' => 'avg_latence',
-                                                    'label' => 'Latence moy. (ms)',
-                                                    'align' => 'right',
-                                                ],
-                                                ['key' => 'avg_clics', 'label' => 'Clics moy.', 'align' => 'right'],
-                                                [
-                                                    'key' => 'avg_changements',
-                                                    'label' => 'Changements moy.',
-                                                    'align' => 'right',
-                                                ],
-                                                [
-                                                    'key' => 'avg_hors_cible',
-                                                    'label' => 'Hors-cible moy.',
-                                                    'align' => 'right',
-                                                ],
-                                                [
-                                                    'key' => 'avg_pauses',
-                                                    'label' => 'Pauses moy.',
-                                                    'align' => 'right',
-                                                ],
-                                            ];
-                                        @endphp
-                                        @foreach ($cols as $col)
-                                            <th
-                                                class="px-4 py-3 whitespace-nowrap {{ $col['align'] === 'right' ? 'text-right' : 'text-left' }}">
-                                                <button wire:click="sortBy('{{ $col['key'] }}')"
-                                                    class="inline-flex items-center gap-1.5 cursor-pointer select-none font-bold text-sv-blue uppercase tracking-wider hover:text-sv-green transition-colors {{ $col['align'] === 'right' ? 'flex-row-reverse' : '' }}">
-                                                    <span>{{ $col['label'] }}</span>
-                                                    <span class="inline-flex flex-col gap-[2px] shrink-0">
-                                                        <svg class="w-2 h-2 transition-colors {{ $sortField === $col['key'] && $sortDirection === 'desc' ? 'text-[#1a2340]' : 'text-gray-300' }}"
-                                                            viewBox="0 0 8 5" fill="currentColor">
-                                                            <path d="M4 0L8 5H0L4 0Z" />
-                                                        </svg>
-                                                        <svg class="w-2 h-2 transition-colors {{ $sortField === $col['key'] && $sortDirection === 'asc' ? 'text-[#1a2340]' : 'text-gray-300' }}"
-                                                            viewBox="0 0 8 5" fill="currentColor">
-                                                            <path d="M4 5L0 0H8L4 5Z" />
-                                                        </svg>
-                                                    </span>
-                                                </button>
-                                            </th>
-                                        @endforeach
-                                    </tr>
-                                </thead>
-
-                                <tbody class="divide-y divide-gray-50">
-                                    @forelse ($this->trackingData['tableau'] as $row)
-                                        <tr class="hover:bg-gray-50/80 transition-colors"
-                                            style="border-bottom:1px solid #f9fafb">
-                                            <td class="px-4 py-2.5 font-mono font-bold text-gray-400">
-                                                {{ $row['num'] }}</td>
-                                            <td class="px-4 py-2.5">
-                                                <span
-                                                    class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-bold"
-                                                    style="background:rgba(26,158,126,0.1);color:#1a9e7e">
-                                                    {{ $row['categorie'] ?? '—' }}
-                                                </span>
-                                            </td>
-                                            <td class="px-4 py-2.5 text-gray-600 max-w-xs truncate"
-                                                title="{{ $row['intitule'] ?? '' }}">
-                                                {{ $row['intitule'] ?? '' }}
-                                            </td>
-
-                                            @if (($row['nb_occurrences'] ?? 0) == 0)
-                                                <td colspan="7"
-                                                    class="px-4 py-2.5 text-center text-gray-300 text-xs italic">
-                                                    Aucune donnée</td>
-                                            @else
-                                                <td class="px-4 py-2.5 text-right font-mono font-bold"
-                                                    style="color: {{ ($row['avg_score'] ?? 0) > 0 ? '#1a9e7e' : (($row['avg_score'] ?? 0) < 0 ? '#f87171' : '#9ca3af') }}">
-                                                    {{ $row['avg_score'] ?? '—' }}
-                                                </td>
-                                                <td class="px-4 py-2.5 text-right font-mono text-gray-700">
-                                                    {{ isset($row['avg_temps']) ? number_format($row['avg_temps'], 0, ',', ' ') : '—' }}
-                                                </td>
-                                                <td class="px-4 py-2.5 text-right font-mono text-gray-700">
-                                                    {{ isset($row['avg_latence']) ? number_format($row['avg_latence'], 0, ',', ' ') : '—' }}
-                                                </td>
-                                                <td class="px-4 py-2.5 text-right font-mono text-gray-700">
-                                                    {{ $row['avg_clics'] ?? '—' }}</td>
-                                                <td class="px-4 py-2.5 text-right font-mono"
-                                                    style="{{ ($row['avg_changements'] ?? 0) > 0.5 ? 'color:#f97316;font-weight:700' : 'color:#374151' }}">
-                                                    {{ $row['avg_changements'] ?? '—' }}
-                                                </td>
-                                                <td class="px-4 py-2.5 text-right font-mono text-gray-700">
-                                                    {{ $row['avg_hors_cible'] ?? '—' }}</td>
-                                                <td class="px-4 py-2.5 text-right font-mono text-gray-700">
-                                                    {{ $row['avg_pauses'] ?? '—' }}</td>
-                                            @endif
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="10"
-                                                class="px-4 py-12 text-center text-gray-300 text-xs font-mono">
-                                                Aucune donnée de tracking pour cette période.</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            let latenceChart = null,
-                                changementsChart = null,
-                                ordreChart = null;
-                            const initialData = @js($this->trackingData);
-
-                            const CYAN = 'rgb(6,182,212)',
-                                CYAN_A = 'rgba(6,182,212,0.75)';
-                            const ORANGE = 'rgb(249,115,22)',
-                                ORANGE_A = 'rgba(249,115,22,0.75)';
-                            const SV_GREEN = 'rgb(26,158,126)';
-
-                            const tooltipBase = {
-                                backgroundColor: '#1a2340',
-                                titleColor: '#fff',
-                                bodyColor: '#9ca3af',
-                                borderColor: '#374151',
-                                borderWidth: 1,
-                                padding: 10,
-                                boxPadding: 6
-                            };
-                            const axisTicks = {
-                                color: '#9ca3af',
-                                font: {
-                                    size: 11
-                                },
-                                padding: 8
-                            };
-
-                            function initCharts(data) {
-                                if (!data) return;
-                                if (latenceChart) {
-                                    latenceChart.destroy();
-                                    latenceChart = null;
-                                }
-                                if (changementsChart) {
-                                    changementsChart.destroy();
-                                    changementsChart = null;
-                                }
-                                if (ordreChart) {
-                                    ordreChart.destroy();
-                                    ordreChart = null;
-                                }
-
-                                const hasL = data.top5_latence?.length > 0;
-                                latenceChart = new Chart(document.getElementById('latenceChart'), {
-                                    type: 'bar',
-                                    data: {
-                                        labels: hasL ? data.top5_latence.map(d => d.label) : ['Aucune donnée'],
-                                        datasets: [{
-                                            data: hasL ? data.top5_latence.map(d => d.value) : [0],
-                                            backgroundColor: CYAN_A,
-                                            borderColor: CYAN,
-                                            borderWidth: 1.5,
-                                            borderRadius: {
-                                                topLeft: 0,
-                                                topRight: 6,
-                                                bottomLeft: 0,
-                                                bottomRight: 6
-                                            },
-                                            borderSkipped: 'left',
-                                            barPercentage: 0.6
-                                        }]
-                                    },
-                                    options: {
-                                        indexAxis: 'y',
-                                        responsive: true,
-                                        maintainAspectRatio: false,
-                                        plugins: {
-                                            legend: {
-                                                display: false
-                                            },
-                                            tooltip: {
-                                                ...tooltipBase,
-                                                callbacks: {
-                                                    label: c => ` ${c.raw} ms`
-                                                }
-                                            }
-                                        },
-                                        scales: {
-                                            x: {
-                                                grid: {
-                                                    display: false
-                                                },
-                                                border: {
-                                                    display: false
-                                                },
-                                                ticks: {
-                                                    ...axisTicks,
-                                                    callback: v => v + ' ms'
-                                                }
-                                            },
-                                            y: {
-                                                grid: {
-                                                    display: false
-                                                },
-                                                border: {
-                                                    display: false
-                                                },
-                                                ticks: axisTicks
-                                            }
-                                        }
-                                    }
-                                });
-
-                                const hasC = data.top5_changements?.length > 0;
-                                changementsChart = new Chart(document.getElementById('changementsChart'), {
-                                    type: 'bar',
-                                    data: {
-                                        labels: hasC ? data.top5_changements.map(d => d.label) : ['Aucune donnée'],
-                                        datasets: [{
-                                            data: hasC ? data.top5_changements.map(d => d.value) : [0],
-                                            backgroundColor: ORANGE_A,
-                                            borderColor: ORANGE,
-                                            borderWidth: 1.5,
-                                            borderRadius: {
-                                                topLeft: 6,
-                                                topRight: 6,
-                                                bottomLeft: 0,
-                                                bottomRight: 0
-                                            },
-                                            borderSkipped: false,
-                                            barPercentage: 0.55
-                                        }]
-                                    },
-                                    options: {
-                                        responsive: true,
-                                        maintainAspectRatio: false,
-                                        plugins: {
-                                            legend: {
-                                                display: false
-                                            },
-                                            tooltip: {
-                                                ...tooltipBase,
-                                                callbacks: {
-                                                    label: c => ` ${c.raw} changement(s) moy.`
-                                                }
-                                            }
-                                        },
-                                        scales: {
-                                            x: {
-                                                grid: {
-                                                    display: false
-                                                },
-                                                border: {
-                                                    display: false
-                                                },
-                                                ticks: axisTicks
-                                            },
-                                            y: {
-                                                grid: {
-                                                    color: '#f3f4f6'
-                                                },
-                                                border: {
-                                                    display: false
-                                                },
-                                                ticks: axisTicks,
-                                                beginAtZero: true
-                                            }
-                                        }
-                                    }
-                                });
-
-                                const hasO = data.ordre_positions?.length > 0;
-                                ordreChart = new Chart(document.getElementById('ordreChart'), {
-                                    type: 'line',
-                                    data: {
-                                        labels: hasO ? data.ordre_positions.map((p,index) => 'Pos. ' + (index + 1) ) : ['Aucune donnée'],
-                                        datasets: [{
-                                                label: 'Temps total moy. (ms)',
-                                                data: hasO ? data.ordre_temps : [0],
-                                                borderColor: SV_GREEN,
-                                                fill: false,
-                                                tension: 0.35,
-                                                pointRadius: 3,
-                                                pointHoverRadius: 6,
-                                                borderWidth: 2
-                                            },
-                                            {
-                                                label: 'Latence moy. (ms)',
-                                                data: hasO ? data.ordre_latence : [0],
-                                                borderColor: CYAN,
-                                                fill: false,
-                                                tension: 0.35,
-                                                pointRadius: 3,
-                                                pointHoverRadius: 6,
-                                                borderWidth: 2,
-                                                borderDash: [4, 3]
-                                            },
-                                            {
-                                                label: 'Changements moy.',
-                                                data: hasO ? data.ordre_changements : [0],
-                                                borderColor: ORANGE,
-                                                fill: false,
-                                                tension: 0.35,
-                                                pointRadius: 3,
-                                                pointHoverRadius: 6,
-                                                borderWidth: 2,
-                                                borderDash: [2, 3],
-                                                yAxisID: 'y2'
-                                            }
-                                        ]
-                                    },
-                                    options: {
-                                        responsive: true,
-                                        maintainAspectRatio: false,
-                                        interaction: {
-                                            mode: 'index',
-                                            intersect: false
-                                        },
-                                        plugins: {
-                                            legend: {
-                                                position: 'top',
-                                                align: 'end',
-                                                labels: {
-                                                    usePointStyle: true,
-                                                    pointStyle: 'circle',
-                                                    font: {
-                                                        size: 11
-                                                    },
-                                                    color: '#374151',
-                                                    padding: 16
-                                                }
-                                            },
-                                            tooltip: tooltipBase
-                                        },
-                                        scales: {
-                                            x: {
-                                                grid: {
-                                                    display: false
-                                                },
-                                                border: {
-                                                    display: false
-                                                },
-                                                ticks: {
-                                                    ...axisTicks,
-                                                    maxTicksLimit: 15
-                                                }
-                                            },
-                                            y: {
-                                                grid: {
-                                                    color: '#f3f4f6'
-                                                },
-                                                border: {
-                                                    display: false
-                                                },
-                                                ticks: axisTicks,
-                                                beginAtZero: true,
-                                                title: {
-                                                    display: true,
-                                                    text: 'ms',
-                                                    color: '#9ca3af',
-                                                    font: {
-                                                        size: 10
-                                                    }
-                                                }
-                                            },
-                                            y2: {
-                                                position: 'right',
-                                                beginAtZero: true,
-                                                grid: {
-                                                    display: false
-                                                },
-                                                border: {
-                                                    display: false
-                                                },
-                                                ticks: {
-                                                    ...axisTicks,
-                                                    font: {
-                                                        size: 10
-                                                    }
-                                                },
-                                                title: {
-                                                    display: true,
-                                                    text: 'changements',
-                                                    color: '#9ca3af',
-                                                    font: {
-                                                        size: 10
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                });
-
-                                document.getElementById('totalPassations').textContent = data.total_passations;
-                            }
-
-                            initCharts(initialData);
-
-                            window.addEventListener('update-charts', function(event) {
-                                const payload = event.detail;
-                                const data = Array.isArray(payload) ? payload[0] : (payload.data ?? payload);
-                                initCharts(data);
-                            });
-                        });
-                    </script>
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div class="px-5 py-4 border-b border-gray-50 flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Données</p>
+                    <p class="font-bold text-sv-blue text-sm mt-0.5">Tableau d'analyse par question</p>
                 </div>
+                <span class="text-xs text-gray-400 font-medium">Moyennes sur toutes les passations
+                    filtrées</span>
+            </div>
+            <div class="overflow-auto" style="max-height: 420px;">
+                <table class="w-full text-xs min-w-[900px]">
+                    <thead class="sticky top-0 z-10">
+                        <tr class="bg-gray-50 border-b border-gray-100">
+                            @php
+                                $cols = [
+                                    ['key' => 'num', 'label' => 'N°', 'align' => 'left'],
+                                    ['key' => 'categorie', 'label' => 'Catégorie', 'align' => 'left'],
+                                    ['key' => 'intitule', 'label' => 'Extrait', 'align' => 'left'],
+                                    ['key' => 'avg_score', 'label' => 'Score moy.', 'align' => 'right'],
+                                    [
+                                        'key' => 'avg_temps',
+                                        'label' => 'Temps moy. (ms)',
+                                        'align' => 'right',
+                                    ],
+                                    [
+                                        'key' => 'avg_latence',
+                                        'label' => 'Latence moy. (ms)',
+                                        'align' => 'right',
+                                    ],
+                                    ['key' => 'avg_clics', 'label' => 'Clics moy.', 'align' => 'right'],
+                                    [
+                                        'key' => 'avg_changements',
+                                        'label' => 'Changements moy.',
+                                        'align' => 'right',
+                                    ],
+                                    [
+                                        'key' => 'avg_hors_cible',
+                                        'label' => 'Hors-cible moy.',
+                                        'align' => 'right',
+                                    ],
+                                    [
+                                        'key' => 'avg_pauses',
+                                        'label' => 'Pauses moy.',
+                                        'align' => 'right',
+                                    ],
+                                ];
+                            @endphp
+                            @foreach ($cols as $col)
+                                <th
+                                    class="px-4 py-3 whitespace-nowrap {{ $col['align'] === 'right' ? 'text-right' : 'text-left' }}">
+                                    <button wire:click="sortBy('{{ $col['key'] }}')"
+                                        class="inline-flex items-center gap-1.5 cursor-pointer select-none font-bold text-sv-blue uppercase tracking-wider hover:text-sv-green transition-colors {{ $col['align'] === 'right' ? 'flex-row-reverse' : '' }}">
+                                        <span>{{ $col['label'] }}</span>
+                                        <span class="inline-flex flex-col gap-[2px] shrink-0">
+                                            <svg class="w-2 h-2 transition-colors {{ $sortField === $col['key'] && $sortDirection === 'desc' ? 'text-[#1a2340]' : 'text-gray-300' }}"
+                                                viewBox="0 0 8 5" fill="currentColor">
+                                                <path d="M4 0L8 5H0L4 0Z" />
+                                            </svg>
+                                            <svg class="w-2 h-2 transition-colors {{ $sortField === $col['key'] && $sortDirection === 'asc' ? 'text-[#1a2340]' : 'text-gray-300' }}"
+                                                viewBox="0 0 8 5" fill="currentColor">
+                                                <path d="M4 5L0 0H8L4 5Z" />
+                                            </svg>
+                                        </span>
+                                    </button>
+                                </th>
+                            @endforeach
+                        </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-gray-50">
+                        @forelse ($this->trackingData['tableau'] as $row)
+                            <tr class="hover:bg-gray-50/80 transition-colors" style="border-bottom:1px solid #f9fafb">
+                                <td class="px-4 py-2.5 font-mono font-bold text-gray-400">
+                                    {{ $row['num'] }}</td>
+                                <td class="px-4 py-2.5">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-bold"
+                                        style="background:rgba(26,158,126,0.1);color:#1a9e7e">
+                                        {{ $row['categorie'] ?? '—' }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-2.5 text-gray-600 max-w-xs truncate"
+                                    title="{{ $row['intitule'] ?? '' }}">
+                                    {{ $row['intitule'] ?? '' }}
+                                </td>
+
+                                @if (($row['nb_occurrences'] ?? 0) == 0)
+                                    <td colspan="7" class="px-4 py-2.5 text-center text-gray-300 text-xs italic">
+                                        Aucune donnée</td>
+                                @else
+                                    <td class="px-4 py-2.5 text-right font-mono font-bold"
+                                        style="color: {{ ($row['avg_score'] ?? 0) > 0 ? '#1a9e7e' : (($row['avg_score'] ?? 0) < 0 ? '#f87171' : '#9ca3af') }}">
+                                        {{ $row['avg_score'] ?? '—' }}
+                                    </td>
+                                    <td class="px-4 py-2.5 text-right font-mono text-gray-700">
+                                        {{ isset($row['avg_temps']) ? number_format($row['avg_temps'], 0, ',', ' ') : '—' }}
+                                    </td>
+                                    <td class="px-4 py-2.5 text-right font-mono text-gray-700">
+                                        {{ isset($row['avg_latence']) ? number_format($row['avg_latence'], 0, ',', ' ') : '—' }}
+                                    </td>
+                                    <td class="px-4 py-2.5 text-right font-mono text-gray-700">
+                                        {{ $row['avg_clics'] ?? '—' }}</td>
+                                    <td class="px-4 py-2.5 text-right font-mono"
+                                        style="{{ ($row['avg_changements'] ?? 0) > 0.5 ? 'color:#f97316;font-weight:700' : 'color:#374151' }}">
+                                        {{ $row['avg_changements'] ?? '—' }}
+                                    </td>
+                                    <td class="px-4 py-2.5 text-right font-mono text-gray-700">
+                                        {{ $row['avg_hors_cible'] ?? '—' }}</td>
+                                    <td class="px-4 py-2.5 text-right font-mono text-gray-700">
+                                        {{ $row['avg_pauses'] ?? '—' }}</td>
+                                @endif
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="10" class="px-4 py-12 text-center text-gray-300 text-xs font-mono">
+                                    Aucune donnée de tracking pour cette période.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="chart-data" data-tracking-data='@json($this->trackingData)' hidden>
+        </div>
+    </div>
+</div>

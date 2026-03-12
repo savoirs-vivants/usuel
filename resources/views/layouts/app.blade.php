@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,25 +9,37 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/charts.js'])
     @livewireStyles
 
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
+
 <body class="font-grotesk bg-gray-50 text-sv-blue antialiased">
 
-        @if(!Route::is('welcome') && !Route::is('login') && !Route::is('inscription') && !Route::is('questionnaire.run') && !Route::is('questions.gestion') && !Route::is('password.forgot') && !Route::is('password.reset') && !Route::is('confidentialite') && !Route::is('mentions'))
-
+    @if (
+        !Route::is('welcome') &&
+            !Route::is('login') &&
+            !Route::is('inscription') &&
+            !Route::is('questionnaire.run') &&
+            !Route::is('questions.gestion') &&
+            !Route::is('password.forgot') &&
+            !Route::is('password.reset') &&
+            !Route::is('confidentialite') &&
+            !Route::is('mentions'))
         <div>
             @include('components.sidebar')
             <main>
                 @yield('content')
             </main>
         </div>
-
-    @else        <main>
+    @else
+        <main>
             @yield('content')
         </main>
     @endif
@@ -47,4 +60,5 @@
         });
     </script>
 </body>
+
 </html>

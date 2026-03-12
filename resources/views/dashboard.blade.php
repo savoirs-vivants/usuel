@@ -34,7 +34,7 @@
 
         <div class="grid grid-cols-3 gap-4">
 
-            <div data-aos="fade-up" data-aos-delay="100" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover-lift">
+            <div data-aos="fade-up" data-aos-delay="100" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
                 <div class="flex items-center justify-between mb-4">
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Ce mois-ci</p>
                     <div class="w-9 h-9 bg-sv-green/10 rounded-xl flex items-center justify-center">
@@ -57,7 +57,7 @@
                 @endif
             </div>
 
-            <div data-aos="fade-up" data-aos-delay="200" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover-lift">
+            <div data-aos="fade-up" data-aos-delay="200" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
                 <div class="flex items-center justify-between mb-4">
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Bénéficiaires</p>
                     <div class="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center">
@@ -71,7 +71,7 @@
                 <p class="text-sm text-gray-400 font-medium">personnes évaluées</p>
             </div>
 
-            <div data-aos="fade-up" data-aos-delay="300" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover-lift">
+            <div data-aos="fade-up" data-aos-delay="300" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
                 <div class="flex items-center justify-between mb-4">
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Total</p>
                     <div class="w-9 h-9 bg-purple-50 rounded-xl flex items-center justify-center">
@@ -226,107 +226,11 @@
 </div>
 </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-
-            const ctxBar = document.getElementById('chartMois');
-            if (ctxBar) {
-                new Chart(ctxBar, {
-                    type: 'bar',
-                    data: {
-                        labels: @json($labelsBarChart),
-                        datasets: [{
-                            data: @json($dataBarChart),
-                            backgroundColor: '#1a9e7e22',
-                            borderColor: '#1a9e7e',
-                            borderWidth: 2,
-                            borderRadius: 8,
-                            borderSkipped: false,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: ctx => ` ${ctx.parsed.y} passation(s)`
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                grid: {
-                                    display: false
-                                },
-                                ticks: {
-                                    font: {
-                                        size: 11
-                                    },
-                                    color: '#9ca3af'
-                                }
-                            },
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    stepSize: 1,
-                                    font: {
-                                        size: 11
-                                    },
-                                    color: '#9ca3af'
-                                },
-                                grid: {
-                                    color: '#f3f4f6'
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-
-            const ctxDonut = document.getElementById('chartScores');
-            if (ctxDonut) {
-                new Chart(ctxDonut, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Score faible (< 0)', 'Score moyen (0–15)', 'Score élevé (> 15)'],
-                        datasets: [{
-                            data: @json($repartitionScores),
-                            backgroundColor: ['#ef444422', '#f59e0b22', '#1a9e7e22'],
-                            borderColor: ['#ef4444', '#f59e0b', '#1a9e7e'],
-                            borderWidth: 2,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        cutout: '72%',
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    font: {
-                                        size: 11
-                                    },
-                                    padding: 12,
-                                    boxWidth: 12,
-                                    color: '#374151'
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: ctx => ` ${ctx.parsed} passation(s)`
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        });
-    </script>
+<div id="chart-data"
+    data-labels-bar-chart='@json($labelsBarChart)'
+    data-data-bar-chart='@json($dataBarChart)'
+    data-repartition-scores='@json($repartitionScores)'
+    hidden>
+</div>
 
 @endsection
