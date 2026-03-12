@@ -6,8 +6,6 @@
 
 <div class="ml-60 min-h-screen bg-[#f4f5f9] p-10">
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 max-w-[1200px] mx-auto items-start">
-
-        {{-- ── GAUCHE : FORMULAIRE ── --}}
         <main>
             <div class="mb-8">
                 <h1 class="font-mono text-3xl font-bold text-[#1a2340] mb-2">Modifier mon profil</h1>
@@ -17,7 +15,6 @@
             @livewire('edit-profile')
         </main>
 
-        {{-- ── DROITE : ASIDE (Identité) ── --}}
         <aside class="bg-[#1a2340] rounded-[24px] px-[30px] py-[40px] sticky top-10 text-white shadow-[0_20px_40px_rgba(26,35,64,0.15)] overflow-hidden relative">
 
             <div class="absolute -top-[50px] -right-[50px] w-[150px] h-[150px] bg-[#16987C] rounded-full blur-[40px] opacity-30 pointer-events-none"></div>

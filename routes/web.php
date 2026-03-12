@@ -10,6 +10,11 @@ use App\Http\Controllers\QuestionnaireResultController;
 use App\Http\Controllers\PasswordResetController;
 use App\Models\Passation;
 use App\Models\User;
+use App\Livewire\StatistiquesPublic;
+use App\Livewire\StatistiquesComportementale;
+use App\Livewire\GestionQuestions;
+use App\Livewire\EditUser;
+use App\Livewire\QuestionnaireRun;
 
 Route::get('/', function () {
     return view('welcome');
@@ -46,9 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/backoffice', [BackOfficeController::class, 'index'])->name('backoffice');
-    Route::get('/backoffice/user/{user}/edit', function (User $user) {
-        return view('edit-user-page', compact('user'));
-    })->name('user.edit');
+    Route::get('/backoffice/user/{user}/edit', EditUser::class)->name('user.edit');
     Route::delete('backoffice/bulk', [BackofficeController::class, 'destroyMultiple'])->name('backoffice.destroyMultiple');
     Route::delete('/backoffice/users/{user}', [BackOfficeController::class, 'destroy'])->name('backoffice.destroy');
 
@@ -60,28 +63,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('passations/bulk', [PassationController::class, 'destroyMultiple'])->name('passation.destroyMultiple');
     Route::delete('/passations/{passation}', [PassationController::class, 'destroy'])->name('passation.destroy');
 
-
-
     Route::get('/questionnaire', function () {
         return view('questionnaire');
     })->name('questionnaire.index');
 
-    Route::get('/questions/gestion', fn() => view('questions-editor'))
+    Route::get('/questions/gestion', GestionQuestions::class)
     ->name('questions.gestion')
     ->can('viewAny', App\Models\Question::class);
 
-    Route::get('/questionnaire/run', function () {
-        return view('questionnaire.run');
-    })->name('questionnaire.run');
+    Route::get('/questionnaire/run', QuestionnaireRun::class)->name('questionnaire.run');
 
     Route::get('/questionnaire/result/{id}', [QuestionnaireResultController::class, 'show'])
         ->name('questionnaire.result');
 
-    Route::get('/statistiques/public', function () {
-        return view('statistiques');
-    })->name('statistiques.index');
+    Route::get('/statistiques/public', StatistiquesPublic::class)->name('statistiques.index');
 
-    Route::get('/statistiques/comportementale', function () {
-        return view('statistiques-comportementale-page');
-    })->name('statistiques.comportementale');
+    Route::get('/statistiques/comportementale', StatistiquesComportementale::class)->name('statistiques.comportementale');
 });

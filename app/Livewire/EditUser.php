@@ -6,7 +6,11 @@ use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 
+#[Layout('layouts.app')]
+#[Title('Usuel - Modifier l\'utilisateur')]
 class EditUser extends Component
 {
     public User $user;

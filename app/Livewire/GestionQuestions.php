@@ -6,7 +6,11 @@ use App\Models\Question;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 
+#[Layout('layouts.app')]
+#[Title('Usuel - Usuel - Gestion des questions')]
 class GestionQuestions extends Component
 {
     use WithFileUploads;

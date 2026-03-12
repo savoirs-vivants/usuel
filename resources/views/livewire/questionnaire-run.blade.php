@@ -1,3 +1,5 @@
+    <section class="min-h-screen bg-gray-50 flex flex-col pt-12">
+
 <div class="min-h-screen bg-white flex flex-col" x-data="{
         tracker: null,
         audioEnabled: {{ $audio ? 'true' : 'false' }},
@@ -330,6 +332,7 @@
         </div>
     @endif
 </div>
+    </section>
 <script>
     window.QuestionTracker = class QuestionTracker {
         constructor(questionId, position) {

@@ -10,7 +10,11 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Url;
 use Stichoza\GoogleTranslate\GoogleTranslate;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 
+#[Layout('layouts.app')]
+#[Title('Usuel - Usuel - Passation du questionnaire')]
 class QuestionnaireRun extends Component
 {
     #[Url(as: 'step')]

@@ -10,7 +10,11 @@ use App\Models\Beneficiaire;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 
+#[Layout('layouts.app')]
+#[Title('Usuel - Statistiques Public')]
 class StatistiquesPublic extends Component
 {
     #[Url(as: 'age')]

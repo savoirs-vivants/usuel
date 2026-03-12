@@ -11,7 +11,12 @@ use App\Models\Question;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 
+
+#[Layout('layouts.app')]
+#[Title('Usuel - Statistiques Comportementale')]
 class StatistiquesComportementale extends Component
 {
     #[Url(as: 'age')]
