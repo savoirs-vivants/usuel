@@ -75,9 +75,9 @@
                     <div class="stagger-2 grid grid-cols-2 gap-3">
                         <div class="space-y-1.5">
                             <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Nom</label>
-                            <input type="text" wire:model="name" placeholder="Nom"
+                            <input type="text" wire:model="form.name" placeholder="Nom"
                                 class="w-full border-2 border-gray-100 focus:border-sv-green bg-gray-50 focus:bg-white rounded-xl px-3.5 py-2.5 outline-none text-sm font-semibold text-gray-800 transition-all duration-200 placeholder-gray-300">
-                            @error('name')
+                            @error('form.name')
                                 <p class="text-red-500 text-xs flex items-center gap-1">
                                     <svg class="w-3 h-3 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
                                     {{ $message }}
@@ -86,9 +86,9 @@
                         </div>
                         <div class="space-y-1.5">
                             <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Prénom</label>
-                            <input type="text" wire:model="firstname" placeholder="Prénom"
+                            <input type="text" wire:model="form.firstname" placeholder="Prénom"
                                 class="w-full border-2 border-gray-100 focus:border-sv-green bg-gray-50 focus:bg-white rounded-xl px-3.5 py-2.5 outline-none text-sm font-semibold text-gray-800 transition-all duration-200 placeholder-gray-300">
-                            @error('firstname')
+                            @error('form.firstname')
                                 <p class="text-red-500 text-xs flex items-center gap-1">
                                     <svg class="w-3 h-3 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
                                     {{ $message }}
@@ -105,10 +105,10 @@
                             <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
-                            <input type="email" wire:model="email" placeholder="exemple@example.fr"
+                            <input type="email" wire:model="form.email" placeholder="exemple@example.fr"
                                 class="w-full border-2 border-gray-100 focus:border-sv-green bg-gray-50 focus:bg-white rounded-xl pl-10 pr-3.5 py-2.5 outline-none text-sm font-semibold text-gray-800 transition-all duration-200 placeholder-gray-300">
                         </div>
-                        @error('email')
+                        @error('form.email')
                             <p class="text-red-500 text-xs flex items-center gap-1">
                                 <svg class="w-3 h-3 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
                                 {{ $message }}
@@ -121,16 +121,16 @@
                             <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">
                                 Rôle <span class="text-sv-green normal-case tracking-normal font-semibold">*</span>
                             </label>
-                            <select wire:model="role"
+                            <select wire:model="form.role"
                                 class="w-full border-2 border-gray-100 focus:border-sv-green bg-gray-50 focus:bg-white rounded-xl px-3.5 py-2.5 outline-none text-sm font-semibold text-gray-800 transition-all duration-200 cursor-pointer">
-                                <option value="#">— Choisir —</option>
+                                <option value="">— Choisir —</option>
                                 <option value="travailleur">Travailleur social</option>
                                 @if (auth()->user()->role === 'admin')
                                     <option value="gestionnaire">Gestionnaire</option>
                                     <option value="admin">Administrateur</option>
                                 @endif
                             </select>
-                            @error('role')
+                            @error('form.role')
                                 <p class="text-red-500 text-xs flex items-center gap-1">
                                     <svg class="w-3 h-3 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
                                     {{ $message }}
@@ -148,9 +148,9 @@
                                     </svg>
                                 </div>
                             @else
-                                <input type="text" wire:model="structure" placeholder="Nom de la structure"
+                                <input type="text" wire:model="form.structure" placeholder="Nom de la structure"
                                     class="w-full border-2 border-gray-100 focus:border-sv-green bg-gray-50 focus:bg-white rounded-xl px-3.5 py-2.5 outline-none text-sm font-semibold text-gray-800 transition-all duration-200 placeholder-gray-300">
-                                @error('structure')
+                                @error('form.structure')
                                     <p class="text-red-500 text-xs flex items-center gap-1">
                                         <svg class="w-3 h-3 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
                                         {{ $message }}

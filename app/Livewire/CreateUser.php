@@ -3,73 +3,45 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\InvitationMail;
+use App\Livewire\Forms\UserForm; 
 use Illuminate\Support\Facades\Auth;
 
 class CreateUser extends Component
 {
+    public UserForm $form;
     public $isOpen = false;
-    public $name;
-    public $firstname;
-    public $email;
-    public $role;
-    public $structure;
 
     public function openModal()
     {
+        $this->form->reset();
         $this->resetValidation();
+
         $currentUser = Auth::user();
 
         if ($currentUser->role === 'gestionnaire') {
-            $this->structure = $currentUser->structure;
-            $this->role = 'travailleur';
+            $this->form->structure = $currentUser->structure;
+            $this->form->role = 'travailleur';
         }
+
         $this->isOpen = true;
     }
 
     public function closeModal()
     {
         $this->isOpen = false;
-        $this->reset(['name', 'firstname', 'email', 'role', 'structure']);
+        $this->form->reset();
     }
 
     public function save()
     {
-        $this->validate([
-        'name'      => 'nullable|string|max:255',
-        'firstname' => 'nullable|string|max:255',
-        'email'     => 'required|email|unique:users,email',
-        'role'      => 'required|string',
-        'structure' => 'nullable|string|max:255',
-        ], [
-            'email.required' => 'L\'adresse e-mail est obligatoire.',
-            'email.unique'   => 'Cette adresse e-mail est déjà utilisée.',
-            'role.required'  => 'Le rôle de l\'utilisateur est obligatoire.',
-        ]);
+        $user = $this->form->store();
 
-        $token = Str::uuid()->toString();
-
-        $user = User::create([
-            'name'             => $this->name,
-            'firstname'        => $this->firstname,
-            'email'            => $this->email,
-            'role'             => $this->role,
-            'structure'        => $this->structure,
-            'password'         => Hash::make(Str::random(32)),
-            'invitation_token' => $token,
-            'is_registered'    => false,
-        ]);
-
-        Mail::to($user->email)->send(new InvitationMail($user, $token));
-
-        $email = $this->email;
+        $email = $user->email;
         $this->closeModal();
+
         session()->flash('toast_message', 'Invitation envoyée à ' . $email);
         session()->flash('toast_type', 'success');
+
         return redirect()->route('backoffice');
     }
 

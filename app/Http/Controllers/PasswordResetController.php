@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Http\Requests\ForgotPasswordRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -12,24 +13,20 @@ use Carbon\Carbon;
 
 class PasswordResetController extends Controller
 {
-    public function showForgot()
-    {
-        return view('auth.forgot-password');
-    }
+    public function showForgot() { return view('auth.forgot-password'); }
 
-    public function sendReset(Request $request)
+    public function sendReset(ForgotPasswordRequest $request)
     {
-        $request->validate(['email' => 'required|email|exists:users,email']);
-
+        $email = $request->validated()['email'];
         $token = Str::random(64);
 
         DB::table('password_reset_tokens')->updateOrInsert(
-            ['email' => $request->email],
+            ['email' => $email],
             ['token' => Hash::make($token), 'created_at' => Carbon::now()]
         );
 
-        Mail::send('emails.reset-password', ['token' => $token, 'email' => $request->email], function ($mail) use ($request) {
-            $mail->to($request->email)
+        Mail::send('emails.reset-password', ['token' => $token, 'email' => $email], function ($mail) use ($email) {
+            $mail->to($email)
                  ->subject('Réinitialisation de votre mot de passe – Usuel');
         });
 
@@ -41,19 +38,15 @@ class PasswordResetController extends Controller
         return view('auth.reset-password', compact('token', 'email'));
     }
 
-    public function reset(Request $request)
+    public function reset(ResetPasswordRequest $request)
     {
-        $request->validate([
-            'email'    => 'required|email|exists:users,email',
-            'token'    => 'required',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
+        $data = $request->validated();
 
         $record = DB::table('password_reset_tokens')
-            ->where('email', $request->email)
+            ->where('email', $data['email'])
             ->first();
 
-        if (!$record || !Hash::check($request->token, $record->token)) {
+        if (!$record || !Hash::check($data['token'], $record->token)) {
             return back()->withErrors(['token' => 'Lien invalide ou expiré.']);
         }
 
@@ -61,11 +54,11 @@ class PasswordResetController extends Controller
             return back()->withErrors(['token' => 'Ce lien a expiré. Veuillez en demander un nouveau.']);
         }
 
-        User::where('email', $request->email)->update([
-            'password' => Hash::make($request->password),
+        User::where('email', $data['email'])->update([
+            'password' => Hash::make($data['password']),
         ]);
 
-        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+        DB::table('password_reset_tokens')->where('email', $data['email'])->delete();
 
         return redirect()->route('login')->with('success', 'Mot de passe mis à jour. Vous pouvez vous connecter.');
     }

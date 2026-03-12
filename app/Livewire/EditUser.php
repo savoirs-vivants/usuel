@@ -4,8 +4,8 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\User;
+use App\Livewire\Forms\EditUserForm;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 
@@ -14,46 +14,21 @@ use Livewire\Attributes\Title;
 class EditUser extends Component
 {
     public User $user;
-
-    public string $name      = '';
-    public string $firstname = '';
-    public string $email     = '';
-    public string $structure = '';
-    public string $role      = '';
+    public EditUserForm $form;
 
     public function mount(User $user): void
     {
+        Gate::authorize('update', $user);
 
-        Gate::authorize('update', $this->user);
-
-        $this->user      = $user;
-        $this->name      = $user->name      ?? '';
-        $this->firstname = $user->firstname ?? '';
-        $this->email     = $user->email     ?? '';
-        $this->structure = $user->structure ?? '';
-        $this->role      = $user->role      ?? '';
+        $this->user = $user;
+        $this->form->setUser($user);
     }
 
     public function save(): void
     {
-
         Gate::authorize('update', $this->user);
 
-        $this->validate([
-            'name'      => 'nullable|string|max:255',
-            'firstname' => 'nullable|string|max:255',
-            'email'     => ['required', 'email', Rule::unique('users', 'email')->ignore($this->user->id)],
-            'structure' => 'nullable|string|max:255',
-            'role'      => 'required|string|in:travailleur,gestionnaire,admin',
-        ]);
-
-        $this->user->update([
-            'name'      => $this->name,
-            'firstname' => $this->firstname,
-            'email'     => $this->email,
-            'structure' => $this->structure,
-            'role'      => $this->role,
-        ]);
+        $this->form->updateUser();
 
         session()->flash('toast_message', 'Utilisateur mis à jour avec succès');
         session()->flash('toast_type', 'success');

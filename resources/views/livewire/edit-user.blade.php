@@ -39,18 +39,18 @@
                             <div>
                                 <label
                                     class="block text-[11px] font-bold tracking-wide uppercase text-[#1a2340] mb-2">Nom</label>
-                                <input type="text" wire:model="name"
+                                <input type="text" wire:model="form.name"
                                     class="w-full bg-[#f9fafb] border-2 border-[#f3f4f6] rounded-xl px-4 py-3 text-sm text-[#1a2340] font-medium transition-all duration-200 outline-none focus:bg-white focus:border-[#16987C] focus:ring-[4px] focus:ring-[#16987C]/10">
-                                @error('name')
+                                @error('form.name')
                                     <p class="text-[#ef4444] text-xs mt-1.5 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div>
                                 <label
                                     class="block text-[11px] font-bold tracking-wide uppercase text-[#1a2340] mb-2">Prénom</label>
-                                <input type="text" wire:model="firstname"
+                                <input type="text" wire:model="form.firstname"
                                     class="w-full bg-[#f9fafb] border-2 border-[#f3f4f6] rounded-xl px-4 py-3 text-sm text-[#1a2340] font-medium transition-all duration-200 outline-none focus:bg-white focus:border-[#16987C] focus:ring-[4px] focus:ring-[#16987C]/10">
-                                @error('firstname')
+                                @error('form.firstname')
                                     <p class="text-[#ef4444] text-xs mt-1.5 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -59,9 +59,9 @@
                         <div>
                             <label
                                 class="block text-[11px] font-bold tracking-wide uppercase text-[#1a2340] mb-2">Email</label>
-                            <input type="email" wire:model="email"
+                            <input type="email" wire:model="form.email"
                                 class="w-full bg-[#f9fafb] border-2 border-[#f3f4f6] rounded-xl px-4 py-3 text-sm text-[#1a2340] font-medium transition-all duration-200 outline-none focus:bg-white focus:border-[#16987C] focus:ring-[4px] focus:ring-[#16987C]/10">
-                            @error('email')
+                            @error('form.email')
                                 <p class="text-[#ef4444] text-xs mt-1.5 font-medium">{{ $message }}</p>
                             @enderror
                         </div>
@@ -70,15 +70,15 @@
                             <label
                                 class="block text-[11px] font-bold tracking-wide uppercase text-[#1a2340] mb-2">Structure</label>
                             @if (auth()->user()->role === 'admin')
-                                <input type="text" wire:model="structure"
+                                <input type="text" wire:model="form.structure"
                                     class="w-full bg-[#f9fafb] border-2 border-[#f3f4f6] rounded-xl px-4 py-3 text-sm text-[#1a2340] font-medium transition-all duration-200 outline-none focus:bg-white focus:border-[#16987C] focus:ring-[4px] focus:ring-[#16987C]/10">
-                                @error('structure')
+                                @error('form.structure')
                                     <p class="text-[#ef4444] text-xs mt-1.5 font-medium">{{ $message }}</p>
                                 @enderror
                             @else
                                 <div
                                     class="w-full bg-[#f3f4f6] border-2 border-[#e5e7eb] rounded-xl px-4 py-3 text-sm text-[#6b7280] font-medium flex justify-between items-center cursor-not-allowed">
-                                    <span>{{ $structure ?? '—' }}</span>
+                                    <span>{{ $form->structure ?? '—' }}</span>
                                     <span
                                         class="text-[10px] font-bold uppercase tracking-wide bg-white border border-gray-200 px-2 py-1 rounded-md text-[#9ca3af]">Verrouillé</span>
                                 </div>
@@ -89,21 +89,21 @@
                             <label class="block text-[11px] font-bold tracking-wide uppercase text-[#1a2340] mb-2">Rôle
                                 <span class="text-[#ef4444]">*</span></label>
                             @if (auth()->user()->role === 'admin')
-                                <select wire:model="role"
+                                <select wire:model="form.role"
                                     class="w-full bg-[#f9fafb] border-2 border-[#f3f4f6] rounded-xl px-4 py-3 text-sm text-[#1a2340] font-medium transition-all duration-200 outline-none focus:bg-white focus:border-[#16987C] focus:ring-[4px] focus:ring-[#16987C]/10 cursor-pointer">
                                     <option value="">-- Choisir --</option>
                                     <option value="travailleur">Travailleur Social</option>
                                     <option value="gestionnaire">Gestionnaire</option>
                                     <option value="admin">Administrateur</option>
                                 </select>
-                                @error('role')
+                                @error('form.role')
                                     <p class="text-[#ef4444] text-xs mt-1.5 font-medium">{{ $message }}</p>
                                 @enderror
                             @else
                                 <div
                                     class="w-full bg-[#f3f4f6] border-2 border-[#e5e7eb] rounded-xl px-4 py-3 text-sm text-[#6b7280] font-medium flex justify-between items-center cursor-not-allowed">
                                     <span
-                                        class="capitalize">{{ $role === 'travailleur' ? 'Travailleur Social' : $role }}</span>
+                                        class="capitalize">{{ $form->role === 'travailleur' ? 'Travailleur Social' : $form->role }}</span>
                                     <span
                                         class="text-[10px] font-bold uppercase tracking-wide bg-white border border-gray-200 px-2 py-1 rounded-md text-[#9ca3af]">Verrouillé</span>
                                 </div>

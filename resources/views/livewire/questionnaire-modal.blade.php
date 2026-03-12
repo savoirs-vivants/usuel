@@ -1,5 +1,4 @@
 <div>
-
     <button
         wire:click="ouvrir"
         class="group inline-flex items-center gap-3 bg-sv-green hover:bg-sv-blue active:scale-95
@@ -90,17 +89,17 @@
                                 ] as [$val, $emoji, $label])
                                 <label class="relative flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer
                                               transition-all duration-150 select-none
-                                              {{ $genre === $val
+                                              {{ $form->genre === $val
                                                  ? 'border-sv-green bg-sv-green/5 shadow-sm shadow-sv-green/20'
                                                  : 'border-gray-100 bg-gray-50 hover:border-gray-300 hover:bg-white active:scale-95' }}">
-                                    <input type="radio" wire:model.live="genre" value="{{ $val }}"
+                                    <input type="radio" wire:model.live="form.genre" value="{{ $val }}"
                                            class="sr-only">
                                     <span class="text-xl leading-none">{{ $emoji }}</span>
                                     <span class="font-grotesk text-sm font-semibold
-                                                 {{ $genre === $val ? 'text-sv-blue' : 'text-gray-600' }}">
+                                                 {{ $form->genre === $val ? 'text-sv-blue' : 'text-gray-600' }}">
                                         {{ $label }}
                                     </span>
-                                    @if($genre === $val)
+                                    @if($form->genre === $val)
                                     <span class="absolute top-2.5 right-2.5 flex items-center justify-center
                                                  w-4 h-4 rounded-full bg-sv-green">
                                         <svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor"
@@ -112,7 +111,7 @@
                                 </label>
                                 @endforeach
                             </div>
-                            @error('genre')
+                            @error('form.genre')
                             <p class="mt-2 text-xs text-red-500 font-grotesk flex items-center gap-1.5">
                                 <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
@@ -127,12 +126,12 @@
                                 Tranche d'âge
                             </label>
                             <div class="relative">
-                                <select id="age" wire:model="age"
+                                <select id="age" wire:model="form.age"
                                         class="w-full appearance-none font-grotesk bg-gray-50 border-2 rounded-2xl
                                                pl-5 pr-12 py-3.5 text-sm font-medium text-sv-blue
                                                cursor-pointer focus:outline-none focus:ring-4 focus:ring-sv-green/20
                                                focus:border-sv-green transition-all duration-150
-                                               @error('age') border-red-300 bg-red-50 @else border-gray-100 hover:border-gray-300 @enderror">
+                                               @error('form.age') border-red-300 bg-red-50 @else border-gray-100 hover:border-gray-300 @enderror">
                                     <option value="" disabled>Sélectionner votre tranche d'âge</option>
                                     <option value="moins_18">Moins de 18 ans</option>
                                     <option value="18_25">18 – 25 ans</option>
@@ -143,7 +142,7 @@
                                     <option value="plus_65">Plus de 65 ans</option>
                                 </select>
                             </div>
-                            @error('age')
+                            @error('form.age')
                             <p class="mt-2 text-xs text-red-500 font-grotesk flex items-center gap-1.5">
                                 <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
@@ -158,12 +157,12 @@
                                 Niveau de diplôme
                             </label>
                             <div class="relative">
-                                <select id="diplome" wire:model="diplome"
+                                <select id="diplome" wire:model="form.diplome"
                                         class="w-full appearance-none font-grotesk bg-gray-50 border-2 rounded-2xl
                                                pl-5 pr-12 py-3.5 text-sm font-medium text-sv-blue
                                                cursor-pointer focus:outline-none focus:ring-4 focus:ring-sv-green/20
                                                focus:border-sv-green transition-all duration-150
-                                               @error('diplome') border-red-300 bg-red-50 @else border-gray-100 hover:border-gray-300 @enderror">
+                                               @error('form.diplome') border-red-300 bg-red-50 @else border-gray-100 hover:border-gray-300 @enderror">
                                     <option value="" disabled>Sélectionner votre diplôme</option>
                                     <option value="aucun">Aucun diplôme</option>
                                     <option value="brevet">Brevet des collèges (DNB)</option>
@@ -175,7 +174,7 @@
                                     <option value="doctorat">Doctorat (Bac +8)</option>
                                 </select>
                             </div>
-                            @error('diplome')
+                            @error('form.diplome')
                             <p class="mt-2 text-xs text-red-500 font-grotesk flex items-center gap-1.5">
                                 <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
@@ -190,12 +189,12 @@
                                 Catégorie socio-professionnelle
                             </label>
                             <div class="relative">
-                                <select id="csp" wire:model="csp"
+                                <select id="csp" wire:model="form.csp"
                                         class="w-full appearance-none font-grotesk bg-gray-50 border-2 rounded-2xl
                                                pl-5 pr-12 py-3.5 text-sm font-medium text-sv-blue
                                                cursor-pointer focus:outline-none focus:ring-4 focus:ring-sv-green/20
                                                focus:border-sv-green transition-all duration-150
-                                               @error('csp') border-red-300 bg-red-50 @else border-gray-100 hover:border-gray-300 @enderror">
+                                               @error('form.csp') border-red-300 bg-red-50 @else border-gray-100 hover:border-gray-300 @enderror">
                                     <option value="" disabled>Sélectionner une catégorie</option>
                                     <option value="agriculteur">Agriculteur exploitant</option>
                                     <option value="artisan">Artisan, commerçant, chef d'entreprise</option>
@@ -208,7 +207,7 @@
                                     <option value="autre">Autre</option>
                                 </select>
                             </div>
-                            @error('csp')
+                            @error('form.csp')
                             <p class="mt-2 text-xs text-red-500 font-grotesk flex items-center gap-1.5">
                                 <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
@@ -308,14 +307,14 @@
                             </label>
                             <input
                                 type="text"
-                                wire:model="prenom"
+                                wire:model="form.prenom"
                                 placeholder="Votre prénom"
                                 class="w-full font-grotesk bg-gray-50 border-2 rounded-2xl
                                        px-5 py-3.5 text-base font-medium text-sv-blue placeholder-gray-300
                                        focus:outline-none focus:ring-4 focus:ring-sv-green/20 focus:border-sv-green
                                        transition-all duration-150
-                                       @error('prenom') border-red-300 bg-red-50 @else border-gray-100 hover:border-gray-300 @enderror">
-                            @error('prenom')
+                                       @error('form.prenom') border-red-300 bg-red-50 @else border-gray-100 hover:border-gray-300 @enderror">
+                            @error('form.prenom')
                             <p class="mt-2 text-xs text-red-500 font-grotesk flex items-center gap-1.5">
                                 <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
@@ -331,14 +330,14 @@
                             </label>
                             <input
                                 type="text"
-                                wire:model="nom"
+                                wire:model="form.nom"
                                 placeholder="Votre nom de famille"
                                 class="w-full font-grotesk bg-gray-50 border-2 rounded-2xl
                                        px-5 py-3.5 text-base font-medium text-sv-blue placeholder-gray-300
                                        focus:outline-none focus:ring-4 focus:ring-sv-green/20 focus:border-sv-green
                                        transition-all duration-150
-                                       @error('nom') border-red-300 bg-red-50 @else border-gray-100 hover:border-gray-300 @enderror">
-                            @error('nom')
+                                       @error('form.nom') border-red-300 bg-red-50 @else border-gray-100 hover:border-gray-300 @enderror">
+                            @error('form.nom')
                             <p class="mt-2 text-xs text-red-500 font-grotesk flex items-center gap-1.5">
                                 <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
@@ -352,7 +351,7 @@
                                 Langue du questionnaire
                             </label>
                             <div class="relative">
-                                <select id="langue" wire:model="langue"
+                                <select id="langue" wire:model="form.langue"
                                         class="w-full appearance-none font-grotesk bg-gray-50 border-2 rounded-2xl
                                                pl-5 pr-12 py-3.5 text-sm font-medium text-sv-blue
                                                cursor-pointer focus:outline-none focus:ring-4 focus:ring-sv-green/20
@@ -376,15 +375,15 @@
                             <label class="block font-grotesk text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
                                 Accessibilité
                             </label>
-                            <label wire:click="$toggle('audio')"
+                            <label wire:click="$toggle('form.audio')"
                                    class="flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-150 select-none
-                                          {{ $audio
+                                          {{ $form->audio
                                              ? 'border-sv-green bg-sv-green/5 shadow-sm shadow-sv-green/20'
                                              : 'border-gray-100 bg-gray-50 hover:border-gray-300 hover:bg-white' }}">
 
                                 <span class="flex items-center justify-center w-10 h-10 rounded-xl shrink-0 transition-all duration-150
-                                             {{ $audio ? 'bg-sv-green text-white' : 'bg-gray-100 text-gray-400' }}">
-                                    @if($audio)
+                                             {{ $form->audio ? 'bg-sv-green text-white' : 'bg-gray-100 text-gray-400' }}">
+                                    @if($form->audio)
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                   d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/>
@@ -399,7 +398,7 @@
                                     @endif
                                 </span>
                                 <div class="flex-1 min-w-0">
-                                    <p class="font-grotesk text-sm font-semibold {{ $audio ? 'text-sv-blue' : 'text-gray-600' }}">
+                                    <p class="font-grotesk text-sm font-semibold {{ $form->audio ? 'text-sv-blue' : 'text-gray-600' }}">
                                         Lecture audio des questions
                                     </p>
                                     <p class="font-grotesk text-xs text-gray-400 mt-0.5 leading-snug">
@@ -407,9 +406,9 @@
                                     </p>
                                 </div>
                                 <div class="shrink-0 relative w-11 h-6 rounded-full transition-all duration-200
-                                            {{ $audio ? 'bg-sv-green' : 'bg-gray-200' }}">
+                                            {{ $form->audio ? 'bg-sv-green' : 'bg-gray-200' }}">
                                     <span class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-all duration-200
-                                                 {{ $audio ? 'translate-x-5' : 'translate-x-0' }}">
+                                                 {{ $form->audio ? 'translate-x-5' : 'translate-x-0' }}">
                                     </span>
                                 </div>
                             </label>
@@ -461,15 +460,15 @@
                     </div>
 
                     <label class="flex items-start gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-150
-                                  {{ $consentement ? 'border-sv-green bg-sv-green/5' : 'border-gray-100 bg-gray-50 hover:border-gray-300' }}">
+                                  {{ $form->consentement ? 'border-sv-green bg-sv-green/5' : 'border-gray-100 bg-gray-50 hover:border-gray-300' }}">
                         <div class="relative shrink-0 mt-0.5">
                             <input
                                 type="checkbox"
-                                wire:model.live="consentement"
+                                wire:model.live="form.consentement"
                                 class="sr-only">
                             <div class="w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-150
-                                        {{ $consentement ? 'bg-sv-green border-sv-green' : 'border-gray-300 bg-white' }}">
-                                @if($consentement)
+                                        {{ $form->consentement ? 'bg-sv-green border-sv-green' : 'border-gray-300 bg-white' }}">
+                                @if($form->consentement)
                                 <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                                 </svg>
@@ -481,7 +480,7 @@
                         </span>
                     </label>
 
-                    @error('consentement')
+                    @error('form.consentement')
                     <p class="mt-2 text-xs text-red-500 font-grotesk flex items-center gap-1.5">
                         <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>

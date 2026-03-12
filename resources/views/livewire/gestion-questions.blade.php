@@ -1,7 +1,6 @@
 <div class="flex h-screen font-grotesk overflow-hidden" style="background: #f0f2f8;">
 
     <aside class="w-96 shrink-0 flex flex-col h-screen relative" style="background: linear-gradient(160deg, #1c2454 0%, #222A60 60%, #1a3a50 100%);">
-
         <div class="absolute inset-0 opacity-[0.04] pointer-events-none" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><path d=%22M0 0h60v60H0z%22 fill=%22none%22/><path d=%22M0 0l60 60M60 0L0 60%22 stroke=%22white%22 stroke-width=%220.5%22/></svg>');"></div>
 
         <div class="relative px-5 pt-6 pb-5 shrink-0" style="border-bottom: 1px solid rgba(255,255,255,0.08);">
@@ -39,7 +38,7 @@
 
         <div class="flex-1 overflow-y-auto py-4 px-3 space-y-1.5" style="scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent;">
 
-            @if ($isNew)
+            @if ($form->isNew)
             <div class="rounded-xl p-3.5" style="background: rgba(22,152,124,0.18); border: 1px solid rgba(22,152,124,0.4);">
                 <div class="flex items-center gap-2 mb-1">
                     <span class="w-1.5 h-1.5 rounded-full bg-sv-green animate-pulse"></span>
@@ -54,25 +53,25 @@
                 <button wire:click="selectQuestion({{ $q['id'] }})"
                     class="w-full text-left rounded-xl p-3.5 transition-all
                         {{ !$q['active'] ? 'opacity-40 grayscale' : '' }}"
-                    style="{{ $selectedId === $q['id'] && !$isNew
+                    style="{{ $form->selectedId === $q['id'] && !$form->isNew
                         ? 'background: rgba(22,152,124,0.18); border: 1px solid rgba(22,152,124,0.35);'
                         : 'background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);' }}"
                     onmouseover="if(!this.classList.contains('active-q')) { this.style.background='rgba(255,255,255,0.09)'; this.style.border='1px solid rgba(255,255,255,0.12)'; }"
                     onmouseout="if(!this.classList.contains('active-q')) { this.style.background='rgba(255,255,255,0.04)'; this.style.border='1px solid rgba(255,255,255,0.06)'; }">
                     <div class="flex items-start gap-3 pr-8"> <span class="font-mono text-[11px] font-bold shrink-0 mt-0.5"
-                            style="color: {{ $selectedId === $q['id'] && !$isNew ? '#16987C' : 'rgba(255,255,255,0.25)' }}">
+                            style="color: {{ $form->selectedId === $q['id'] && !$form->isNew ? '#16987C' : 'rgba(255,255,255,0.25)' }}">
                             #{{ $q['id'] }}
                         </span>
                         <div class="min-w-0">
                             <p class="text-[10px] font-bold uppercase tracking-wider mb-1 flex items-center gap-1.5"
-                                style="color: {{ $selectedId === $q['id'] && !$isNew ? '#16987C' : 'rgba(255,255,255,0.35)' }}">
-                                {{ $categories[$q['categorie']] ?? $q['categorie'] }}
+                                style="color: {{ $form->selectedId === $q['id'] && !$form->isNew ? '#16987C' : 'rgba(255,255,255,0.35)' }}">
+                                {{ $form->categories[$q['categorie']] ?? $q['categorie'] }}
                                 @if (!$q['active'])
                                     <span class="px-1.5 py-0.5 rounded text-[8px] font-bold bg-red-500/20 text-red-400 border border-red-500/30">DÉSACTIVÉE</span>
                                 @endif
                             </p>
                             <p class="text-[13px] font-medium leading-snug line-clamp-2"
-                                style="color: {{ $selectedId === $q['id'] && !$isNew ? 'white' : 'rgba(255,255,255,0.75)' }}">
+                                style="color: {{ $form->selectedId === $q['id'] && !$form->isNew ? 'white' : 'rgba(255,255,255,0.75)' }}">
                                 {{ $q['intitule'] ?: '(sans intitulé)' }}
                             </p>
                         </div>
@@ -113,7 +112,7 @@
 
     <main class="flex-1 overflow-y-auto" style="background: #f0f2f8;">
 
-        @if ($selectedId === null && !$isNew)
+        @if ($form->selectedId === null && !$form->isNew)
 
         <div class="flex flex-col items-center justify-center h-full gap-4">
             <div class="w-20 h-20 rounded-2xl flex items-center justify-center" style="background: rgba(34,42,96,0.07);">
@@ -134,14 +133,14 @@
             <div class="flex items-center justify-between mb-2">
                 <div>
                     <div class="flex items-center gap-2 mb-1.5">
-                        @if ($isNew)
+                        @if ($form->isNew)
                         <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-sv-green">
                             <span class="w-1.5 h-1.5 rounded-full bg-sv-green animate-pulse"></span>
                             Nouvelle question
                         </span>
                         @else
                         <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest" style="color: rgba(34,42,96,0.4);">
-                            <span class="font-mono">Édition — #{{ $selectedId }}</span>
+                            <span class="font-mono">Édition — #{{ $form->selectedId }}</span>
                         </span>
                         @endif
                     </div>
@@ -166,24 +165,24 @@
                 </div>
                 <div class="p-6 space-y-4">
                     <div>
-                        <textarea wire:model="intitule" rows="3"
+                        <textarea wire:model="form.intitule" rows="3"
                             placeholder="Saisissez l'intitulé de la question…"
                             class="w-full rounded-xl px-4 py-3.5 text-sm font-medium text-sv-blue placeholder-gray-300 outline-none resize-none leading-relaxed transition-all"
                             style="background: #f7f8fc; border: 1.5px solid rgba(34,42,96,0.1);"
                             onfocus="this.style.border='1.5px solid #16987C'; this.style.background='white'; this.style.boxShadow='0 0 0 4px rgba(22,152,124,0.08)'"
                             onblur="this.style.border='1.5px solid rgba(34,42,96,0.1)'; this.style.background='#f7f8fc'; this.style.boxShadow='none'"></textarea>
-                        @error('intitule') <p class="text-red-500 text-xs mt-2 font-medium">{{ $message }}</p> @enderror
+                        @error('form.intitule') <p class="text-red-500 text-xs mt-2 font-medium">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
                         <label class="block text-[11px] font-bold text-sv-blue uppercase tracking-widest opacity-50 mb-2">Catégorie</label>
                         <div class="relative">
-                            <select wire:model="categorie"
+                            <select wire:model="form.categorie"
                                 class="w-full appearance-none rounded-xl px-4 py-3 pr-10 text-sm font-semibold text-sv-blue outline-none transition-all cursor-pointer"
                                 style="background: #f7f8fc; border: 1.5px solid rgba(34,42,96,0.1);"
                                 onfocus="this.style.border='1.5px solid #16987C'; this.style.boxShadow='0 0 0 4px rgba(22,152,124,0.08)'"
                                 onblur="this.style.border='1.5px solid rgba(34,42,96,0.1)'; this.style.boxShadow='none'">
-                                @foreach ($categories as $value => $label)
+                                @foreach ($form->categories as $value => $label)
                                     <option value="{{ $value }}">{{ $label }}</option>
                                 @endforeach
                             </select>
@@ -191,7 +190,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </div>
-                        @error('categorie') <p class="text-red-500 text-xs mt-2 font-medium">{{ $message }}</p> @enderror
+                        @error('form.categorie') <p class="text-red-500 text-xs mt-2 font-medium">{{ $message }}</p> @enderror
                     </div>
                 </div>
             </div>
@@ -202,11 +201,11 @@
                     <p class="text-[11px] font-bold text-sv-blue uppercase tracking-[0.15em] opacity-60">Image <span class="normal-case tracking-normal font-medium opacity-60">(optionnelle)</span></p>
                 </div>
                 <div class="p-6">
-                    <input type="file" id="image-input" wire:model="newImage" accept="image/*" class="hidden">
+                    <input type="file" id="image-input" wire:model="form.newImage" accept="image/*" class="hidden">
 
-                    @if ($newImage)
+                    @if ($form->newImage)
                     <div class="relative rounded-xl overflow-hidden" style="border: 2px solid rgba(22,152,124,0.35); background: #f7f8fc;">
-                        <img src="{{ $newImage->temporaryUrl() }}" alt="Aperçu" class="w-full max-h-64 object-contain">
+                        <img src="{{ $form->newImage->temporaryUrl() }}" alt="Aperçu" class="w-full max-h-64 object-contain">
                         <button type="button" wire:click="supprimerImage"
                             class="absolute top-3 right-3 w-8 h-8 bg-red-500 text-white rounded-lg flex items-center justify-center transition-all hover:bg-red-600"
                             style="box-shadow: 0 2px 8px rgba(239,68,68,0.4);">
@@ -216,9 +215,9 @@
                         </button>
                     </div>
 
-                    @elseif ($existingImage && !$removeImage)
+                    @elseif ($form->existingImage && !$form->removeImage)
                     <div class="relative rounded-xl overflow-hidden" style="border: 1.5px solid rgba(34,42,96,0.1); background: #f7f8fc;">
-                        <img src="{{ Storage::url($existingImage) }}" alt="Image actuelle" class="w-full max-h-64 object-contain">
+                        <img src="{{ Storage::url($form->existingImage) }}" alt="Image actuelle" class="w-full max-h-64 object-contain">
                         <button type="button" wire:click="supprimerImage"
                             class="absolute top-3 right-3 w-8 h-8 bg-red-500 text-white rounded-lg flex items-center justify-center transition-all hover:bg-red-600"
                             style="box-shadow: 0 2px 8px rgba(239,68,68,0.4);"
@@ -247,7 +246,7 @@
                     </button>
                     @endif
 
-                    @error('newImage') <p class="text-red-500 text-xs mt-3 font-medium">{{ $message }}</p> @enderror
+                    @error('form.newImage') <p class="text-red-500 text-xs mt-3 font-medium">{{ $message }}</p> @enderror
                 </div>
             </div>
 
@@ -260,7 +259,7 @@
                     <div class="flex items-center gap-2.5">
                         <label class="text-[11px] font-semibold" style="color: rgba(34,42,96,0.45);">Nombre :</label>
                         <div class="relative">
-                            <select wire:model.live="nbReponses"
+                            <select wire:model.live="form.nbReponses"
                                 class="appearance-none text-sm font-bold text-sv-blue rounded-lg pl-3 pr-7 py-1.5 outline-none cursor-pointer transition-all"
                                 style="background: white; border: 1.5px solid rgba(34,42,96,0.12);">
                                 @for ($i = 2; $i <= 8; $i++)
@@ -282,7 +281,7 @@
                         Cliquez sur la case verte pour marquer la bonne réponse. Ajustez le poids de chaque option.
                     </div>
 
-                    @foreach ($choix as $i => $reponse)
+                    @foreach ($form->choix as $i => $reponse)
                     <div class="rounded-xl p-3.5 transition-all"
                          style="{{ ($reponse['poids'] ?? '0') === '1'
                             ? 'background: rgba(22,152,124,0.06); border: 1.5px solid rgba(22,152,124,0.25);'
@@ -311,7 +310,7 @@
                             </button>
 
                             <input type="text"
-                                wire:model="choix.{{ $i }}.texte"
+                                wire:model="form.choix.{{ $i }}.texte"
                                 placeholder="Réponse {{ chr(65 + $i) }}…"
                                 class="flex-1 rounded-lg px-3.5 py-2 text-sm font-medium text-sv-blue placeholder-gray-300 outline-none transition-all"
                                 style="background: white; border: 1.5px solid rgba(34,42,96,0.1);"
@@ -328,7 +327,7 @@
                                     :                  'background: rgba(34,42,96,0.05); border-color: rgba(34,42,96,0.12); color: rgba(34,42,96,0.45);')));
                             @endphp
                             <div class="relative shrink-0">
-                                <select wire:model="choix.{{ $i }}.poids"
+                                <select wire:model="form.choix.{{ $i }}.poids"
                                     class="appearance-none text-xs font-bold border-2 rounded-lg pl-2.5 pr-6 py-2 outline-none cursor-pointer transition-all"
                                     style="{{ $poidsStyle }}">
                                     @foreach ($poidsOptions as $val => $label)
@@ -340,7 +339,7 @@
                                 </svg>
                             </div>
                         </div>
-                        @error('choix.' . $i . '.texte')
+                        @error('form.choix.' . $i . '.texte')
                             <p class="text-red-500 text-xs mt-2 ml-16 font-medium">{{ $message }}</p>
                         @enderror
                     </div>
@@ -382,6 +381,7 @@
         </form>
         @endif
     </main>
+
 @if ($showPreview)
 <div class="fixed inset-0 z-50 min-h-screen bg-white flex flex-col">
     <div class="shrink-0 px-6 py-4 flex items-center gap-4" style="border-bottom: 1px solid rgba(34,42,96,0.08);">
@@ -399,17 +399,17 @@
     </div>
     <div class="flex-1 overflow-hidden">
         @php
-            $hasImage = $newImage || ($existingImage && !$removeImage);
+            $hasImage = $form->newImage || ($form->existingImage && !$form->removeImage);
         @endphp
         @if ($hasImage)
         <div class="h-full grid grid-cols-2">
 
             <div class="h-full bg-gray-50 border-r border-gray-100 flex items-center justify-center p-6">
-                @if ($newImage)
-                    <img src="{{ $newImage->temporaryUrl() }}" alt="Illustration"
+                @if ($form->newImage)
+                    <img src="{{ $form->newImage->temporaryUrl() }}" alt="Illustration"
                         class="max-w-full max-h-full object-contain rounded-xl shadow-lg">
                 @else
-                    <img src="{{ Storage::url($existingImage) }}" alt="Illustration"
+                    <img src="{{ Storage::url($form->existingImage) }}" alt="Illustration"
                         class="max-w-full max-h-full object-contain rounded-xl shadow-lg">
                 @endif
             </div>
@@ -418,10 +418,10 @@
                     Prévisualisation
                 </p>
                 <p class="text-xl font-semibold text-[#1a2340] leading-relaxed mb-8">
-                    {{ $intitule ?: '(aucun intitulé)' }}
+                    {{ $form->intitule ?: '(aucun intitulé)' }}
                 </p>
                 <div class="space-y-2.5">
-                    @foreach ($choix as $i => $reponse)
+                    @foreach ($form->choix as $i => $reponse)
                     @if (trim($reponse['texte']) !== '')
                     <div class="w-full text-left flex items-center gap-4 px-5 py-3 rounded-xl border-2 border-gray-200 bg-gray-100">
                         <div class="w-5 h-5 shrink-0 rounded-full border-2 border-gray-400 bg-white"></div>
@@ -441,10 +441,10 @@
                     Prévisualisation
                 </h2>
                 <p class="text-2xl md:text-3xl font-semibold text-[#1a2340] text-center leading-relaxed mb-10 max-w-2xl">
-                    {{ $intitule ?: '(aucun intitulé)' }}
+                    {{ $form->intitule ?: '(aucun intitulé)' }}
                 </p>
                 <div class="w-full space-y-3">
-                    @foreach ($choix as $i => $reponse)
+                    @foreach ($form->choix as $i => $reponse)
                     @if (trim($reponse['texte']) !== '')
                     <div class="w-full text-left flex items-center gap-4 px-6 py-4 rounded-xl border-2 border-gray-200 bg-gray-100">
                         <div class="w-5 h-5 shrink-0 rounded-full border-2 border-gray-400 bg-white"></div>
