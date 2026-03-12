@@ -19,7 +19,7 @@
         href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
         rel="stylesheet">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/charts.js', 'resources/js/password-toggle.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/charts.js', 'resources/js/password-toggle.js', 'resources/js/tracking.js'])
     @livewireStyles
 
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
