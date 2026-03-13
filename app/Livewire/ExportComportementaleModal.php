@@ -15,6 +15,9 @@ use Livewire\Attributes\Reactive;
 
 class ExportComportementaleModal extends Component
 {
+    // #[Reactive] permet à Livewire de re-rendre ce composant automatiquement
+    // quand ces valeurs changent dans le composant parent, sans déclencher
+    // un aller-retour réseau supplémentaire depuis ce composant enfant.
     #[Reactive]
     public array  $selectedAges     = [];
 
@@ -41,12 +44,17 @@ class ExportComportementaleModal extends Component
 
     private function baseQuery()
     {
+        // On joint passations et beneficiaires ici plutôt que dans chaque méthode
+        // pour centraliser la logique de filtrage : un seul endroit à modifier
+        // si le schéma évolue.
         $query = Tracking::query()
             ->join('passations', 'tracking.id_passation', '=', 'passations.id')
             ->join('beneficiaires', 'passations.id_beneficiaire', '=', 'beneficiaires.id')
             ->whereNotNull('tracking.id_passation')
             ->where('passations.consentement_recherche', 1);
 
+        // Chaque filtre n'est appliqué que s'il contient des valeurs, ce qui permet
+        // d'éviter un WHERE IN () vide qui retournerait zéro résultat de façon silencieuse.
         if (!empty($this->selectedAges))     $query->whereIn('beneficiaires.age',     $this->selectedAges);
         if (!empty($this->selectedGenres))   $query->whereIn('beneficiaires.genre',   $this->selectedGenres);
         if (!empty($this->selectedCsps))     $query->whereIn('beneficiaires.csp',     $this->selectedCsps);
@@ -83,6 +91,8 @@ class ExportComportementaleModal extends Component
 
     private function buildTableau(): array
     {
+        // On agrège directement en base plutôt qu'en PHP pour tirer parti de l'index
+        // sur id_question et éviter de rapatrier des milliers de lignes brutes.
         $byQuestion = $this->baseQuery()
             ->select(
                 'tracking.id_question',
@@ -99,6 +109,8 @@ class ExportComportementaleModal extends Component
             ->get()
             ->keyBy('id_question');
 
+        // On compte les passations distinctes pour afficher un total cohérent :
+        // une même passation peut avoir plusieurs lignes de tracking
         $totalPassations = $this->baseQuery()
             ->distinct('tracking.id_passation')
             ->count('tracking.id_passation');
@@ -134,6 +146,10 @@ class ExportComportementaleModal extends Component
 
         return response()->streamDownload(function () use ($data) {
             $f = fopen('php://output', 'w');
+
+            // Le BOM UTF-8 est indispensable pour qu'Excel (Windows) détecte
+            // automatiquement l'encodage et n'affiche pas de caractères corrompus
+            // sur les accents et caractères spéciaux.
             fprintf($f, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
             fputcsv($f, ['EXPORT — STATISTIQUES COMPORTEMENTALES'], ';');
@@ -150,6 +166,9 @@ class ExportComportementaleModal extends Component
             ], ';');
 
             foreach ($data['rows'] as $r) {
+                // Le flag $noData évite d'afficher un zéro trompeur : une question
+                // non tentée n'a pas un score de 0, elle n'a tout simplement pas
+                // de données, ce que "N/A" traduit sans ambiguïté.
                 $noData = $r['nb_occurrences'] === 0;
                 fputcsv($f, [
                     $r['num'], $r['id'], $r['categorie'], $r['intitule'],
@@ -185,6 +204,7 @@ class ExportComportementaleModal extends Component
         $spreadsheet = new Spreadsheet();
         $spreadsheet->getProperties()->setTitle('Tracking Comportemental');
 
+        // --- Feuille "Résumé" ---
         $sr = $spreadsheet->getActiveSheet()->setTitle('Résumé');
         $sr->mergeCells('A1:C1');
         $sr->setCellValue('A1', 'EXPORT — STATISTIQUES COMPORTEMENTALES');
@@ -204,6 +224,7 @@ class ExportComportementaleModal extends Component
         $sr->getColumnDimension('A')->setWidth(22);
         $sr->getColumnDimension('B')->setWidth(45);
 
+        // --- Feuille "Par question" ---
         $sd = $spreadsheet->createSheet()->setTitle('Par question');
         $headers = [
             'N°', 'ID', 'Catégorie', 'Intitulé',
@@ -251,11 +272,15 @@ class ExportComportementaleModal extends Component
             $sd->getColumnDimensionByColumn($col + 1)->setWidth($width);
         }
 
+        // --- Feuille "Top hésitation" ---
         $st = $spreadsheet->createSheet()->setTitle('Top hésitation');
         $st->setCellValue('A1', 'Question')->setCellValue('B1', 'Latence moy. (ms)');
         $st->getStyle('A1:B1')->applyFromArray($headerStyle);
         $row = 2;
         foreach (collect($data['rows'])->where('nb_occurrences', '>', 0)->sortByDesc('avg_latence')->take(10) as $r) {
+            // mb_strimwidth garantit que la troncature respecte les caractères
+            // multi-octets (accents, etc.) pour éviter un intitulé corrompu en
+            // coupant au milieu d'un caractère UTF-8.
             $st->setCellValue("A{$row}", 'Q' . $r['id'] . ' — ' . mb_strimwidth($r['intitule'], 0, 50, '…'))
                ->setCellValue("B{$row}", $r['avg_latence']);
             $row++;
@@ -263,6 +288,7 @@ class ExportComportementaleModal extends Component
         $st->getColumnDimension('A')->setWidth(55);
         $st->getColumnDimension('B')->setWidth(20);
 
+        // --- Feuille "Top incertitude" ---
         $si = $spreadsheet->createSheet()->setTitle('Top incertitude');
         $si->setCellValue('A1', 'Question')->setCellValue('B1', 'Changements moy.');
         $si->getStyle('A1:B1')->applyFromArray($headerStyle);
@@ -278,6 +304,9 @@ class ExportComportementaleModal extends Component
         $spreadsheet->setActiveSheetIndex(0);
 
         return response()->streamDownload(function () use ($spreadsheet) {
+            // streamDownload évite de stocker le fichier sur le disque du serveur,
+            // ce qui est préférable pour éviter l'accumulation de fichiers temporaires
+            // et pour ne pas exposer de données sensibles dans le filesystem.
             (new Xlsx($spreadsheet))->save('php://output');
         }, $filename, [
             'Content-Type'        => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

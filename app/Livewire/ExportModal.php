@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Auth;
 
 class ExportModal extends Component
 {
+        // #[Reactive] permet à Livewire de re-rendre ce composant automatiquement
+    // quand ces valeurs changent dans le composant parent, sans déclencher
+    // un aller-retour réseau supplémentaire depuis ce composant enfant.
     #[Reactive]
     public array  $selectedAges     = [];
 
@@ -75,6 +78,8 @@ class ExportModal extends Component
             'J'      => $query->whereDate('passations.created_at', $now->toDateString()),
             'M'      => $query->whereMonth('passations.created_at', $now->month)->whereYear('passations.created_at', $now->year),
             'A'      => $query->whereYear('passations.created_at', $now->year),
+            // Les heures explicites capturent toute la journée de fin,
+            // un whereBetween sur DATETIME s'arrêterait sinon à 00:00:00 ce jour-là.
             'Custom' => $query->whereBetween('passations.created_at', [
                              $this->customStartDate . ' 00:00:00',
                              $this->customEndDate   . ' 23:59:59',
@@ -107,6 +112,8 @@ class ExportModal extends Component
         $ageMap = [];
         foreach ($passations as $p) {
             $key    = $labelsMap[$p->age] ?? $p->age;
+            // Le score est stocké en JSON dans la BDD, on le décode seulement si nécessaire
+            // pour ne pas risquer un double-décodage si Eloquent l'a déjà casté.
             $scores = is_string($p->score) ? json_decode($p->score, true) : $p->score;
             $total  = is_array($scores) ? array_sum($scores) : 0;
             $ageMap[$key][] = $total;
@@ -135,6 +142,8 @@ class ExportModal extends Component
         return compact('passations', 'genreMap', 'cspMap', 'ageAvg', 'dimAvg', 'dimKeys', 'dimLabels');
     }
 
+    // Centraliser les libellés ici évite qu'une valeur brute de BDD (ex: 'sans_activite')
+    // se retrouve dans un fichier téléchargé sans traduction.
     private function getLabelsMap(): array
     {
         return [
@@ -174,6 +183,7 @@ class ExportModal extends Component
 
         return response()->streamDownload(function () use ($d, $labelsMap, $isAdmin) {
             $f = fopen('php://output', 'w');
+            // BOM nécessaire pour qu'Excel (Windows) détecte l'UTF-8 et n'affiche pas d'accents corrompus.
             fprintf($f, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
             fputcsv($f, ['EXPORT STATISTIQUES'], ';');
@@ -214,6 +224,8 @@ class ExportModal extends Component
 
             fputcsv($f, ['--- DÉTAIL DES PASSATIONS ---'], ';');
 
+            // L'admin n'exporte pas les noms/prénoms car il travaille sur des données
+            // anonymisées à l'échelle nationale, contrairement au travailleur qui suit ses propres bénéficiaires.
             $headers = ['ID'];
             if (!$isAdmin) {
                 $headers[] = 'Prénom';

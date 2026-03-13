@@ -47,7 +47,7 @@ class StatistiquesComportementale extends Component
     public array $availableCsps     = [];
     public array $availableDiplomes = [];
 
-    public string $sortField = 'num';
+    public string $sortField     = 'num';
     public string $sortDirection = 'asc';
 
     public function sortBy(string $field): void
@@ -55,7 +55,7 @@ class StatistiquesComportementale extends Component
         if ($this->sortField === $field) {
             $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
         } else {
-            $this->sortField = $field;
+            $this->sortField     = $field;
             $this->sortDirection = 'asc';
         }
     }
@@ -74,11 +74,22 @@ class StatistiquesComportementale extends Component
         $this->availableDiplomes = Beneficiaire::whereNotNull('diplome')->distinct()->orderBy('diplome')->pluck('diplome')->toArray();
         $this->customStartDate   = Carbon::now()->startOfMonth()->toDateString();
         $this->customEndDate     = Carbon::now()->endOfMonth()->toDateString();
-        $this->availableModes = Tracking::query()->join('passations', 'tracking.id_passation', '=', 'passations.id')->whereNotNull('passations.mode_ordre')->distinct()->pluck('passations.mode_ordre')->toArray();
+
+        // On récupère les modes depuis les passations réellement enregistrées plutôt
+        // que depuis une liste statique, pour ne pas proposer un filtre sur un mode
+        // qui n'a jamais été utilisé.
+        $this->availableModes = Tracking::query()
+            ->join('passations', 'tracking.id_passation', '=', 'passations.id')
+            ->whereNotNull('passations.mode_ordre')
+            ->distinct()
+            ->pluck('passations.mode_ordre')
+            ->toArray();
     }
 
     public function updated(string $property): void
     {
+        // unset() invalide le cache de la propriété #[Computed] pour forcer
+        // son recalcul lors du prochain accès, après chaque changement de filtre.
         unset($this->trackingData);
         $this->dispatch('update-charts', data: $this->trackingData);
     }
@@ -179,20 +190,20 @@ class StatistiquesComportementale extends Component
 
         $tableau = [];
         foreach ($questions as $idx => $q) {
-            $row = $byQuestion->get($q->id);
+            $row       = $byQuestion->get($q->id);
             $tableau[] = [
-                'num'                => $idx + 1,
-                'id'                 => $q->id,
-                'intitule'           => mb_strimwidth($q->intitule ?? '', 0, 60, '…'),
-                'categorie'          => $q->categorie ?? '—',
-                'avg_temps'          => $row ? round($row->avg_temps) : null,
-                'avg_latence'        => $row ? round($row->avg_latence) : null,
-                'avg_clics'          => $row ? round($row->avg_clics, 1) : null,
-                'avg_changements'    => $row ? round($row->avg_changements, 2) : null,
-                'avg_hors_cible'     => $row ? round($row->avg_hors_cible, 1) : null,
-                'avg_pauses'         => $row ? round($row->avg_pauses, 1) : null,
-                'nb_occurrences'     => $row ? $row->nb_occurrences : 0,
-                'avg_score'          => $row ? round($row->avg_score, 2) : null,
+                'num'             => $idx + 1,
+                'id'              => $q->id,
+                'intitule'        => mb_strimwidth($q->intitule ?? '', 0, 60, '…'),
+                'categorie'       => $q->categorie ?? '—',
+                'avg_temps'       => $row ? round($row->avg_temps) : null,
+                'avg_latence'     => $row ? round($row->avg_latence) : null,
+                'avg_clics'       => $row ? round($row->avg_clics, 1) : null,
+                'avg_changements' => $row ? round($row->avg_changements, 2) : null,
+                'avg_hors_cible'  => $row ? round($row->avg_hors_cible, 1) : null,
+                'avg_pauses'      => $row ? round($row->avg_pauses, 1) : null,
+                'nb_occurrences'  => $row ? $row->nb_occurrences : 0,
+                'avg_score'       => $row ? round($row->avg_score, 2) : null,
             ];
         }
 
@@ -245,38 +256,39 @@ class StatistiquesComportementale extends Component
         ];
     }
 
-
     public function render()
     {
+        // labelsMap est résolu ici et non dans une méthode dédiée car il n'est utilisé
+        // que pour l'affichage des filtres en vue, sans être partagé avec l'export.
         $labelsMap = [
-            'moins_18' => 'Moins de 18 ans',
-            '18_25' => '18 – 25 ans',
-            '26_35' => '26 – 35 ans',
-            '36_45' => '36 – 45 ans',
-            '46_55' => '46 – 55 ans',
-            '56_65' => '56 – 65 ans',
-            'plus_65' => 'Plus de 65 ans',
-            'homme' => 'Homme',
-            'femme' => 'Femme',
-            'autre' => 'Autre / Non-binaire',
-            'non_precise' => 'Non précisé',
-            'aucun' => 'Aucun diplôme',
-            'brevet' => 'Brevet (DNB)',
-            'cap_bep' => 'CAP / BEP',
-            'bac' => 'Baccalauréat',
-            'bac2' => 'Bac +2',
-            'bac3' => 'Bac +3',
-            'bac5' => 'Bac +5',
-            'doctorat' => 'Doctorat',
-            'agriculteur' => 'Agriculteur',
-            'artisan' => 'Artisan / Commerçant',
-            'cadre' => 'Cadre',
+            'moins_18'      => 'Moins de 18 ans',
+            '18_25'         => '18 – 25 ans',
+            '26_35'         => '26 – 35 ans',
+            '36_45'         => '36 – 45 ans',
+            '46_55'         => '46 – 55 ans',
+            '56_65'         => '56 – 65 ans',
+            'plus_65'       => 'Plus de 65 ans',
+            'homme'         => 'Homme',
+            'femme'         => 'Femme',
+            'autre'         => 'Autre / Non-binaire',
+            'non_precise'   => 'Non précisé',
+            'aucun'         => 'Aucun diplôme',
+            'brevet'        => 'Brevet (DNB)',
+            'cap_bep'       => 'CAP / BEP',
+            'bac'           => 'Baccalauréat',
+            'bac2'          => 'Bac +2',
+            'bac3'          => 'Bac +3',
+            'bac5'          => 'Bac +5',
+            'doctorat'      => 'Doctorat',
+            'agriculteur'   => 'Agriculteur',
+            'artisan'       => 'Artisan / Commerçant',
+            'cadre'         => 'Cadre',
             'intermediaire' => 'Prof. intermédiaire',
-            'employe' => 'Employé',
-            'ouvrier' => 'Ouvrier',
-            'retraite' => 'Retraité',
+            'employe'       => 'Employé',
+            'ouvrier'       => 'Ouvrier',
+            'retraite'      => 'Retraité',
             'sans_activite' => 'Sans activité',
-            'autre' => 'Autre',
+            'autre'         => 'Autre',
         ];
 
         return view('livewire.statistiques-comportementale', compact('labelsMap'));

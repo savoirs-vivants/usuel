@@ -7,7 +7,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
-use App\Livewire\Forms\QuestionForm; 
+use App\Livewire\Forms\QuestionForm;
 
 #[Layout('layouts.app')]
 #[Title('Usuel - Gestion des questions')]
@@ -34,6 +34,8 @@ class GestionQuestions extends Component
     {
         $this->loadQuestions();
 
+        // On pré-sélectionne la première question pour que l'interface
+        // ne s'affiche jamais dans un état vide sans formulaire visible.
         if (!empty($this->questions)) {
             $this->selectQuestion($this->questions[0]['id']);
         }
@@ -41,12 +43,16 @@ class GestionQuestions extends Component
 
     private function loadQuestions(): void
     {
+        // On ne sélectionne que les colonnes utiles à la liste latérale pour éviter
+        // de charger les champs lourds (image, choix JSON...) inutilement.
         $this->questions = Question::orderBy('id')
             ->get(['id', 'intitule', 'categorie', 'active'])
             ->map(fn($q) => [
                 'id'        => $q->id,
                 'intitule'  => $q->intitule ?? '',
                 'categorie' => $q->categorie ?? '',
+                // Cast explicite en bool pour éviter qu'un "0"/"1" de la BDD
+                // soit traité comme truthy/falsy de façon incohérente dans Blade.
                 'active'    => (bool) $q->active,
             ])
             ->toArray();
@@ -76,6 +82,9 @@ class GestionQuestions extends Component
 
     public function updatedFormNbReponses($value): void
     {
+        // On contraint la valeur entre 2 et 8 ici plutôt que seulement en validation
+        // pour que l'UI se mette à jour immédiatement pendant la saisie, sans attendre
+        // un submit qui afficherait une erreur après coup.
         $target = max(2, min(8, (int)$value));
         $this->form->nbReponses = $target;
 

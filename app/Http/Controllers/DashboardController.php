@@ -24,11 +24,17 @@ class DashboardController extends Controller
         }
 
 
+        // --- 2. PRÉPARATION DES PÉRIODES TEMPORELLES ---
         $now        = now();
         $debutMois  = $now->copy()->startOfMonth();
         $debutMoisD = $now->copy()->subMonth()->startOfMonth();
         $finMoisD   = $now->copy()->subMonth()->endOfMonth();
 
+
+        // --- 3. CALCUL DES INDICATEURS CLÉS (KPI) ---
+        // IMPORTANT : On utilise (clone $baseQuery) à chaque fois.
+        // Sans le clone, le premier "where" resterait attaché à $baseQuery et
+        // fausserait les calculs suivants.
 
         $passationsMois     = (clone $baseQuery)->where('created_at', '>=', $debutMois)->count();
         $passationsMoisPrec = (clone $baseQuery)->whereBetween('created_at', [$debutMoisD, $finMoisD])->count();
@@ -37,6 +43,7 @@ class DashboardController extends Controller
         $totalBeneficiaires = (clone $baseQuery)->distinct('id_beneficiaire')->count('id_beneficiaire');
 
 
+        // --- 4. TRAITEMENT DES SCORES (LOGIQUE JSON) ---
         $tousLesScores = (clone $baseQuery)->pluck('score')->map(function ($s) {
             $arr = is_string($s) ? json_decode($s, true) : $s;
             return array_sum($arr ?? []);
@@ -46,7 +53,6 @@ class DashboardController extends Controller
             ? round($tousLesScores->avg(), 1)
             : null;
 
-
         $repartitionScores = [
             $tousLesScores->filter(fn($v) => $v < 0)->count(),
             $tousLesScores->filter(fn($v) => $v >= 0 && $v <= 15)->count(),
@@ -54,12 +60,14 @@ class DashboardController extends Controller
         ];
 
 
+        // --- 5. RÉCUPÉRATION DES DERNIÈRES ACTIVITÉS ---
         $dernieresPassations = (clone $baseQuery)->with(['beneficiaire', 'user'])
             ->orderByDesc('created_at')
             ->take(5)
             ->get();
 
 
+        // --- 6. PRÉPARATION DU GRAPHIQUE BARRES (6 DERNIERS MOIS) ---
         $labelsBarChart = [];
         $dataBarChart   = [];
 

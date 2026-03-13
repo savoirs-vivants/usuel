@@ -44,7 +44,7 @@ class StatistiquesPublic extends Component
     {
         $ageOrder = ['moins_18', '18_25', '26_35', '36_45', '46_55', '56_65', 'plus_65'];
         $rawAges  = Beneficiaire::whereNotNull('age')->distinct()->pluck('age')->toArray();
-        $this->availableAges = array_values(array_filter($ageOrder, fn($a) => in_array($a, $rawAges)));
+        $this->availableAges     = array_values(array_filter($ageOrder, fn($a) => in_array($a, $rawAges)));
         $this->availableGenres   = Beneficiaire::whereNotNull('genre')->distinct()->orderBy('genre')->pluck('genre')->toArray();
         $this->availableCsps     = Beneficiaire::whereNotNull('csp')->distinct()->orderBy('csp')->pluck('csp')->toArray();
         $this->availableDiplomes = Beneficiaire::whereNotNull('diplome')->distinct()->orderBy('diplome')->pluck('diplome')->toArray();
@@ -55,6 +55,8 @@ class StatistiquesPublic extends Component
 
     public function updated(string $property): void
     {
+        // On ignore les changements de timeRange ici car setTimeRange() les gère déjà,
+        // évitant un double dispatch qui enverrait les données de chart deux fois.
         if ($property !== 'timeRange') {
             unset($this->chartData);
             $this->dispatch('update-charts', data: $this->chartData);
@@ -103,7 +105,6 @@ class StatistiquesPublic extends Component
             $query->where('passations.consentement_recherche', 1);
         }
 
-
         if (!empty($this->selectedAges))     $query->whereIn('beneficiaires.age',     $this->selectedAges);
         if (!empty($this->selectedGenres))   $query->whereIn('beneficiaires.genre',   $this->selectedGenres);
         if (!empty($this->selectedCsps))     $query->whereIn('beneficiaires.csp',     $this->selectedCsps);
@@ -133,12 +134,10 @@ class StatistiquesPublic extends Component
             '46_55'         => '46-55',
             '56_65'         => '56-65',
             'plus_65'       => '> 65 ans',
-
             'homme'         => 'Homme',
             'femme'         => 'Femme',
             'autre'         => 'Autre / Non-binaire',
             'non_precise'   => 'Non précisé',
-
             'agriculteur'   => 'Agriculteur exploitant',
             'artisan'       => 'Artisan / Commerçant',
             'cadre'         => 'Cadre',
@@ -209,7 +208,9 @@ class StatistiquesPublic extends Component
         }
 
         foreach ($dimKeys as $key) {
-            $moyenne     = $validPassations > 0 ? ($sums[$key] / $validPassations) : 0;
+            $moyenne = $validPassations > 0 ? ($sums[$key] / $validPassations) : 0;
+            // Le +5 recentre le score autour de 0 pour l'affichage radar :
+            // les scores bruts sont négatifs à neutres, le décalage les rend lisibles sur un axe positif.
             $dimScores[] = round($moyenne + 5, 2);
         }
 
@@ -236,12 +237,10 @@ class StatistiquesPublic extends Component
             '46_55'         => '46 – 55 ans',
             '56_65'         => '56 – 65 ans',
             'plus_65'       => 'Plus de 65 ans',
-
             'homme'         => 'Homme',
             'femme'         => 'Femme',
             'autre'         => 'Autre / Non-binaire',
             'non_precise'   => 'Non précisé',
-
             'aucun'         => 'Aucun diplôme',
             'brevet'        => 'Brevet (DNB)',
             'cap_bep'       => 'CAP / BEP',
@@ -250,7 +249,6 @@ class StatistiquesPublic extends Component
             'bac3'          => 'Bac +3 (Licence…)',
             'bac5'          => 'Bac +5 (Master…)',
             'doctorat'      => 'Doctorat (Bac +8)',
-
             'agriculteur'   => 'Agriculteur exploitant',
             'artisan'       => 'Artisan / Commerçant',
             'cadre'         => 'Cadre',

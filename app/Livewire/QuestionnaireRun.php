@@ -17,6 +17,8 @@ use Livewire\Attributes\Title;
 #[Title('Usuel - Usuel - Passation du questionnaire')]
 class QuestionnaireRun extends Component
 {
+    // #[Url] permet de reprendre la passation à la bonne question si l'utilisateur
+    // rafraîchit la page, sans perdre sa progression.
     #[Url(as: 'step')]
     public int    $currentIndex   = 0;
     public int    $totalQuestions = 0;
@@ -52,6 +54,8 @@ class QuestionnaireRun extends Component
 
         $progress = session()->get('questionnaire_progress');
 
+        // On restaure la progression existante pour gérer les rechargements de page
+        // ou les coupures réseau sans repartir de zéro.
         if ($progress && count($progress['questionIds']) > 0) {
             $this->currentIndex = $progress['currentIndex'];
             $this->scores       = $progress['scores'];
@@ -104,6 +108,8 @@ class QuestionnaireRun extends Component
 
     private function modeSemiAleatoire(array $ids): array
     {
+        // On fixe la première et la dernière question pour assurer une cohérence
+        // d'entrée/sortie du questionnaire, seul le milieu est mélangé.
         if (count($ids) <= 2) {
             return $ids;
         }
@@ -126,6 +132,8 @@ class QuestionnaireRun extends Component
             return $questions->pluck('id')->toArray();
         }
 
+        // Le modulo sur le nombre total de passations fait tourner l'ordre des catégories
+        // à chaque nouvelle passation, équilibrant l'exposition sur l'ensemble des utilisateurs.
         $offset   = Passation::count() % $n;
 
         $rotated  = array_merge(
@@ -167,6 +175,8 @@ class QuestionnaireRun extends Component
             $this->insererTracking($tracking);
         }
 
+        // 'E' est la lettre réservée pour "Je ne sais pas", traitée comme une réponse
+        // neutre par getPoids() sans impacter positivement ou négativement le score.
         $this->enregistrerReponse('E');
     }
 
@@ -197,10 +207,12 @@ class QuestionnaireRun extends Component
     {
         if (empty($data) || !isset($data['id_question'])) return;
 
+        // id_passation est null à l'insertion car la passation n'existe pas encore ;
+        // elle sera rattachée en masse dans terminer() une fois l'ID connu.
         $row = Tracking::create([
             'id_passation'        => null,
             'id_question'         => (int)   ($data['id_question']         ?? 0),
-            'position'            => (int)   ($data['position'] + 1           ?? $this->currentIndex + 1),
+            'position'            => (int)   ($data['position'] + 1        ?? $this->currentIndex + 1),
             'temps_total_ms'      => (float) ($data['temps_total_ms']      ?? 0),
             'latence_ms'          => (float) ($data['latence_ms']          ?? 0),
             'nb_clics'            => (int)   ($data['nb_clics']            ?? 0),
@@ -221,6 +233,8 @@ class QuestionnaireRun extends Component
         $langueChoisie         = session('langue', 'fr');
         $audioChoisi           = (bool) session('audio', false);
 
+        // On purge la session avant de créer la passation pour éviter qu'un rechargement
+        // de page après une erreur réseau ne crée une deuxième passation en doublon.
         session()->forget(['beneficiaire_id', 'consentement_recherche', 'questionnaire_progress', 'langue', 'audio']);
 
         $passation = Passation::create([
@@ -240,6 +254,8 @@ class QuestionnaireRun extends Component
                 ->update(['id_passation' => $passation->id]);
         }
 
+        // flash() pour que la page de résultat puisse vérifier
+        // que l'accès est légitime, sans laisser la valeur en session indéfiniment.
         session()->flash('autoriser_resultat', $passation->id);
         $this->completedPassationId = $passation->id;
         $this->showEndModal = true;
@@ -251,6 +267,8 @@ class QuestionnaireRun extends Component
             return $texte;
         }
 
+        // On met en cache la traduction pour éviter un appel API Google à chaque
+        // render, ce qui serait coûteux et soumis aux limites de rate limiting.
         $cacheKey = "trans_{$this->langue}_" . md5($texte);
 
         return Cache::rememberForever($cacheKey, function () use ($texte) {
