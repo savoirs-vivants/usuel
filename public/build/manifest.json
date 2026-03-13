@@ -1,0 +1,37 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-BhOa51zH.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-04VlkGpZ.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/certificat.js": {
+    "file": "assets/certificat-BO6fctiv.js",
+    "name": "certificat",
+    "src": "resources/js/certificat.js",
+    "isEntry": true
+  },
+  "resources/js/charts.js": {
+    "file": "assets/charts-CFcS5N5L.js",
+    "name": "charts",
+    "src": "resources/js/charts.js",
+    "isEntry": true
+  },
+  "resources/js/password-toggle.js": {
+    "file": "assets/password-toggle-DJ48C6RU.js",
+    "name": "password-toggle",
+    "src": "resources/js/password-toggle.js",
+    "isEntry": true
+  },
+  "resources/js/tracking.js": {
+    "file": "assets/tracking-KuYVv0QV.js",
+    "name": "tracking",
+    "src": "resources/js/tracking.js",
+    "isEntry": true
+  }
+}
