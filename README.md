@@ -1,75 +1,110 @@
-## Aperçu du Projet
+# Usuel — Plateforme de passations évaluatives
 
-**Plateforme de Questionnaires et Passations Évaluatives**
+Application Laravel de gestion de questionnaires comportementaux et évaluatifs, avec suivi de passations, statistiques et exports.
 
-Cette application Laravel gère des questionnaires comportementaux et évaluatifs :
+## Fonctionnalités
 
-- **Utilisateurs** : Inscription par invitation (token), gestion profil, admin backoffice.
-- **Questionnaires** : Création/gestion questions, passation (prise du test), résultats, certificats PDF.
-- **Backoffice** : CRUD utilisateurs/questions/passations, statistiques publiques/comportementales, exports Excel.
-**Autres** : Emails invitation/reset PW, tracking réponses, **audio TTS (text-to-speech questions/choix via SpeechSynthesis API browser)**, **traduction Google API (stichoza/google-translate-php)**, multi-langues.
+- **Questionnaires** — création et gestion des questions, passation du test, résultats, génération de certificats PDF
+- **Utilisateurs** — inscription par invitation (token), gestion de profil, backoffice admin
+- **Statistiques** — tableaux de bord public et comportemental, exports Excel (PHPSpreadsheet)
+- **Accessibilité** — audio text-to-speech via l'API Web SpeechSynthesis, traduction automatique via `stichoza/google-translate-php`, support multilingue
 
-**Technos** : Laravel 12, Livewire v4, TailwindCSS + Flowbite, Vite, PHPSpreadsheet.
+## Stack technique
+
+| Couche | Technologie |
+|---|---|
+| Backend | Laravel 12, Livewire v4 |
+| Frontend | TailwindCSS, Flowbite, Vite |
+| Base de données | MySQL / MariaDB |
+| Exports | PHPSpreadsheet |
 
 ## Prérequis
 
 - PHP ^8.2
 - Composer
 - Node.js / NPM
-- MySQL/MariaDB 
-- Serveur web
+- MySQL ou MariaDB
+- Un serveur SMTP (pour les emails d'invitation)
 
 ## Installation
 
-1. **Cloner** le projet : https://git.unistra.fr/strebes/litteratie-savoirs-vivants.git
-2. **Dépendances PHP** :
-   ```
-   composer install
-   cp .env.example .env, 
-   php artisan key:generate, 
-   
-   ```
-3. **Configurer .env** :
-   ```
-   DB_CONNECTION=mysql
-   DB_HOST=127.0.0.1
-   DB_PORT=3306
-   DB_DATABASE=usuel  # Créez la DB MySQL
-   DB_USERNAME=root
-   DB_PASSWORD= 
+### 1. Cloner le dépôt
 
-   APP_URL=http://127.0.0.1:8000
-   MAIL_MAILER=smtp  # Config mail pour invitations
-   ```
-4. **Migrations & Seed** :
-   ```
-   php artisan migrate
-   ```
-5. **Assets** :
-   ```
-   npm install
-   npm run build
-   ```
-
-
-## Lancement Local
-
-**Lancement** :
-```
-php artisan serve
+```bash
+git clone https://git.unistra.fr/strebes/litteratie-savoirs-vivants.git
+cd litteratie-savoirs-vivants
 ```
 
-Accès :
-- Welcome : http://127.0.0.1:8000
+### 2. Installer les dépendances
 
-**Prod** :
+```bash
+composer install
+npm install
 ```
+
+### 3. Configurer l'environnement
+
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+Puis éditer `.env` avec vos valeurs :
+
+```env
+APP_URL=http://127.0.0.1:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=usuel
+DB_USERNAME=root
+DB_PASSWORD=
+
+MAIL_MAILER=smtp
+MAIL_HOST=
+MAIL_PORT=
+MAIL_USERNAME=
+MAIL_PASSWORD=
+```
+
+> Créez la base de données `usuel` dans MySQL avant de continuer.
+
+### 4. Migrations
+
+```bash
+php artisan migrate
+```
+
+### 5. Compiler les assets
+
+```bash
 npm run build
 ```
 
-## Accès Admin
+## Lancement en local
 
-- Créez premier user admin via `php artisan tinker` :
-  ```php
-  User::create(['name'=>'Admin','email'=>'admin@example.com','password'=>bcrypt('password'),'is_admin'=>true]);
-  ```
+```bash
+php artisan serve
+```
+
+L'application est accessible sur [http://127.0.0.1:8000](http://127.0.0.1:8000).
+
+> En développement, utilisez `npm run dev` à la place de `npm run build` pour le hot-reload.
+
+## Créer le premier compte administrateur
+
+```bash
+php artisan tinker
+```
+
+```php
+User::create([
+    'name'     => 'Admin',
+    'email'    => 'admin@example.com',
+    'password' => bcrypt('password'),
+    'role'     => 'admin',
+]);
+```
+
+> Les autres utilisateurs sont créés via le système d'invitation depuis le backoffice.
