@@ -53,6 +53,10 @@ class ProfileForm extends Form
             'email.unique'     => 'Cette adresse email est déjà prise.',
             'password.min'     => 'Le mot de passe doit faire au moins 8 caractères.',
             'password.same'    => 'Les deux mots de passe ne correspondent pas.',
+            'password_confirm.string' => 'La confirmation du mot de passe doit être une chaîne de caractères.',
+            'password_confirm.nullable' => 'La confirmation du mot de passe est obligatoire.',
+            'password.nullable' => 'Le mot de passe est obligatoire.',
+            'password_confirm.required' => 'La confirmation du mot de passe est obligatoire.',
         ];
     }
 

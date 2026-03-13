@@ -35,6 +35,7 @@ class LoginRequest extends FormRequest
             'email.email'    => 'Le format de l\'email est invalide.',
             'email.exists'   => 'Ces identifiants ne correspondent pas à nos enregistrements.',
             'password.required' => 'Le mot de passe est obligatoire.',
+            'password.string'   => 'Le mot de passe doit être une chaîne de caractères.',
         ];
     }
 }

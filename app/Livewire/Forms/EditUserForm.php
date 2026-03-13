@@ -44,6 +44,18 @@ class EditUserForm extends Form
     }
 
     /**
+     * Messages d'erreur personnalisés (Optionnel mais recommandé)
+     */
+    protected function messages(): array
+    {
+        return [
+            'email.required' => 'L\'adresse e-mail est obligatoire.',
+            'email.email'    => 'Le format de l\'email est invalide.',
+            'email.unique'   => 'Cette adresse e-mail est déjà utilisée.',
+        ];
+    }
+
+    /**
      * Met à jour l'utilisateur en base de données.
      */
     public function updateUser(): void

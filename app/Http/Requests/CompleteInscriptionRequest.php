@@ -26,7 +26,7 @@ class CompleteInscriptionRequest extends FormRequest
                 'string',
                 'confirmed',
                 Password::min(8)
-                    ->letters()    
+                    ->letters()
                     ->numbers()
             ],
         ];
@@ -41,6 +41,8 @@ class CompleteInscriptionRequest extends FormRequest
             'password.required'  => 'Le mot de passe est obligatoire.',
             'password.min'       => 'Le mot de passe doit faire au moins :min caractères.',
             'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
+            'password.letters'   => 'Le mot de passe doit contenir au moins une lettre.',
+            'password.numbers'   => 'Le mot de passe doit contenir au moins un chiffre.',
         ];
     }
 }

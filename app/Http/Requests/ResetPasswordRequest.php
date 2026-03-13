@@ -29,6 +29,8 @@ class ResetPasswordRequest extends FormRequest
             'password.required'  => 'Le nouveau mot de passe est obligatoire.',
             'password.min'       => 'Le mot de passe doit contenir au moins 8 caractères.',
             'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
+            'password.letters'   => 'Le mot de passe doit contenir au moins une lettre.',
+            'password.numbers'   => 'Le mot de passe doit contenir au moins un chiffre.',
         ];
     }
 }
