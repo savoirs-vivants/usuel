@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\File;
 use App\Models\Tracking;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Writer\Csv; 
+use PhpOffice\PhpSpreadsheet\Writer\Csv;
 
 class ExportTrackingToDrive extends Command
 {
     protected $signature = 'drive:export';
 
-    protected $description = 'Exporte la table Tracking en Excel ET en CSV, puis les envoie sur kDrive Infomaniak';
+    protected $description = 'Exporte la table Tracking en Excel ET en CSV vers Seafile Unistra';
 
     public function handle()
     {
@@ -49,9 +49,7 @@ class ExportTrackingToDrive extends Command
         // --- 1. GÉNÉRATION EXCEL (.xlsx) ---
         $excelName = 'export_tracking_global.xlsx';
         $excelPath = storage_path('app/' . $excelName);
-        $writerXlsx = new Xlsx($spreadsheet);
-        $writerXlsx->save($excelPath);
-        $this->info('Fichier Excel généré.');
+        (new Xlsx($spreadsheet))->save($excelPath);
 
         // --- 2. GÉNÉRATION CSV (.csv) ---
         $csvName = 'export_tracking_global.csv';
@@ -60,55 +58,56 @@ class ExportTrackingToDrive extends Command
         $writerCsv->setDelimiter(';');
         $writerCsv->setUseBOM(true);
         $writerCsv->save($csvPath);
-        $this->info('Fichier CSV généré.');
 
+        $this->info('Fichiers locaux générés.');
 
-        // --- 3. ENVOI DES DEUX FICHIERS SUR KDRIVE ---
-        $token = env('INFOMANIAK_API_TOKEN');
-        $driveId = env('INFOMANIAK_DRIVE_ID');
-        $folderId = env('INFOMANIAK_FOLDER_ID');
+        // --- 2. ENVOI SUR SEAFILE UNISTRA ---
+        $seafileUrl = rtrim(env('SEAFILE_URL'), '/');
+        $repoId     = env('SEAFILE_REPO_ID');
+        $seafileDir = env('SEAFILE_DIR', '/');
+        $token      = env('SEAFILE_TOKEN');
 
         $fichiersAEnvoyer = [
-            [
-                'path' => $excelPath,
-                'name' => $excelName,
-                'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            ],
-            [
-                'path' => $csvPath,
-                'name' => $csvName,
-                'mime' => 'text/csv'
-            ]
+            ['path' => $excelPath, 'name' => $excelName],
+            ['path' => $csvPath,   'name' => $csvName],
         ];
 
         foreach ($fichiersAEnvoyer as $fichier) {
-            $this->info("Envoi de {$fichier['name']} en cours...");
+            $this->info("Envoi de {$fichier['name']}...");
 
-            $fileContent = file_get_contents($fichier['path']);
-            $fileSize = filesize($fichier['path']);
+            // ÉTAPE 1 : Obtenir le lien d'upload via le repo token
+            $linkResponse = Http::withHeaders([
+                'Authorization' => 'Token ' . $token,
+            ])->get("{$seafileUrl}/api/v2.1/via-repo-token/upload-link/");
 
-            $parametres = http_build_query([
-                'directory_id' => $folderId,
-                'file_name'    => $fichier['name'],
-                'total_size'   => $fileSize,
-                'conflict'     => 'version'
-            ]);
+            if (! $linkResponse->successful()) {
+                $this->error("❌ Impossible d'obtenir le lien d'upload : " . $linkResponse->status() . ' - ' . $linkResponse->body());
+                File::delete($fichier['path']);
+                continue;
+            }
 
-            $url = "https://api.infomaniak.com/3/drive/{$driveId}/upload?" . $parametres;
+            $uploadLink = trim($linkResponse->body(), " \t\n\r\0\x0B\"");
+            $this->info("Lien d'upload obtenu : {$uploadLink}");
 
-            $response = Http::withToken($token)
-                ->withBody($fileContent, $fichier['mime'])
-                ->post($url);
+            // ÉTAPE 2 : Envoyer le fichier
+            $response = Http::withHeaders([
+                'Authorization' => 'Token ' . $token,
+            ])
+                ->attach('file', file_get_contents($fichier['path']), $fichier['name'])
+                ->post($uploadLink, [
+                    'parent_dir' => '/',
+                    'replace'    => 1,
+                ]);
 
             if ($response->successful()) {
-                $this->info("✅ {$fichier['name']} envoyé avec succès !");
+                $this->info("✅ {$fichier['name']} envoyé !");
             } else {
-                $this->error("❌ Erreur pour {$fichier['name']} : " . $response->body());
+                $this->error("❌ Erreur upload {$fichier['name']} : " . $response->status() . ' - ' . $response->body());
             }
 
             File::delete($fichier['path']);
         }
 
-        $this->info('Toutes les opérations sont terminées !');
+        $this->info('Terminé !');
     }
 }
