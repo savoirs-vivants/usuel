@@ -6,108 +6,133 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\File;
 use App\Models\Tracking;
+use App\Models\Passation;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Writer\Csv;
+use Carbon\Carbon;
 
 class ExportTrackingToDrive extends Command
 {
     protected $signature = 'drive:export';
-
-    protected $description = 'Exporte la table Tracking en Excel ET en CSV vers Seafile Unistra';
+    protected $description = 'Exporte les données (avec consentement recherche) vers Seafile Unistra';
 
     public function handle()
     {
-        $this->info('Début de la récupération des données...');
+        $this->info('Début de la génération des rapports (Filtre consentement actif)...');
 
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
+        // --- 1. PRÉPARATION DES COMPÉTENCES (DIMENSIONS) ---
+        $firstPassation = Passation::where('consentement_recherche', true)->whereNotNull('score')->first();
+        $dimKeys = [];
+        if ($firstPassation) {
+            $scores = is_string($firstPassation->score) ? json_decode($firstPassation->score, true) : $firstPassation->score;
+            if (is_array($scores)) {
+                $dimKeys = array_keys($scores);
+            }
+        }
 
-        $headers = ['id', 'id_passation', 'id_question', 'position', 'temps_total_ms', 'latence_ms', 'nb_clics', 'nb_changements', 'nb_clics_hors_cible', 'nb_pauses', 'resultat', 'suivi_souris', 'timestamp'];
+        // --- 2. GÉNÉRATION EXCEL : TRACKING (COMPORTEMENT) ---
+        $spreadsheetTracking = new Spreadsheet();
+        $sheetT = $spreadsheetTracking->getActiveSheet();
+        $sheetT->setTitle('Comportement');
 
-        $sheet->fromArray($headers, NULL, 'A1', true);
-        $sheet->getStyle('A1:M1')->getFont()->setBold(true);
+        $headersT = ['id', 'id_passation', 'id_question', 'position', 'temps_total_ms', 'latence_ms', 'nb_clics', 'nb_changements', 'nb_clics_hors_cible', 'nb_pauses', 'resultat', 'suivi_souris', 'timestamp'];
+        $sheetT->fromArray($headersT, NULL, 'A1', true);
+        $sheetT->getStyle('A1:M1')->getFont()->setBold(true);
 
-        $row = 2;
-        Tracking::select($headers)->chunk(500, function ($trackings) use ($sheet, &$row) {
+        $rowT = 2;
+        Tracking::whereHas('passation', function($query) {
+            $query->where('consentement_recherche', true);
+        })->select($headersT)->chunk(500, function ($trackings) use ($sheetT, &$rowT) {
             foreach ($trackings as $tracking) {
-                $sheet->fromArray($tracking->toArray(), null, 'A' . $row, true);
-                $row++;
+                $sheetT->fromArray($tracking->toArray(), null, 'A' . $rowT, true);
+                $rowT++;
             }
         });
 
-        // --- STYLE EXCEL ---
-        $colonnesAuto = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'M'];
-        foreach ($colonnesAuto as $col) {
-            $sheet->getColumnDimension($col)->setAutoSize(true);
-        }
-        $sheet->getColumnDimension('L')->setAutoSize(false);
-        $sheet->getColumnDimension('L')->setWidth(60);
-        $sheet->getStyle('L2:L' . ($row - 1))->getAlignment()->setWrapText(true);
+        foreach (range('A', 'M') as $col) { $sheetT->getColumnDimension($col)->setAutoSize(true); }
+        $sheetT->getColumnDimension('L')->setAutoSize(false)->setWidth(60);
+        $sheetT->getStyle('L2:L' . ($rowT - 1))->getAlignment()->setWrapText(true);
+
+        $excelTrackingPath = storage_path('app/export_comportement_global.xlsx');
+        (new Xlsx($spreadsheetTracking))->save($excelTrackingPath);
 
 
-        // --- 1. GÉNÉRATION EXCEL (.xlsx) ---
-        $excelName = 'export_tracking_global.xlsx';
-        $excelPath = storage_path('app/' . $excelName);
-        (new Xlsx($spreadsheet))->save($excelPath);
+        // --- 3. GÉNÉRATION EXCEL : SOCIO-DÉMOGRAPHIQUE (PASSATIONS) ---
+        $spreadsheetSocio = new Spreadsheet();
+        $sheetS = $spreadsheetSocio->getActiveSheet();
+        $sheetS->setTitle('Socio-Demographique');
 
-        // --- 2. GÉNÉRATION CSV (.csv) ---
-        $csvName = 'export_tracking_global.csv';
-        $csvPath = storage_path('app/' . $csvName);
-        $writerCsv = new Csv($spreadsheet);
-        $writerCsv->setDelimiter(';');
-        $writerCsv->setUseBOM(true);
-        $writerCsv->save($csvPath);
+        $headersS = ['ID Passation', 'ID Bénéficiaire', 'Langue', 'Mode Audio', 'ID Travailleur'];
+        foreach($dimKeys as $key) { $headersS[] = "Score " . ucfirst($key); }
+        $headersS[] = 'Score Total (/30)';
+        $headersS[] = 'Date';
+        $headersS[] = 'Ordre des blocs';
 
-        $this->info('Fichiers locaux générés.');
+        $sheetS->fromArray($headersS, NULL, 'A1', true);
+        $lastCol = $sheetS->getHighestColumn();
+        $sheetS->getStyle("A1:{$lastCol}1")->getFont()->setBold(true);
 
-        // --- 2. ENVOI SUR SEAFILE UNISTRA ---
+        $rowS = 2;
+        Passation::where('consentement_recherche', true)->chunk(200, function ($passations) use ($sheetS, &$rowS, $dimKeys) {
+            foreach ($passations as $p) {
+                $scores = is_string($p->score) ? json_decode($p->score, true) : $p->score;
+                $scores = is_array($scores) ? $scores : [];
+
+                $rowData = [
+                    $p->id,
+                    $p->id_beneficiaire,
+                    $p->langue ?: 'Français',
+                    $p->audio ? 'Oui' : 'Non',
+                    $p->id_travailleur,
+                ];
+
+                foreach ($dimKeys as $key) {
+                    $rowData[] = $scores[$key] ?? 0;
+                }
+
+                $totalScore = array_sum($scores);
+                $rowData[] = round($totalScore, 2);
+                $rowData[] = Carbon::parse($p->created_at)->format('d/m/Y H:i');
+                $rowData[] = $p->mode_ordre;
+
+                $sheetS->fromArray($rowData, null, 'A' . $rowS, true);
+                $rowS++;
+            }
+        });
+
+        foreach (range('A', $lastCol) as $col) { $sheetS->getColumnDimension($col)->setAutoSize(true); }
+
+        $excelSocioPath = storage_path('app/export_socio_demo_global.xlsx');
+        (new Xlsx($spreadsheetSocio))->save($excelSocioPath);
+
+
+        // --- 4. ENVOI SUR SEAFILE UNISTRA ---
         $seafileUrl = rtrim(env('SEAFILE_URL'), '/');
-        $repoId     = env('SEAFILE_REPO_ID');
-        $seafileDir = env('SEAFILE_DIR', '/');
-        $token      = env('SEAFILE_TOKEN');
+        $token = env('SEAFILE_TOKEN');
 
         $fichiersAEnvoyer = [
-            ['path' => $excelPath, 'name' => $excelName],
-            ['path' => $csvPath,   'name' => $csvName],
+            ['path' => $excelTrackingPath, 'name' => 'export_comportement_global.xlsx'],
+            ['path' => $excelSocioPath,    'name' => 'export_socio_demo_global.xlsx'],
         ];
 
         foreach ($fichiersAEnvoyer as $fichier) {
             $this->info("Envoi de {$fichier['name']}...");
 
-            // ÉTAPE 1 : Obtenir le lien d'upload via le repo token
-            $linkResponse = Http::withHeaders([
-                'Authorization' => 'Token ' . $token,
-            ])->get("{$seafileUrl}/api/v2.1/via-repo-token/upload-link/");
+            $linkResponse = Http::withHeaders(['Authorization' => 'Token ' . $token])
+                ->get("{$seafileUrl}/api/v2.1/via-repo-token/upload-link/");
 
-            if (! $linkResponse->successful()) {
-                $this->error("❌ Impossible d'obtenir le lien d'upload : " . $linkResponse->status() . ' - ' . $linkResponse->body());
-                File::delete($fichier['path']);
-                continue;
-            }
+            if ($linkResponse->successful()) {
+                $uploadLink = trim($linkResponse->body(), " \t\n\r\0\x0B\"");
+                Http::withHeaders(['Authorization' => 'Token ' . $token])
+                    ->attach('file', file_get_contents($fichier['path']), $fichier['name'])
+                    ->post($uploadLink, ['parent_dir' => '/', 'replace' => 1]);
 
-            $uploadLink = trim($linkResponse->body(), " \t\n\r\0\x0B\"");
-            $this->info("Lien d'upload obtenu : {$uploadLink}");
-
-            // ÉTAPE 2 : Envoyer le fichier
-            $response = Http::withHeaders([
-                'Authorization' => 'Token ' . $token,
-            ])
-                ->attach('file', file_get_contents($fichier['path']), $fichier['name'])
-                ->post($uploadLink, [
-                    'parent_dir' => '/',
-                    'replace'    => 1,
-                ]);
-
-            if ($response->successful()) {
                 $this->info("✅ {$fichier['name']} envoyé !");
-            } else {
-                $this->error("❌ Erreur upload {$fichier['name']} : " . $response->status() . ' - ' . $response->body());
             }
 
             File::delete($fichier['path']);
         }
 
-        $this->info('Terminé !');
+        $this->info('Export terminé. Seules les données avec consentement ont été traitées.');
     }
 }
