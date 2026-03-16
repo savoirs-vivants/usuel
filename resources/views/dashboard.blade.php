@@ -20,7 +20,7 @@
                 <h1 class="font-mono font-bold text-3xl text-sv-blue">{{ $salut }}, {{ $prenom }} 👋</h1>
                 <p class="text-gray-400 text-sm mt-1">Voici un résumé de l'activité de votre plateforme.</p>
             </div>
-            <a href="{{ route('questionnaire.run') ?? '#' }}"
+            <a href="{{ route('questionnaire.index') }}"
                 class="inline-flex items-center gap-2.5 bg-sv-green hover:bg-sv-green/90 text-white font-bold text-sm px-6 py-3.5 rounded-2xl shadow-lg shadow-sv-green/25 transition-all duration-150 hover:scale-[1.02] hover-scale">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />

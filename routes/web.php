@@ -8,8 +8,6 @@ use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\PassationController;
 use App\Http\Controllers\QuestionnaireResultController;
 use App\Http\Controllers\PasswordResetController;
-use App\Models\Passation;
-use App\Models\User;
 use App\Livewire\StatistiquesPublic;
 use App\Livewire\StatistiquesComportementale;
 use App\Livewire\GestionQuestions;

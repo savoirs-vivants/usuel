@@ -93,7 +93,7 @@
                 </h2>
                 <p class="text-gray-600 text-base leading-relaxed mb-4">
                     Usuel permet aux travailleurs sociaux et formateurs d'identifier précisément les freins numériques de
-                    chaque beneficiary — sans que ce dernier ait besoin de compétences techniques pour y répondre.
+                    chaque bénéficiaire — sans que ce dernier ait besoin de compétences techniques pour y répondre.
                 </p>
                 <p class="text-gray-600 text-base leading-relaxed">
                     En transformant des indicateurs techniques en orientations concrètes, Usuel facilite la construction de
@@ -123,7 +123,7 @@
 
             <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
 
-                @foreach ([['01', '🧑‍💼', 'Créez un accès', 'Ouvrez une session sécurisée pour votre bénéficiaire en quelques clics.'], ['02', '💬', 'Le bénéficiaire répond', 'Des questions simples sur son quotidien numérique. Pas de jargon technique.'], ['03', '📋', 'Analysez les résultats', 'Vous recevez un rapport clair avec le niveau identifié et les axes de progression.'], ['04', '🚀', 'Orientez vers la formation', 'Proposez le parcours le plus adapté grâce aux recommandations générées.']] as [$num, $icon, $title, $desc])
+                @foreach ([['01', '🧑‍💼', 'Créez un accès', 'Lancer un questionnaire pour votre bénéficiaire en quelques clics.'], ['02', '💬', 'Le bénéficiaire répond', 'Des questions simples sur son quotidien numérique. Pas de jargon technique.'], ['03', '📋', 'Analysez les résultats', 'Vous recevez un rapport clair avec le niveau identifié et les axes de progression.'], ['04', '🚀', 'Orientez vers la formation', 'Proposez le parcours le plus adapté suite à ses résultats.']] as [$num, $icon, $title, $desc])
                     <div data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 + 100 }}"
                         class="bg-white border-2 border-gray-200 rounded-2xl p-6 hover:border-sv-green hover:-translate-y-1 transition-all duration-200 hover-lift">
                         <p class="font-extrabold text-4xl text-sv-green opacity-20 leading-none mb-3">{{ $num }}
