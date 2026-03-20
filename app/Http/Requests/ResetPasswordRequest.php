@@ -17,7 +17,7 @@ class ResetPasswordRequest extends FormRequest
             'password' => [
                 'required',
                 'confirmed',
-                Password::min(8)->letters()->numbers(),
+                Password::min(8)->letters()->numbers()->symbols(),
             ],
         ];
     }
@@ -31,6 +31,7 @@ class ResetPasswordRequest extends FormRequest
             'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
             'password.letters'   => 'Le mot de passe doit contenir au moins une lettre.',
             'password.numbers'   => 'Le mot de passe doit contenir au moins un chiffre.',
+            'password.symbols'   => 'Le mot de passe doit contenir au moins un caractère spécial (ex: _, @, !, etc.).',
         ];
     }
 }
