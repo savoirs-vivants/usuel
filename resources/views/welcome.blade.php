@@ -115,6 +115,22 @@
 
         </div>
     </section>
+    
+    <section id="video-presentation" class="bg-sv-blue text-white px-6 py-20 border-b border-sv-blue">
+        <div class="max-w-4xl mx-auto text-center">
+            <p data-aos="fade-up" class="text-sv-green font-bold text-xs tracking-widest uppercase mb-3">Découvrir en vidéo</p>
+            <h2 data-aos="fade-up" data-aos-delay="100" class="text-3xl md:text-4xl font-extrabold mb-10">
+                Présentation d'Usuel
+            </h2>
+
+            <div data-aos="zoom-in" data-aos-delay="200" class="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 aspect-video bg-gray-900 mx-auto">
+                <video controls class="w-full h-full object-cover">
+                    <source src="{{ asset('storage/Webinaire_V2_Usuel.mp4') }}" type="video/mp4">
+                    Votre navigateur ne supporte pas la lecture de la vidéo.
+                </video>
+            </div>
+        </div>
+    </section>
 
     <section id="comment-ca-marche" class="bg-gray-50 px-6 py-20 border-b border-gray-200">
         <div class="max-w-4xl mx-auto">
