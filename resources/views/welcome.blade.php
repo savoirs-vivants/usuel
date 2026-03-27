@@ -161,7 +161,7 @@
                 <h2 class="text-2xl md:text-3xl font-extrabold mb-3">Les données de vos bénéficiaires sont protégées</h2>
                 <p class="text-base leading-relaxed opacity-85">
                     Usuel garantit l'anonymat complet de toutes les données sensibles. Aucune information personnelle n'est
-                    partagée sans consentement explicite. La plateforme est hébergée en France et respecte le RGPD.
+                    partagée sans consentement explicite.
                 </p>
             </div>
         </div>

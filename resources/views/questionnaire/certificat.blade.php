@@ -1,6 +1,6 @@
 @extends('layouts.print')
 
-@section('title', 'Certificat – ' . $passation->beneficiaire->prenom . ' ' . $passation->beneficiaire->nom)
+@section('title', 'Certificat')
 
 @section('content')
 

@@ -1,6 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Résultats – ' . $passation->beneficiaire->nom . ' ' . $passation->beneficiaire->prenom)
-
+@section('title', 'Résultats')
 @section('content')
     @php
         $scores    = $passation->score ?? [];
