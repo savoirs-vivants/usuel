@@ -13,6 +13,7 @@ use App\Livewire\StatistiquesComportementale;
 use App\Livewire\GestionQuestions;
 use App\Livewire\EditUser;
 use App\Livewire\QuestionnaireRun;
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', function () {
     return view('welcome');
@@ -36,6 +37,15 @@ Route::get('/mentions-legales', function () {
 Route::get('/politique-confidentialite', function () {
     return view('confidentialite');
 })->name('confidentialite');
+
+Route::get('/bH4U$m+=vc5fpJf', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('drive:export');
+        return 'L\'export Drive a été exécuté avec succès !';
+    } catch (\Exception $e) {
+        return 'Erreur : ' . $e->getMessage();
+    }
+});
 
 
 Route::middleware('auth')->group(function () {
