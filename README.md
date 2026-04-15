@@ -31,7 +31,7 @@ Application Laravel de gestion de questionnaires comportementaux et évaluatifs,
 ### 1. Cloner le dépôt
 
 ```bash
-git clone https://git.unistra.fr/strebes/litteratie-savoirs-vivants.git
+git clone https://github.com/savoirs-vivants/usuel.git
 cd litteratie-savoirs-vivants
 ```
 
