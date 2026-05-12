@@ -35,136 +35,121 @@
 @endphp
 
 <button onclick="window.print()"
-    class="no-print fixed top-4 right-4 z-50 flex items-center gap-2 bg-sv-blue hover:bg-sv-green text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-lg transition-colors duration-200">
-    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    class="no-print fixed top-4 right-4 z-50 flex items-center gap-2 bg-slate-900 hover:bg-emerald-600 text-white font-semibold text-sm px-5 py-2.5 rounded-full shadow-lg transition-all duration-300">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round"
               d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2
                  m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2z
                  m8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
     </svg>
-    Imprimer / Enregistrer en PDF
+    Générer le PDF
 </button>
 
-<div class="bg-white relative overflow-hidden flex flex-col shadow-2xl"
-     style="width:210mm; min-height:297mm;">
+<div class="mx-auto relative overflow-hidden flex flex-row shadow-2xl print:shadow-none print:m-0 bg-white"
+     style="width:210mm; min-height:297mm; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
 
-    <div class="h-1.5 shrink-0 bg-gradient-to-r from-sv-blue via-sv-green to-sv-blue"></div>
-    <div class="absolute -top-16 -right-16 w-72 h-72 bg-sv-green/5 rounded-full pointer-events-none"></div>
+    <div class="w-[75mm] shrink-0 bg-slate-900 text-white relative flex flex-col justify-between p-8 overflow-hidden z-10">
 
-    <header class="shrink-0 text-center px-12 pt-7 pb-4 relative z-10">
-        <div class="flex items-center justify-center gap-2 mb-5">
-            <div class="w-8 h-8 bg-sv-blue rounded-lg flex items-center justify-center">
-                <svg class="w-5 h-5 text-sv-green" fill="currentColor" viewBox="0 0 24 24">
+        <div class="absolute -top-20 -left-20 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-10 -right-10 w-40 h-40 bg-blue-500/20 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-emerald-500/30 to-transparent"></div>
+
+        <div class="relative z-10 mt-4">
+            <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/20 mb-5 shadow-lg">
+                <svg class="w-7 h-7 text-emerald-400" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2L2 21h20L12 2zm0 4l7 13H5l7-13zm-1 5v4h2v-4h-2zm0 5v2h2v-2h-2z"/>
                 </svg>
             </div>
-            <span class="font-mono font-bold text-sv-blue tracking-widest text-sm uppercase">Usuel</span>
+            <h2 class="tracking-[0.3em] uppercase text-sm font-bold text-emerald-400">Usuel</h2>
         </div>
 
-        <p class="font-semibold text-sv-green uppercase tracking-[.2em] text-xs mb-2">✦ Certificat de compétences</p>
-        <h1 class="font-extrabold text-sv-blue text-3xl uppercase tracking-tight leading-tight mb-1">
-            Littératie Numérique
-        </h1>
-        <p class="text-gray-400 text-sm">Attestation d'évaluation des compétences numériques</p>
-        <div class="mt-5 mb-1">
-            <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-2">Délivré à</p>
-            @if (auth()->user()->role !== 'admin')
-            <span class="inline-block font-bold text-sv-blue text-2xl bg-slate-50 border-b-4 border-sv-green px-6 py-1.5 rounded-xl">
-                {{ $passation->beneficiaire->prenom }} {{ $passation->beneficiaire->nom }}
-            </span>
-            @endif
-        </div>
-    </header>
+        <div class="relative z-10 flex-1 flex flex-col justify-center items-center text-center">
+            <p class="text-xs uppercase tracking-[0.2em] text-slate-400 mb-6">Niveau Atteint</p>
 
-    <div class="shrink-0 mx-10 rounded-2xl overflow-hidden relative z-10"
-         style="height:108mm; background:linear-gradient(135deg,#1a2340 0%,#132d4a 55%,#0d3d2e 100%);">
-
-        <div style="position:absolute;width:180px;height:180px;right:-30px;top:-30px;
-                    border-radius:50%;background:rgba(26,158,126,0.07);pointer-events:none"></div>
-        <div style="position:absolute;width:100px;height:100px;left:-15px;bottom:-15px;
-                    border-radius:50%;background:rgba(26,158,126,0.05);pointer-events:none"></div>
-
-        <div style="position:relative;z-index:10;display:flex;flex-direction:column;
-                    height:100%;padding:1.5rem 1.75rem;gap:1rem;">
-
-            <div style="display:flex;align-items:center;gap:1.5rem;">
-
-                <div style="text-align:center;min-width:72px;flex-shrink:0;">
-                    <p style="font-size:8px;font-weight:700;text-transform:uppercase;
-                               letter-spacing:.18em;color:#1a9e7e;margin-bottom:2px">Score global</p>
-                    <p style="font-family:monospace;font-weight:800;font-size:2.4rem;
-                               line-height:1;color:white;letter-spacing:-1px">
-                        {{ $scoreTotal > 0 ? '+' : '' }}{{ $scoreTotal }}
-                    </p>
-                    <p style="font-size:9px;font-weight:600;color:rgba(255,255,255,0.3)">/ 30 points</p>
-                </div>
-
-                <div style="width:1px;align-self:stretch;background:rgba(255,255,255,0.12);flex-shrink:0"></div>
-
-                <div style="display:flex;align-items:center;gap:1rem;">
-                    <span style="display:inline-flex;align-items:center;justify-content:center;
-                                 width:3rem;height:3rem;border-radius:50%;background:#1a9e7e;
-                                 color:white;font-family:monospace;font-weight:800;font-size:1.4rem;
-                                 box-shadow:0 0 0 5px rgba(26,158,126,0.18);flex-shrink:0">
-                        {{ $parcours }}
-                    </span>
-                    <div>
-                        <p style="font-size:8px;font-weight:700;text-transform:uppercase;
-                                   letter-spacing:.18em;color:#1a9e7e;margin-bottom:3px">
-                            Parcours d'orientation
-                        </p>
-                        <p style="font-size:1rem;font-weight:800;color:white;line-height:1.2;margin-bottom:5px">
-                            {{ $parcoursLabel }}
-                        </p>
-                        <span style="font-size:10px;font-weight:600;padding:2px 10px;border-radius:999px;
-                                     background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.55);
-                                     border:1px solid rgba(255,255,255,0.12)">
-                            {{ OrientationService::ORIENTATIONS[$parcours] ?? '' }}
-                        </span>
-                    </div>
-                </div>
+            <div class="relative flex items-center justify-center w-36 h-36 mb-6">
+                <div class="absolute inset-0 rounded-full border-4 border-emerald-500/20"></div>
+                <div class="absolute inset-2 rounded-full border-2 border-emerald-400/60 border-dashed animate-[spin_60s_linear_infinite]"></div>
+                <span class="text-7xl font-black text-white drop-shadow-lg" style="font-family: monospace;">{{ $parcours }}</span>
             </div>
 
-            <div style="border-left:3px solid #1a9e7e;padding-left:1.1rem;flex:1;">
-                <p style="font-size:0.8rem;color:rgba(255,255,255,0.8);line-height:1.7;
-                           font-style:italic;font-family:Georgia,serif;margin:0">
-                    {{ $phrase }}
+            <h3 class="text-2xl font-bold text-white leading-tight mb-3">{{ $parcoursLabel }}</h3>
+            <span class="text-xs bg-emerald-500/20 text-emerald-300 px-4 py-1.5 rounded-full border border-emerald-500/30 font-medium tracking-wide">
+                {{ OrientationService::ORIENTATIONS[$parcours] ?? '' }}
+            </span>
+
+            <div class="mt-12 w-full bg-white/5 rounded-2xl p-6 border border-white/10 backdrop-blur-md shadow-xl">
+                <p class="text-xs uppercase tracking-widest text-slate-400 mb-2">Score Global</p>
+                <p class="text-5xl font-black text-white" style="font-family: monospace;">
+                    {{ $scoreTotal }}<span class="text-xl text-slate-400 font-medium">/30</span>
                 </p>
             </div>
+        </div>
 
+        <div class="relative z-10 mb-8">
             @if (!empty($modules))
-            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;">
-                @foreach ($modules as $module)
-                    <span style="font-size:10px;font-weight:600;padding:3px 12px;border-radius:999px;
-                                 background:rgba(26,158,126,0.18);color:#34d399;
-                                 border:1px solid rgba(26,158,126,0.35)">
-                        {{ $module }}
-                    </span>
-                @endforeach
-            </div>
+                <p class="text-[10px] uppercase tracking-[0.2em] text-slate-400 mb-4 text-center">Recommandations</p>
+                <div class="flex flex-wrap gap-2 justify-center">
+                    @foreach ($modules as $module)
+                        <span class="text-xs font-medium bg-slate-800/80 text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700 shadow-sm">
+                            {{ $module }}
+                        </span>
+                    @endforeach
+                </div>
             @endif
-
         </div>
     </div>
 
-    <p class="text-center text-gray-500 text-xs leading-relaxed px-16 mt-4 shrink-0 relative z-10">
-        Ce document atteste que le bénéficiaire a complété l'évaluation de littératie numérique Usuel
-        et a obtenu le profil de compétences présenté ci-dessus, conformément au référentiel Usuel.
-    </p>
+    <div class="flex-1 relative bg-white px-12 py-12 flex flex-col overflow-hidden">
 
-    <div class="shrink-0 mx-10 pt-4 pb-6 mt-auto flex items-end justify-between relative z-10">
-        <div>
-            <p class="text-xs text-gray-500 font-medium mb-1">Évalué par l'organisme de formation</p>
-            <div class="h-10 w-36 border-b-2 border-gray-300 mb-1.5"></div>
-            <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Signature &amp; Cachet</p>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[450px] font-black text-slate-50 opacity-60 pointer-events-none select-none z-0" style="font-family: monospace;">
+            {{ $parcours }}
         </div>
-        <div class="flex flex-col items-end gap-1.5">
-            <div id="qrcode" data-url="https://usuel.savoirsvivants.fr/" class="border border-gray-200 rounded-lg p-1.5 bg-white shadow-sm"></div>
-            <p class="font-mono text-sv-blue text-xs font-bold">
-                ID : CERT-{{ $passation->id }}
+
+        <div class="relative z-10 text-right mb-16">
+            <h1 class="text-4xl font-black text-slate-900 uppercase tracking-tighter mb-2">Littératie Numérique</h1>
+            <p class="text-emerald-600 font-bold uppercase tracking-[0.2em] text-xs">Certificat de compétences</p>
+            <div class="w-16 h-1.5 bg-emerald-500 ml-auto mt-4 rounded-full"></div>
+        </div>
+
+        <div class="relative z-10 mb-16 mt-8">
+            <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-4">Délivré avec succès à</p>
+
+            @if (auth()->user()->role !== 'admin')
+                <h2 class="text-5xl font-black text-slate-900 uppercase tracking-tight leading-none mb-2">
+                    {{ $passation->beneficiaire->prenom }}<br>
+                    <span class="text-emerald-600">{{ $passation->beneficiaire->nom }}</span>
+                </h2>
+            @else
+                <div class="w-4/5 h-12 border-b-2 border-slate-200 mb-4"></div>
+                <div class="w-3/5 h-12 border-b-2 border-slate-200"></div>
+            @endif
+        </div>
+
+        <div class="relative z-10 bg-slate-50 border-l-4 border-emerald-500 p-8 rounded-r-2xl mb-auto shadow-sm">
+            <svg class="w-10 h-10 text-emerald-200 absolute -top-5 -left-5 bg-white rounded-full p-1" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+            </svg>
+            <p class="text-slate-700 font-medium text-xl leading-relaxed relative z-10 italic">
+                {{ $phrase }}
             </p>
         </div>
-    </div>
 
+        <div class="relative z-10 flex items-end justify-between pt-8 border-t border-slate-100">
+            <div class="max-w-[240px]">
+                <p class="text-[9px] text-slate-400 leading-relaxed mb-6">
+                    Ce document atteste que le bénéficiaire a complété l'évaluation et obtenu le profil de compétences présenté, conformément au référentiel Usuel.
+                </p>
+                <div class="border-b-2 border-slate-200 w-full mb-2"></div>
+                <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Signature & Cachet</p>
+            </div>
+
+            <div class="flex flex-col items-end gap-3">
+                <div id="qrcode" data-url="https://usuel.savoirsvivants.fr/" class="border-2 border-slate-100 p-2 rounded-xl shadow-sm bg-white"></div>
+                <p class="font-mono text-[10px] font-bold text-slate-400 tracking-[0.1em]">
+                    ID: CERT-{{ str_pad($passation->id, 6, '0', STR_PAD_LEFT) }}
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
