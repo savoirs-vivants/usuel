@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Passation;
 use App\Models\Question;
 use App\Models\Tracking;
+use App\Services\OrientationService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Cache;
@@ -249,6 +250,13 @@ class QuestionnaireRun extends Component
             'scenario'               => null,
             'modules'                => null,
         ]);
+
+        // Calcul immédiat du parcours d'orientation et des modules recommandés.
+        // On charge le bénéficiaire pour que OrientationService puisse lire la tranche d'âge
+        // (nécessaire pour distinguer les parcours G et F).
+        $passation->load('beneficiaire');
+        OrientationService::compute($passation);
+
         if ($consentementRecherche && !empty($this->trackingIds)) {
             Tracking::whereIn('id', $this->trackingIds)
                 ->update(['id_passation' => $passation->id]);

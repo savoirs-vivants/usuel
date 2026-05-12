@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
             height: 80,
             colorDark: '#1a2340',
             colorLight: '#ffffff',
-            correctLevel: QRCode.CorrectLevel.M 
+            correctLevel: QRCode.CorrectLevel.M
         });
     }
 
@@ -34,11 +34,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- 3. PRÉPARATION DES DONNÉES ---
     const keys   = Object.keys(rawScores);
-    
     // Associe le nom humain (labelsMap) à la clé technique. Si introuvable, garde la clé technique en fallback.
     const labels = keys.map(k => labelsMap[k] || k);
     const values = keys.map(k => parseFloat(rawScores[k]));
-    
+
     // On ajoute +5 à toutes les valeurs.
     // Pourquoi ? Les graphiques radar de Chart.js ne gèrent visuellement pas bien les axes qui croisent le centre (valeurs négatives).
     // Si les scores d'origine vont de -5 à +5, le +5 décale l'échelle de 0 à 10 pour un rendu parfait depuis le centre.
@@ -80,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             plugins: {
                 legend:  { display: false },
-                tooltip: { enabled: false }, 
+                tooltip: { enabled: false },
             },
             animation: {
                 onComplete: () => {

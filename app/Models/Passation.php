@@ -23,6 +23,7 @@ class Passation extends Model
 
     protected $casts = [
         'score'                  => 'array',
+        'modules'                => 'array',
         'consentement_recherche' => 'boolean',
         'audio'                  => 'boolean',
         'date'                   => 'date',

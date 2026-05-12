@@ -1,40 +1,72 @@
 @extends('layouts.app')
 @section('title', 'Résultats')
-@section('content')
-    @php
-        $scores    = $passation->score ?? [];
-        $labelsMap = [
-            'Resilience' => 'Résilience',
-            'EC'         => 'Esprit Critique',
-            'CSDLEN'     => 'Comportements sociaux',
-            'CT'         => 'Comp. Technique',
-            'TDLinfo'    => "Traitement de l'info",
-            'CDC'        => 'Création de contenu',
-        ];
-        $iconsMap  = [
-            'Resilience' => '🛡️',
-            'EC'         => '🧠',
-            'CSDLEN'     => '🤝',
-            'CT'         => '⚙️',
-            'TDLinfo'    => '🔍',
-            'CDC'        => '✏️',
-        ];
-        $catColors = [
-            'Resilience' => '#3b82f6',
-            'EC'         => '#8b5cf6',
-            'CSDLEN'     => '#ec4899',
-            'CT'         => '#f97316',
-            'TDLinfo'    => '#10b981',
-            'CDC'        => '#f59e0b',
-        ];
-        $scoreTotal    = $passation->score_total;
-        $maxTotal      = 30.0;
-        $minTotal      = -30.0;
-        $maxParCat     = 5.0;
-        $scorePct      = round((($scoreTotal - $minTotal) / ($maxTotal - $minTotal)) * 100);
-        $circumference = round($scorePct * 3.14159);
-    @endphp
 
+@php
+    use App\Services\OrientationService;
+
+    $scores    = $passation->score ?? [];
+    $labelsMap = [
+        'Resilience' => 'Résilience',
+        'EC'         => 'Esprit Critique',
+        'CSDLEN'     => 'Comportements sociaux',
+        'CT'         => 'Comp. Technique',
+        'TDLinfo'    => "Traitement de l'info",
+        'CDC'        => 'Création de contenu',
+    ];
+    $iconsMap  = [
+        'Resilience' => '🛡️',
+        'EC'         => '🧠',
+        'CSDLEN'     => '🤝',
+        'CT'         => '⚙️',
+        'TDLinfo'    => '🔍',
+        'CDC'        => '✏️',
+    ];
+    $catColors = [
+        'Resilience' => '#3b82f6',
+        'EC'         => '#8b5cf6',
+        'CSDLEN'     => '#ec4899',
+        'CT'         => '#f97316',
+        'TDLinfo'    => '#10b981',
+        'CDC'        => '#f59e0b',
+    ];
+
+    $scoreTotal    = $passation->score_total;
+    $maxTotal      = 30.0;
+    $minTotal      = -30.0;
+    $maxParCat     = 5.0;
+    $scorePct      = round((($scoreTotal - $minTotal) / ($maxTotal - $minTotal)) * 100);
+    $circumference = round($scorePct * 3.14159);
+
+    $parcours = $passation->scenario;
+    if (!$parcours) {
+        $passation->loadMissing('beneficiaire');
+        OrientationService::compute($passation);
+        $passation->refresh();
+        $parcours = $passation->scenario;
+    }
+
+    $parcoursLabel  = OrientationService::PARCOURS_LABELS[$parcours]  ?? '–';
+    $orientation    = OrientationService::ORIENTATIONS[$parcours]     ?? '–';
+    $modules        = $passation->modules ?? OrientationService::MODULES[$parcours] ?? [];
+
+    $parcoursColor = match(true) {
+        in_array($parcours, ['A', 'B'])       => 'red',
+        in_array($parcours, ['C'])            => 'orange',
+        in_array($parcours, ['D', 'E', 'F', 'G']) => 'blue',
+        $parcours === 'H'                     => 'green',
+        default                               => 'gray',
+    };
+    $parcoursColorMap = [
+        'red'    => ['bg' => '#fee2e2', 'text' => '#dc2626', 'border' => '#fca5a5'],
+        'orange' => ['bg' => '#ffedd5', 'text' => '#ea580c', 'border' => '#fdba74'],
+        'blue'   => ['bg' => '#dbeafe', 'text' => '#2563eb', 'border' => '#93c5fd'],
+        'green'  => ['bg' => '#dcfce7', 'text' => '#16a34a', 'border' => '#86efac'],
+        'gray'   => ['bg' => '#f3f4f6', 'text' => '#6b7280', 'border' => '#d1d5db'],
+    ];
+    $pColor = $parcoursColorMap[$parcoursColor];
+@endphp
+
+@section('content')
     <div class="h-screen flex flex-col dot-grid">
         <div class="res-header shrink-0 bg-white border-b border-gray-100 px-8 pt-4 pb-4 flex items-center justify-between shadow-sm">
             <div class="flex items-center gap-4">
@@ -79,13 +111,15 @@
         </div>
 
         <div class="flex-1 flex gap-4 px-8 py-5 min-h-0">
-            <div class="res-left w-48 shrink-0 flex flex-col gap-4">
-                <div class="card rounded-2xl p-5 flex flex-col items-center flex-1 justify-center relative overflow-hidden">
+
+            <div class="res-left w-56 shrink-0 flex flex-col gap-3">
+
+                <div class="card rounded-2xl p-4 flex flex-col items-center justify-center relative overflow-hidden shrink-0">
                     <div class="absolute inset-0 bg-gradient-to-b from-[#1a9e7e]/4 via-transparent to-transparent pointer-events-none rounded-2xl"></div>
 
-                    <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-5 relative z-10">Score global</p>
+                    <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-3 relative z-10">Score global</p>
 
-                    <div class="relative w-32 h-32 mb-4 z-10">
+                    <div class="relative w-28 h-28 mb-2 z-10">
                         <svg viewBox="0 0 120 120" class="w-full h-full -rotate-90">
                             <circle cx="60" cy="60" r="50" fill="none"
                                 stroke="#e5e7eb" stroke-width="12"/>
@@ -110,6 +144,38 @@
                             <span class="text-gray-400 text-[10px] font-semibold">/ {{ (int)$maxTotal }} pts</span>
                         </div>
                     </div>
+                </div>
+
+                <div class="card rounded-2xl p-4 flex flex-col gap-2.5 flex-1 overflow-y-auto">
+                    <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest shrink-0">Orientation</p>
+
+                    <div class="rounded-xl px-3 py-2 shrink-0"
+                         style="background:{{ $pColor['bg'] }}; border: 1px solid {{ $pColor['border'] }}">
+                        <p class="text-[10px] font-bold uppercase tracking-wider mb-0.5"
+                           style="color:{{ $pColor['text'] }}">Parcours {{ $parcours }}</p>
+                        <p class="text-xs font-semibold leading-snug" style="color:{{ $pColor['text'] }}">
+                            {{ $parcoursLabel }}
+                        </p>
+                    </div>
+
+                    <div class="shrink-0">
+                        <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold mb-1">Vers</p>
+                        <p class="text-xs text-[#1a2340] font-medium leading-snug">{{ $orientation }}</p>
+                    </div>
+
+                    @if (!empty($modules))
+                    <div class="shrink-0">
+                        <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold mb-1">Modules prioritaires</p>
+                        <ul class="flex flex-col gap-1">
+                            @foreach ($modules as $module)
+                                <li class="flex items-start gap-1.5">
+                                    <span class="mt-0.5 w-1.5 h-1.5 rounded-full bg-[#1a9e7e] shrink-0"></span>
+                                    <span class="text-[11px] text-[#1a2340] leading-snug">{{ $module }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
                 </div>
             </div>
 
