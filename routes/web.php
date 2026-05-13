@@ -59,6 +59,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/backoffice', [BackOfficeController::class, 'index'])->name('backoffice');
+    Route::get('/backoffice/user/{user}', [BackOfficeController::class, 'show'])->name('backoffice.show');
     Route::get('/backoffice/user/{user}/edit', EditUser::class)->name('user.edit');
     Route::delete('backoffice/bulk', [BackofficeController::class, 'destroyMultiple'])->name('backoffice.destroyMultiple');
     Route::delete('/backoffice/users/{user}', [BackOfficeController::class, 'destroy'])->name('backoffice.destroy');

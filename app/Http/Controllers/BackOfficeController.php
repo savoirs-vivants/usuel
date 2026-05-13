@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\DB;
 
 class BackOfficeController extends Controller
 {
@@ -48,6 +49,38 @@ class BackOfficeController extends Controller
         $users = $query->latest()->paginate($perPage)->withQueryString();
 
         return view('backoffice', compact('users', 'search', 'perPage', 'structures', 'structureFilter'));
+    }
+
+    public function show(User $user)
+    {
+
+        $nbPassations = DB::table('passations')
+            ->where('id_travailleur', $user->id)
+            ->count();
+
+        $nbBeneficiaires = DB::table('passations')
+            ->where('id_travailleur', $user->id)
+            ->distinct()
+            ->count('id_beneficiaire');
+
+        $recentPassations = DB::table('passations')
+            ->join('beneficiaires', 'passations.id_beneficiaire', '=', 'beneficiaires.id')
+            ->select('passations.*', 'beneficiaires.nom', 'beneficiaires.prenom')
+            ->where('passations.id_travailleur', $user->id)
+            ->orderByDesc('passations.created_at')
+            ->limit(10)
+            ->get()
+            ->map(function ($passation) {
+                $passation->modules_array = json_decode($passation->modules, true) ?? [];
+                return $passation;
+            });
+
+        return view('show-user', compact(
+            'user',
+            'nbPassations',
+            'nbBeneficiaires',
+            'recentPassations'
+        ));
     }
 
     public function edit(User $user)

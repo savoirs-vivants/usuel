@@ -54,15 +54,6 @@
         <div class="absolute bottom-10 -right-10 w-40 h-40 bg-blue-500/20 rounded-full blur-2xl pointer-events-none"></div>
         <div class="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-emerald-500/30 to-transparent"></div>
 
-        <div class="relative z-10 mt-4">
-            <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/20 mb-5 shadow-lg">
-                <svg class="w-7 h-7 text-emerald-400" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2L2 21h20L12 2zm0 4l7 13H5l7-13zm-1 5v4h2v-4h-2zm0 5v2h2v-2h-2z"/>
-                </svg>
-            </div>
-            <h2 class="tracking-[0.3em] uppercase text-sm font-bold text-emerald-400">Usuel</h2>
-        </div>
-
         <div class="relative z-10 flex-1 flex flex-col justify-center items-center text-center">
             <p class="text-xs uppercase tracking-[0.2em] text-slate-400 mb-6">Niveau Atteint</p>
 
@@ -106,7 +97,7 @@
         </div>
 
         <div class="relative z-10 text-right mb-16">
-            <h1 class="text-4xl font-black text-slate-900 uppercase tracking-tighter mb-2">Littératie Numérique</h1>
+            <h1 class="text-4xl font-black text-slate-900 uppercase tracking-tighter mb-2">Usuel</h1>
             <p class="text-emerald-600 font-bold uppercase tracking-[0.2em] text-xs">Certificat de compétences</p>
             <div class="w-16 h-1.5 bg-emerald-500 ml-auto mt-4 rounded-full"></div>
         </div>
