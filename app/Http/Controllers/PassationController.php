@@ -32,10 +32,10 @@ class PassationController extends Controller
         if (!empty($search)) {
             $query->where(function (Builder $q) use ($search) {
                 $q->where('id', $search)
-                  ->orWhereHas('beneficiaire', function (Builder $qb) use ($search) {
-                      $qb->where('nom', 'LIKE', "%{$search}%")
-                         ->orWhere('prenom', 'LIKE', "%{$search}%");
-                  });
+                    ->orWhereHas('beneficiaire', function (Builder $qb) use ($search) {
+                        $qb->where('nom', 'LIKE', "%{$search}%")
+                            ->orWhere('prenom', 'LIKE', "%{$search}%");
+                    });
             });
         }
 
@@ -48,7 +48,18 @@ class PassationController extends Controller
     {
         Gate::authorize('view', $passation);
 
-        return view('questionnaire.certificat', compact('passation'));
+        $cheminTampon = storage_path('app/certificats_assets/tampon.png');
+        $cheminSignature = storage_path('app/certificats_assets/signature.png');
+
+        $tamponBase64 = file_exists($cheminTampon)
+            ? 'data:image/png;base64,' . base64_encode(file_get_contents($cheminTampon))
+            : null;
+
+        $signatureBase64 = file_exists($cheminSignature)
+            ? 'data:image/png;base64,' . base64_encode(file_get_contents($cheminSignature))
+            : null;
+
+        return view('questionnaire.certificat', compact('passation', 'tamponBase64', 'signatureBase64'));
     }
 
     public function destroy(Passation $passation)

@@ -317,6 +317,7 @@
                                         Le niveau atteint ne nécessite pas d'accompagnement spécifique. Une certification officielle peut venir valoriser ces acquis.
                                     @else
                                         Une inscription à un stage Savoirs Vivants lui permettra de progresser sur ses points de fragilité dans un cadre bienveillant et structuré.
+                                        <span class="block mt-1 text-orange-600 font-bold">Adresse mail de contact : contact@savoirsvivants.fr</span>
                                     @endif
                                 </p>
                             </div>
