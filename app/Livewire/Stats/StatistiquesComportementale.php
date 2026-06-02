@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Stats;
 
 use Livewire\Component;
 use Livewire\Attributes\Url;
@@ -291,6 +291,6 @@ class StatistiquesComportementale extends Component
             'autre'         => 'Autre',
         ];
 
-        return view('livewire.statistiques-comportementale', compact('labelsMap'));
+        return view('livewire.stats.statistiques-comportementale', compact('labelsMap'));
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Stats;
 
 use Livewire\Component;
 use App\Models\Passation;
@@ -408,6 +408,6 @@ class ExportModal extends Component
 
     public function render()
     {
-        return view('livewire.export-modal');
+        return view('livewire.stats.export-modal');
     }
 }

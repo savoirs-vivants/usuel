@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Questionnaire;
 
 use App\Models\Passation;
 use App\Models\Question;
@@ -316,7 +316,7 @@ class QuestionnaireRun extends Component
             }
         }
 
-        return view('livewire.questionnaire-run', [
+        return view('livewire.questionnaire.questionnaire-run', [
             'currentQuestion'    => $currentQuestion,
             'translatedIntitule' => $translatedIntitule,
             'translatedChoix'    => $translatedChoix,

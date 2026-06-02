@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Admin;
 
 use Livewire\Component;
 use App\Livewire\Forms\UserForm; 
@@ -47,6 +47,6 @@ class CreateUser extends Component
 
     public function render()
     {
-        return view('livewire.create-user');
+        return view('livewire.admin.create-user');
     }
 }

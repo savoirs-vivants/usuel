@@ -12,7 +12,7 @@
                 <p class="text-gray-500 text-sm">Gérez vos informations personnelles et sécurisez votre compte.</p>
             </div>
 
-            @livewire('edit-profile')
+            @livewire('user.edit-profile')
         </main>
 
         <aside class="bg-[#1a2340] rounded-[24px] px-[30px] py-[40px] sticky top-10 text-white shadow-[0_20px_40px_rgba(26,35,64,0.15)] overflow-hidden relative">

@@ -48,7 +48,7 @@ class BackOfficeController extends Controller
 
         $users = $query->latest()->paginate($perPage)->withQueryString();
 
-        return view('backoffice', compact('users', 'search', 'perPage', 'structures', 'structureFilter'));
+        return view('pages.backoffice', compact('users', 'search', 'perPage', 'structures', 'structureFilter'));
     }
 
     public function show(User $user)
@@ -75,7 +75,7 @@ class BackOfficeController extends Controller
                 return $passation;
             });
 
-        return view('show-user', compact(
+        return view('pages.show-user', compact(
             'user',
             'nbPassations',
             'nbBeneficiaires',
@@ -85,7 +85,7 @@ class BackOfficeController extends Controller
 
     public function edit(User $user)
     {
-        return view('edit-user', compact('user'));
+        return view('pages.edit-user', compact('user'));
     }
 
     public function destroy(User $user)

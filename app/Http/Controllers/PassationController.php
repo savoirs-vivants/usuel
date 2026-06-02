@@ -41,7 +41,7 @@ class PassationController extends Controller
 
         $passations = $query->paginate($perPage)->withQueryString();
 
-        return view('passation', compact('passations', 'search', 'perPage'));
+        return view('pages.passation', compact('passations', 'search', 'perPage'));
     }
 
     public function certificat(Passation $passation)

@@ -82,7 +82,7 @@ class DashboardController extends Controller
             $dataBarChart[]   = $count;
         }
 
-        return view('dashboard', compact(
+        return view('pages.dashboard', compact(
             'passationsMois',
             'evolutionMois',
             'scoreMoyen',

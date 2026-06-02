@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Admin;
 
 use App\Models\Question;
 use Livewire\Component;
@@ -137,6 +137,6 @@ class GestionQuestions extends Component
 
     public function render(): \Illuminate\View\View
     {
-        return view('livewire.gestion-questions');
+        return view('livewire.admin.gestion-questions');
     }
 }

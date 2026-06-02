@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Questionnaire;
 
 use Livewire\Component;
 use Livewire\Attributes\On;
@@ -52,6 +52,6 @@ class QuestionnaireModal extends Component
 
     public function render(): \Illuminate\View\View
     {
-        return view('livewire.questionnaire-modal');
+        return view('livewire.questionnaire.questionnaire-modal');
     }
 }

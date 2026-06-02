@@ -20,7 +20,7 @@
 
             <div class="flex items-center gap-3 shrink-0">
                 @can('viewAny', App\Models\Question::class)
-                    @livewire('mode-selector')
+                    @livewire('admin.mode-selector')
                     <div x-data="{ show: false, message: '' }"
                         x-on:notify.window="message = $event.detail.message; show = true; setTimeout(() => show = false, 3000)"
                         x-show="show" x-transition.opacity.duration.300ms style="display: none;"
@@ -43,7 +43,7 @@
                     </a>
                 @endcan
 
-                @livewire('questionnaire-modal')
+                @livewire('questionnaire.questionnaire-modal')
             </div>
         </div>
 

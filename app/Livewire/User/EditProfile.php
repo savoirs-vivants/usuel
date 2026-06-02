@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\User;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +27,6 @@ class EditProfile extends Component
 
     public function render()
     {
-        return view('livewire.edit-profile');
+        return view('livewire.user.edit-profile');
     }
 }

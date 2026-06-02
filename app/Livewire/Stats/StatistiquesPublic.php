@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Stats;
 
 use Livewire\Component;
 use Livewire\Attributes\Url;
@@ -260,6 +260,6 @@ class StatistiquesPublic extends Component
             'autre'         => 'Autre',
         ];
 
-        return view('livewire.statistiques-public', compact('labelsMap'));
+        return view('livewire.stats.statistiques-public', compact('labelsMap'));
     }
 }

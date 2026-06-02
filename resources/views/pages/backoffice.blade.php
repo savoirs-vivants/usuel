@@ -16,7 +16,7 @@
                 <p class="text-sm text-gray-400 mt-1">Gestion des comptes de la plateforme</p>
             </div>
             <div class="flex items-center gap-3">
-                @livewire('create-user')
+                @livewire('admin.create-user')
             </div>
         </div>
 

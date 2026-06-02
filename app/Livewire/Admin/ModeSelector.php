@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Admin;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Cache;
@@ -31,6 +31,6 @@ class ModeSelector extends Component
 
     public function render()
     {
-        return view('livewire.mode-selector');
+        return view('livewire.admin.mode-selector');
     }
 }

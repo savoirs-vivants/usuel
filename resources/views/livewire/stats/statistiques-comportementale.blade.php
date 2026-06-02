@@ -9,7 +9,7 @@
                         <h1 class="font-mono font-bold text-3xl text-sv-blue">Statistiques</h1>
                         <p class="text-sm text-gray-400 mt-1">Analyse comportementale du public évalué.</p>
                     </div>
-                    @livewire('export-comportementale-modal', [
+                    @livewire('stats.export-comportementale-modal', [
                         'selectedAges' => $selectedAges,
                         'selectedGenres' => $selectedGenres,
                         'selectedCsps' => $selectedCsps,

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Stats;
 
 use Livewire\Component;
 use App\Models\Tracking;
@@ -317,6 +317,6 @@ class ExportComportementaleModal extends Component
 
     public function render(): \Illuminate\View\View
     {
-        return view('livewire.export-comportementale-modal');
+        return view('livewire.stats.export-comportementale-modal');
     }
 }

@@ -8,15 +8,15 @@ use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\PassationController;
 use App\Http\Controllers\QuestionnaireResultController;
 use App\Http\Controllers\PasswordResetController;
-use App\Livewire\StatistiquesPublic;
-use App\Livewire\StatistiquesComportementale;
-use App\Livewire\GestionQuestions;
-use App\Livewire\EditUser;
-use App\Livewire\QuestionnaireRun;
+use App\Livewire\Stats\StatistiquesPublic;
+use App\Livewire\Stats\StatistiquesComportementale;
+use App\Livewire\Admin\GestionQuestions;
+use App\Livewire\Admin\EditUser;
+use App\Livewire\Questionnaire\QuestionnaireRun;
 use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages.welcome');
 })->name('welcome');
 
 Route::get('/inscription/{token}', [InscriptionController::class, 'show'])->name('inscription');
@@ -31,11 +31,11 @@ Route::get('/reinitialiser/{token}/{email}', [PasswordResetController::class, 's
 Route::post('/reinitialiser', [PasswordResetController::class, 'reset'])->name('password.update');
 
 Route::get('/mentions-legales', function () {
-    return view('mentions');
+    return view('pages.mentions');
 })->name('mentions');
 
 Route::get('/politique-confidentialite', function () {
-    return view('confidentialite');
+    return view('pages.confidentialite');
 })->name('confidentialite');
 
 Route::get('/bH4U$m+=vc5fpJf', function () {
@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/profil', function () {
-        return view('profile-page');
+        return view('pages.profile-page');
     })->name('profile.edit');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -73,7 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/passations/{passation}', [PassationController::class, 'destroy'])->name('passation.destroy');
 
     Route::get('/questionnaire', function () {
-        return view('questionnaire');
+        return view('pages.questionnaire');
     })->name('questionnaire.index');
 
     Route::get('/questions/gestion', GestionQuestions::class)
