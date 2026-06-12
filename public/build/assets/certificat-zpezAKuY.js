@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",function(){const e=document.getElementById("qrcode");if(e){const t=e.dataset.url;t&&typeof QRCode<"u"&&new QRCode(e,{text:t,width:80,height:80,colorDark:"#0f172a",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M})}});
