@@ -35,12 +35,12 @@ class OrientationService
      * Noms complets des parcours (utilisés dans les vues et le certificat).
      */
     public const PARCOURS_LABELS = [
-        'A' => 'Grand débutant numérique',
-        'B' => 'Autonomie fragile administrative',
+        'A' => 'Premiers pas numériques',
+        'B' => 'Autonomie fragile démarches administratives',
         'C' => 'Insertion professionnelle numérique',
-        'D' => 'Vigilance numérique',
+        'D' => 'Sécurité numérique',
         'E' => 'Création et valorisation numérique',
-        'F' => 'Consolidation – Autonome à renforcer',
+        'F' => 'Consolidation senior autonome',
         'G' => 'Usage intuitif mais fragile',
         'H' => 'Autonomie confirmée',
     ];
